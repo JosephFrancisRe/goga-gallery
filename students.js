@@ -16,6 +16,7 @@
 
 window.GOGA_CONFIG = {
   defaultYear: "2026",
+  defaultFilter: "featured",
   inactivityLimitMs: 300000
 };
 

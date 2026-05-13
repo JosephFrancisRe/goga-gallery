@@ -1,19 +1,17 @@
-# GOGA Software Engineering Showcase - Simple Version
+# GOGA Software Engineering Showcase - Compact Version
 
-This is the simplified version.
+This version keeps the simplified layout but fixes the oversized-card problem.
 
-## What changed
+## Changes in this version
 
-- No large thumbnail cards
-- No complicated left sidebar
-- No separate featured row
-- One clear search panel
-- Compact project cards
-- Projects open in the same page with an X to close
-- 5-minute inactivity reset
-- Future years still supported
+- Featured is selected by default.
+- Reset returns to Featured, not All.
+- Cards are compact directory tiles.
+- Cards no longer stretch vertically to fill the screen.
+- The page still uses pagination instead of scrolling.
+- Projects still open inside the same-page viewer.
 
-## Files
+## Files to upload
 
 Upload these files to the root of your GitHub Pages repository:
 
@@ -25,7 +23,7 @@ Upload these files to the root of your GitHub Pages repository:
 
 ## Editing projects
 
-Edit only `students.js`.
+Edit `students.js`.
 
 Example:
 
@@ -40,6 +38,19 @@ Example:
 }
 ```
 
-## Important note about embedded viewing
+## Changing the default tab
 
-Some outside websites block iframe viewing. CodeHS share/embed links should be the most reliable option for this exhibit.
+In `students.js`, change:
+
+```js
+defaultFilter: "featured"
+```
+
+Options:
+
+```js
+defaultFilter: "all"
+defaultFilter: "featured"
+defaultFilter: "game"
+defaultFilter: "website"
+```

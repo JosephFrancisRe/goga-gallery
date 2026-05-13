@@ -1,6 +1,7 @@
 /* global GOGA_CONFIG, GOGA_PROJECTS */
 
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
+const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "featured";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
 const PROJECTS_PER_PAGE = 12;
 
@@ -8,7 +9,7 @@ const state = {
   year: DEFAULT_YEAR,
   search: "",
   student: "",
-  filter: "all",
+  filter: DEFAULT_FILTER,
   page: 1,
   inactivityTimer: null,
   activeProject: null
@@ -90,6 +91,12 @@ function setupStudents() {
   }
 }
 
+function setupFilterButtons() {
+  els.filterButtons.forEach(button => {
+    button.classList.toggle("active", button.dataset.filter === state.filter);
+  });
+}
+
 function matches(project) {
   if (getYear(project) !== state.year) return false;
 
@@ -127,6 +134,7 @@ function filteredProjects() {
 function render() {
   setupYears();
   setupStudents();
+  setupFilterButtons();
   renderCards();
 }
 
@@ -146,10 +154,10 @@ function renderCards() {
   els.prevButton.disabled = state.page <= 1;
   els.nextButton.disabled = state.page >= totalPages;
 
-  updateHeading(list.length);
+  updateHeading();
 
   if (visible.length === 0) {
-    els.projectGrid.innerHTML = `<div class="empty">No projects match this search. Press Reset to return to the full gallery.</div>`;
+    els.projectGrid.innerHTML = `<div class="empty">No projects match this search. Press Reset to return to the featured gallery.</div>`;
     return;
   }
 
@@ -161,7 +169,7 @@ function renderCards() {
   });
 }
 
-function updateHeading(count) {
+function updateHeading() {
   if (state.student) {
     els.modeLabel.textContent = "Selected Student";
     els.galleryTitle.textContent = `${state.student}'s Projects`;
@@ -264,16 +272,12 @@ function resetAll() {
   state.year = DEFAULT_YEAR;
   state.search = "";
   state.student = "";
-  state.filter = "all";
+  state.filter = DEFAULT_FILTER;
   state.page = 1;
 
   els.searchInput.value = "";
   els.studentSelect.value = "";
   els.yearSelect.value = DEFAULT_YEAR;
-
-  els.filterButtons.forEach(button => {
-    button.classList.toggle("active", button.dataset.filter === "all");
-  });
 
   closeProjectViewer();
   render();
@@ -303,10 +307,7 @@ function bindEvents() {
     button.addEventListener("click", () => {
       state.filter = button.dataset.filter;
       state.page = 1;
-
-      els.filterButtons.forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
-
+      setupFilterButtons();
       renderCards();
     });
   });
