@@ -8,104 +8,92 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="kiosk" id="app">
-    <header class="topbar">
-      <div class="brand-block">
-        <img src="assets/gateway-logo.png" alt="Gateway Tech logo" class="logo" />
+  <main class="app">
+    <header class="header">
+      <div class="brand">
+        <img src="assets/gateway-logo.png" alt="Gateway Tech logo" />
         <div>
-          <p class="school-name">Gateway Tech</p>
+          <p class="school">Gateway Tech</p>
           <h1>GOGA</h1>
           <p class="subtitle">Gallery of Gateway Art · Software Engineering Showcase</p>
         </div>
       </div>
 
-      <div class="year-block" aria-label="Showcase year">
-        <span>Showcase Year</span>
-        <div id="yearButtons" class="year-buttons"></div>
+      <div class="year-control">
+        <label for="yearSelect">Year</label>
+        <select id="yearSelect"></select>
       </div>
     </header>
 
-    <section class="instruction-strip" aria-label="How to use this exhibit">
-      <div><strong>1</strong><span>Search or select a student</span></div>
-      <div><strong>2</strong><span>Choose a project card</span></div>
-      <div><strong>3</strong><span>Close with X to return</span></div>
-    </section>
+    <section class="search-panel" aria-label="Find a student project">
+      <div class="search-title">
+        <p>Find Your Student</p>
+        <h2>Type a name, select a student, or browse the gallery.</h2>
+      </div>
 
-    <section class="main-layout">
-      <aside class="control-panel" aria-label="Gallery controls">
-        <div class="panel-heading">
-          <p>Find a Student</p>
-          <h2>Search the gallery</h2>
-        </div>
-
-        <label class="field">
-          <span>Student or project</span>
-          <input id="searchInput" type="search" placeholder="Type a name..." autocomplete="off" />
+      <div class="search-controls">
+        <label class="field search-field">
+          <span>Search</span>
+          <input id="searchInput" type="search" placeholder="Type student name or project title..." autocomplete="off" />
         </label>
 
         <label class="field">
-          <span>Select student</span>
+          <span>Student</span>
           <select id="studentSelect">
             <option value="">All students</option>
           </select>
         </label>
 
-        <div class="filter-buttons" aria-label="Project type filters">
-          <button type="button" class="filter-button active" data-type="">All</button>
-          <button type="button" class="filter-button" data-type="Game">Games</button>
-          <button type="button" class="filter-button" data-type="Website">Websites</button>
-          <button type="button" class="filter-button" data-featured="true">Featured</button>
+        <div class="filters" aria-label="Project filters">
+          <button type="button" class="filter active" data-filter="all">All</button>
+          <button type="button" class="filter" data-filter="featured">Featured</button>
+          <button type="button" class="filter" data-filter="game">Games</button>
+          <button type="button" class="filter" data-filter="website">Websites</button>
         </div>
 
-        <div class="control-actions">
-          <button type="button" class="secondary-button" id="homeButton">Home</button>
-          <button type="button" class="primary-button" id="resetButton">Reset</button>
-        </div>
-
-        <div class="credit-box">
-          <strong>Instructor</strong>
-          <span>Mr. Re · Gateway Tech Software Engineering</span>
-        </div>
-      </aside>
-
-      <section class="gallery-panel" aria-label="Student project gallery">
-        <div class="gallery-header">
-          <div>
-            <p class="section-label" id="modeLabel">Featured Work</p>
-            <h2 id="galleryTitle">Select a student project</h2>
-          </div>
-          <div class="result-count" id="resultCount">0 projects</div>
-        </div>
-
-        <div class="featured-row" id="featuredRow" aria-label="Featured projects"></div>
-
-        <div class="project-grid" id="projectGrid" aria-live="polite"></div>
-
-        <div class="pagination-bar">
-          <button type="button" class="secondary-button small" id="prevPage">Previous</button>
-          <span id="pageLabel">Page 1 of 1</span>
-          <button type="button" class="secondary-button small" id="nextPage">Next</button>
-        </div>
-      </section>
+        <button type="button" class="reset" id="resetButton">Reset</button>
+      </div>
     </section>
+
+    <section class="gallery-panel" aria-label="Project gallery">
+      <div class="gallery-heading">
+        <div>
+          <p id="modeLabel">All Projects</p>
+          <h2 id="galleryTitle">Student Project Gallery</h2>
+        </div>
+        <strong id="projectCount">0 projects</strong>
+      </div>
+
+      <div class="project-grid" id="projectGrid" aria-live="polite"></div>
+
+      <div class="pager">
+        <button type="button" id="prevButton">Previous</button>
+        <span id="pageLabel">Page 1 of 1</span>
+        <button type="button" id="nextButton">Next</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Mr. Re · Gateway Tech Software Engineering</span>
+      <span>Click any project to view it here. Use X to return to the gallery.</span>
+    </footer>
   </main>
 
-  <div class="viewer-overlay" id="viewerOverlay" aria-hidden="true">
-    <div class="viewer-shell" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
-      <div class="viewer-header">
+  <div class="viewer" id="viewer" aria-hidden="true">
+    <div class="viewer-window" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+      <div class="viewer-top">
         <div>
-          <p id="viewerStudent"></p>
+          <p id="viewerStudent">Student</p>
           <h2 id="viewerTitle">Project Viewer</h2>
         </div>
-        <button type="button" class="viewer-close" id="viewerClose" aria-label="Close project viewer">×</button>
+        <button type="button" id="closeViewer" aria-label="Close project viewer">×</button>
       </div>
 
       <div class="viewer-body">
-        <iframe id="projectFrame" title="Student project viewer" loading="lazy" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
-        <div class="viewer-fallback" id="viewerFallback" hidden>
-          <h3>This project could not load inside the viewer.</h3>
-          <p>Some websites block embedded viewing. CodeHS share/embed links are usually the best option for this exhibit format.</p>
-          <button type="button" class="primary-button" id="retryViewer">Try Again</button>
+        <iframe id="projectFrame" title="Student project viewer" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
+        <div class="viewer-note" id="viewerNote" hidden>
+          <h3>This project could not be displayed inside the gallery.</h3>
+          <p>Some external sites block embedded viewing. CodeHS share or embed links are usually the best fit for this page.</p>
         </div>
       </div>
     </div>

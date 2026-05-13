@@ -1,16 +1,17 @@
 /*
-  Edit this file to add student projects.
+  GOGA project data.
+
+  Keep student names as first name + last initial.
 
   Required fields:
-  - studentDisplayName: first name + last initial, e.g. "Maria R."
-  - projectTitle: use "" if no title is available
-  - projectType: "Game" or "Website"
-  - projectLink: CodeHS share/embed link or student website link
-  - featured: true or false
+  studentDisplayName: "Maria R."
+  projectTitle: "Space Dodger" or "" if unknown
+  projectType: "Game" or "Website"
+  projectLink: CodeHS share/embed link or student website link
+  featured: true or false
 
   Optional:
-  - year: "2026", "2027", etc.
-  - thumbnail: path to screenshot, e.g. "assets/thumbnails/maria-r-game.png"
+  year: "2026", "2027", etc.
 */
 
 window.GOGA_CONFIG = {
@@ -25,8 +26,7 @@ window.GOGA_PROJECTS = [
     projectType: "Game",
     projectLink: "https://codehs.com/",
     featured: true,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   },
   {
     studentDisplayName: "Example B.",
@@ -34,8 +34,7 @@ window.GOGA_PROJECTS = [
     projectType: "Website",
     projectLink: "https://codehs.com/",
     featured: true,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   },
   {
     studentDisplayName: "Example C.",
@@ -43,8 +42,7 @@ window.GOGA_PROJECTS = [
     projectType: "Game",
     projectLink: "https://codehs.com/",
     featured: true,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   },
   {
     studentDisplayName: "Example D.",
@@ -52,8 +50,7 @@ window.GOGA_PROJECTS = [
     projectType: "Game",
     projectLink: "https://codehs.com/",
     featured: false,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   },
   {
     studentDisplayName: "Example E.",
@@ -61,8 +58,7 @@ window.GOGA_PROJECTS = [
     projectType: "Website",
     projectLink: "https://codehs.com/",
     featured: false,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   },
   {
     studentDisplayName: "Example F.",
@@ -70,8 +66,7 @@ window.GOGA_PROJECTS = [
     projectType: "Game",
     projectLink: "https://codehs.com/",
     featured: false,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   },
   {
     studentDisplayName: "Example G.",
@@ -79,7 +74,6 @@ window.GOGA_PROJECTS = [
     projectType: "Website",
     projectLink: "https://codehs.com/",
     featured: false,
-    year: "2026",
-    thumbnail: ""
+    year: "2026"
   }
 ];

@@ -1,22 +1,21 @@
-# GOGA Software Engineering Showcase - Kiosk Version
+# GOGA Software Engineering Showcase - Simple Version
 
-This version is designed for the event laptops.
+This is the simplified version.
 
-## Design goal
+## What changed
 
-The homepage behaves like a single-screen exhibit kiosk:
-
-- No normal website scrolling on laptops
-- Large GOGA branding
-- Simple 3-step instructions
-- Search/select student on the left
-- Featured projects and project cards on the right
-- Pagination instead of scrolling
-- Project opens inside a large overlay viewer
-- X closes the project and returns to the gallery
+- No large thumbnail cards
+- No complicated left sidebar
+- No separate featured row
+- One clear search panel
+- Compact project cards
+- Projects open in the same page with an X to close
 - 5-minute inactivity reset
+- Future years still supported
 
 ## Files
+
+Upload these files to the root of your GitHub Pages repository:
 
 - `index.html`
 - `styles.css`
@@ -24,9 +23,9 @@ The homepage behaves like a single-screen exhibit kiosk:
 - `students.js`
 - `assets/gateway-logo.png`
 
-## How to add projects
+## Editing projects
 
-Edit `students.js`.
+Edit only `students.js`.
 
 Example:
 
@@ -37,39 +36,10 @@ Example:
   projectType: "Game",
   projectLink: "https://codehs.com/share/...",
   featured: true,
-  year: "2026",
-  thumbnail: ""
+  year: "2026"
 }
 ```
 
-## If a project does not load in the viewer
+## Important note about embedded viewing
 
-Some websites block embedded viewing. CodeHS embed links should be the most reliable.
-
-For CodeHS links, the script tries to add `/embed` automatically, but the best workflow is to use the official CodeHS embed/share link whenever possible.
-
-## Future years
-
-Add `year: "2027"` to future project entries.
-
-To make the site open to 2027 first, edit:
-
-```js
-defaultYear: "2026"
-```
-
-and change it to:
-
-```js
-defaultYear: "2027"
-```
-
-## Event setup
-
-Recommended laptop setup:
-
-1. Open the GitHub Pages URL.
-2. Set browser zoom to 100%.
-3. Use full-screen mode.
-4. Confirm there is no page scrolling on the event laptops.
-5. Test search, dropdown, featured cards, and project viewer.
+Some outside websites block iframe viewing. CodeHS share/embed links should be the most reliable option for this exhibit.

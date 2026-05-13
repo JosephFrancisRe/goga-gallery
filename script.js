@@ -2,41 +2,37 @@
 
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
-const PROJECTS_PER_PAGE = 6;
+const PROJECTS_PER_PAGE = 12;
 
 const state = {
-  activeYear: DEFAULT_YEAR,
+  year: DEFAULT_YEAR,
   search: "",
   student: "",
-  type: "",
-  featuredOnly: false,
+  filter: "all",
   page: 1,
-  viewerProject: null,
-  inactivityTimer: null
+  inactivityTimer: null,
+  activeProject: null
 };
 
 const els = {
-  yearButtons: document.getElementById("yearButtons"),
+  yearSelect: document.getElementById("yearSelect"),
   searchInput: document.getElementById("searchInput"),
   studentSelect: document.getElementById("studentSelect"),
-  filterButtons: document.querySelectorAll(".filter-button"),
-  homeButton: document.getElementById("homeButton"),
+  filterButtons: document.querySelectorAll(".filter"),
   resetButton: document.getElementById("resetButton"),
-  featuredRow: document.getElementById("featuredRow"),
   projectGrid: document.getElementById("projectGrid"),
-  resultCount: document.getElementById("resultCount"),
+  projectCount: document.getElementById("projectCount"),
   pageLabel: document.getElementById("pageLabel"),
-  prevPage: document.getElementById("prevPage"),
-  nextPage: document.getElementById("nextPage"),
+  prevButton: document.getElementById("prevButton"),
+  nextButton: document.getElementById("nextButton"),
   modeLabel: document.getElementById("modeLabel"),
   galleryTitle: document.getElementById("galleryTitle"),
-  viewerOverlay: document.getElementById("viewerOverlay"),
-  viewerClose: document.getElementById("viewerClose"),
+  viewer: document.getElementById("viewer"),
+  closeViewer: document.getElementById("closeViewer"),
   viewerTitle: document.getElementById("viewerTitle"),
   viewerStudent: document.getElementById("viewerStudent"),
   projectFrame: document.getElementById("projectFrame"),
-  viewerFallback: document.getElementById("viewerFallback"),
-  retryViewer: document.getElementById("retryViewer")
+  viewerNote: document.getElementById("viewerNote")
 };
 
 function projects() {
@@ -71,24 +67,16 @@ function getYears() {
   return years.sort((a, b) => Number(b) - Number(a));
 }
 
-function renderYears() {
-  els.yearButtons.innerHTML = getYears().map(year => {
-    const active = year === state.activeYear ? " active" : "";
-    return `<button type="button" class="year-button${active}" data-year="${escapeHtml(year)}">${escapeHtml(year)}</button>`;
+function setupYears() {
+  els.yearSelect.innerHTML = getYears().map(year => {
+    return `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`;
   }).join("");
-
-  els.yearButtons.querySelectorAll("[data-year]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.activeYear = button.dataset.year;
-      resetFilters(false);
-      render();
-    });
-  });
+  els.yearSelect.value = state.year;
 }
 
-function populateStudentSelect() {
+function setupStudents() {
   const students = uniqueSorted(projects()
-    .filter(project => getYear(project) === state.activeYear)
+    .filter(project => getYear(project) === state.year)
     .map(project => project.studentDisplayName));
 
   els.studentSelect.innerHTML = `<option value="">All students</option>` + students.map(student => {
@@ -97,11 +85,13 @@ function populateStudentSelect() {
 
   if (students.includes(state.student)) {
     els.studentSelect.value = state.student;
+  } else {
+    state.student = "";
   }
 }
 
 function matches(project) {
-  if (getYear(project) !== state.activeYear) return false;
+  if (getYear(project) !== state.year) return false;
 
   const search = normalize(state.search);
   const haystack = [
@@ -111,162 +101,144 @@ function matches(project) {
     project.featured ? "featured" : ""
   ].map(normalize).join(" ");
 
-  const searchMatches = !search || haystack.includes(search);
-  const studentMatches = !state.student || project.studentDisplayName === state.student;
-  const typeMatches = !state.type || normalize(project.projectType) === normalize(state.type);
-  const featuredMatches = !state.featuredOnly || Boolean(project.featured);
+  if (search && !haystack.includes(search)) return false;
+  if (state.student && project.studentDisplayName !== state.student) return false;
 
-  return searchMatches && studentMatches && typeMatches && featuredMatches;
+  const type = normalize(project.projectType);
+
+  if (state.filter === "featured" && !project.featured) return false;
+  if (state.filter === "game" && !type.includes("game")) return false;
+  if (state.filter === "website" && !type.includes("web")) return false;
+
+  return true;
 }
 
-function getFilteredProjects() {
+function filteredProjects() {
   return projects()
     .filter(matches)
     .slice()
     .sort((a, b) => {
-      const studentCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
-      if (studentCompare !== 0) return studentCompare;
+      const nameCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
+      if (nameCompare !== 0) return nameCompare;
       return getTitle(a).localeCompare(getTitle(b));
     });
 }
 
-function renderFeaturedRow() {
-  const featured = projects()
-    .filter(project => getYear(project) === state.activeYear && Boolean(project.featured))
-    .slice(0, 3);
-
-  if (featured.length === 0) {
-    els.featuredRow.innerHTML = `
-      <div class="empty-state">No featured projects have been added yet.</div>
-    `;
-    return;
-  }
-
-  els.featuredRow.innerHTML = featured.map(project => {
-    const index = projects().indexOf(project);
-    return `
-      <article class="feature-mini">
-        <div class="feature-title">
-          <strong>${escapeHtml(getTitle(project))}</strong>
-          <span>${escapeHtml(project.studentDisplayName || "Student")} · ${escapeHtml(project.projectType || "Project")}</span>
-        </div>
-        <button type="button" data-project-index="${index}">View Featured Project</button>
-      </article>
-    `;
-  }).join("");
-
-  attachViewerButtons(els.featuredRow);
+function render() {
+  setupYears();
+  setupStudents();
+  renderCards();
 }
 
-function renderProjectGrid() {
-  const filtered = getFilteredProjects();
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PROJECTS_PER_PAGE));
+function renderCards() {
+  const list = filteredProjects();
+  const totalPages = Math.max(1, Math.ceil(list.length / PROJECTS_PER_PAGE));
 
   if (state.page > totalPages) state.page = totalPages;
   if (state.page < 1) state.page = 1;
 
   const start = (state.page - 1) * PROJECTS_PER_PAGE;
-  const visible = filtered.slice(start, start + PROJECTS_PER_PAGE);
+  const visible = list.slice(start, start + PROJECTS_PER_PAGE);
 
-  const projectWord = filtered.length === 1 ? "project" : "projects";
-  els.resultCount.textContent = `${filtered.length} ${projectWord}`;
+  const word = list.length === 1 ? "project" : "projects";
+  els.projectCount.textContent = `${list.length} ${word}`;
   els.pageLabel.textContent = `Page ${state.page} of ${totalPages}`;
-  els.prevPage.disabled = state.page <= 1;
-  els.nextPage.disabled = state.page >= totalPages;
+  els.prevButton.disabled = state.page <= 1;
+  els.nextButton.disabled = state.page >= totalPages;
 
-  if (state.featuredOnly) {
-    els.modeLabel.textContent = "Featured Work";
-    els.galleryTitle.textContent = "Featured projects";
-  } else if (state.student) {
-    els.modeLabel.textContent = "Selected Student";
-    els.galleryTitle.textContent = `${state.student}'s projects`;
-  } else if (state.type) {
-    els.modeLabel.textContent = state.type;
-    els.galleryTitle.textContent = `${state.type} projects`;
-  } else {
-    els.modeLabel.textContent = "Student Gallery";
-    els.galleryTitle.textContent = "Select a student project";
-  }
+  updateHeading(list.length);
 
   if (visible.length === 0) {
-    els.projectGrid.innerHTML = `
-      <div class="empty-state">
-        No projects match this search. Press Reset to return to the full gallery.
-      </div>
-    `;
+    els.projectGrid.innerHTML = `<div class="empty">No projects match this search. Press Reset to return to the full gallery.</div>`;
     return;
   }
 
   els.projectGrid.innerHTML = visible.map(projectCard).join("");
-  attachViewerButtons(els.projectGrid);
+  els.projectGrid.querySelectorAll("[data-project-index]").forEach(button => {
+    button.addEventListener("click", () => {
+      openViewer(projects()[Number(button.dataset.projectIndex)]);
+    });
+  });
+}
+
+function updateHeading(count) {
+  if (state.student) {
+    els.modeLabel.textContent = "Selected Student";
+    els.galleryTitle.textContent = `${state.student}'s Projects`;
+    return;
+  }
+
+  if (state.filter === "featured") {
+    els.modeLabel.textContent = "Featured Work";
+    els.galleryTitle.textContent = "Featured Student Projects";
+    return;
+  }
+
+  if (state.filter === "game") {
+    els.modeLabel.textContent = "Games";
+    els.galleryTitle.textContent = "Student Game Projects";
+    return;
+  }
+
+  if (state.filter === "website") {
+    els.modeLabel.textContent = "Websites";
+    els.galleryTitle.textContent = "Student Website Projects";
+    return;
+  }
+
+  els.modeLabel.textContent = "All Projects";
+  els.galleryTitle.textContent = "Student Project Gallery";
 }
 
 function projectCard(project) {
   const index = projects().indexOf(project);
   const type = project.projectType || "Project";
-  const typeClass = normalize(type).includes("web") ? "website" : "game";
-  const thumbClasses = ["project-thumb", typeClass];
-
-  if (project.featured) thumbClasses.push("featured");
-  if (project.thumbnail) thumbClasses.push("has-image");
-
-  const thumbStyle = project.thumbnail
-    ? ` style="background-image: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.35)), url('${escapeAttribute(project.thumbnail)}');"`
-    : "";
+  const isWebsite = normalize(type).includes("web");
+  const classes = ["card"];
+  if (isWebsite) classes.push("website");
+  if (project.featured) classes.push("featured");
 
   return `
-    <article class="project-card">
-      <div class="${thumbClasses.join(" ")}"${thumbStyle}>${escapeHtml(type)}</div>
-      <div class="project-info">
-        <h3>${escapeHtml(getTitle(project))}</h3>
-        <p class="student-name">${escapeHtml(project.studentDisplayName || "Student")}</p>
-        <div class="badges">
-          <span class="badge">${escapeHtml(getYear(project))}</span>
-          <span class="badge">${escapeHtml(type)}</span>
-          ${project.featured ? `<span class="badge featured">Featured</span>` : ""}
-        </div>
-        <button class="view-button" type="button" data-project-index="${index}">View Project</button>
+    <article class="${classes.join(" ")}">
+      <h3>${escapeHtml(getTitle(project))}</h3>
+      <p class="student">${escapeHtml(project.studentDisplayName || "Student")}</p>
+      <div class="badges">
+        <span class="badge">${escapeHtml(type)}</span>
+        <span class="badge">${escapeHtml(getYear(project))}</span>
+        ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
       </div>
+      <button type="button" data-project-index="${index}">View Project</button>
     </article>
   `;
-}
-
-function attachViewerButtons(root) {
-  root.querySelectorAll("[data-project-index]").forEach(button => {
-    button.addEventListener("click", () => {
-      const project = projects()[Number(button.dataset.projectIndex)];
-      openViewer(project);
-    });
-  });
 }
 
 function openViewer(project) {
   if (!project) return;
 
-  state.viewerProject = project;
+  state.activeProject = project;
   els.viewerTitle.textContent = getTitle(project);
   els.viewerStudent.textContent = `${project.studentDisplayName || "Student"} · ${project.projectType || "Project"}`;
-  els.viewerFallback.hidden = true;
+  els.viewerNote.hidden = true;
 
   const link = String(project.projectLink || "").trim();
   if (link) {
     els.projectFrame.src = getEmbedUrl(link);
   } else {
     els.projectFrame.removeAttribute("src");
-    els.viewerFallback.hidden = false;
+    els.viewerNote.hidden = false;
   }
 
-  els.viewerOverlay.classList.add("open");
-  els.viewerOverlay.setAttribute("aria-hidden", "false");
-  els.viewerClose.focus();
+  els.viewer.classList.add("open");
+  els.viewer.setAttribute("aria-hidden", "false");
+  els.closeViewer.focus();
 }
 
-function closeViewer() {
-  els.viewerOverlay.classList.remove("open");
-  els.viewerOverlay.setAttribute("aria-hidden", "true");
+function closeProjectViewer() {
+  els.viewer.classList.remove("open");
+  els.viewer.setAttribute("aria-hidden", "true");
   els.projectFrame.removeAttribute("src");
-  els.viewerFallback.hidden = true;
-  state.viewerProject = null;
+  els.viewerNote.hidden = true;
+  state.activeProject = null;
 }
 
 function getEmbedUrl(url) {
@@ -288,92 +260,76 @@ function getEmbedUrl(url) {
   }
 }
 
-function setFilterButtonState(clickedButton) {
-  els.filterButtons.forEach(button => button.classList.remove("active"));
-  clickedButton.classList.add("active");
-}
-
-function resetFilters(resetYear = true) {
-  if (resetYear) state.activeYear = DEFAULT_YEAR;
+function resetAll() {
+  state.year = DEFAULT_YEAR;
   state.search = "";
   state.student = "";
-  state.type = "";
-  state.featuredOnly = false;
+  state.filter = "all";
   state.page = 1;
 
   els.searchInput.value = "";
   els.studentSelect.value = "";
+  els.yearSelect.value = DEFAULT_YEAR;
 
   els.filterButtons.forEach(button => {
-    const isAll = !button.dataset.type && !button.dataset.featured;
-    button.classList.toggle("active", isAll);
+    button.classList.toggle("active", button.dataset.filter === "all");
   });
-}
 
-function render() {
-  renderYears();
-  populateStudentSelect();
-  renderFeaturedRow();
-  renderProjectGrid();
+  closeProjectViewer();
+  render();
 }
 
 function bindEvents() {
+  els.yearSelect.addEventListener("change", () => {
+    state.year = els.yearSelect.value;
+    state.page = 1;
+    state.student = "";
+    render();
+  });
+
   els.searchInput.addEventListener("input", () => {
     state.search = els.searchInput.value;
     state.page = 1;
-    renderProjectGrid();
+    renderCards();
   });
 
   els.studentSelect.addEventListener("change", () => {
     state.student = els.studentSelect.value;
     state.page = 1;
-    renderProjectGrid();
+    renderCards();
   });
 
   els.filterButtons.forEach(button => {
     button.addEventListener("click", () => {
-      setFilterButtonState(button);
-      state.type = button.dataset.type || "";
-      state.featuredOnly = button.dataset.featured === "true";
+      state.filter = button.dataset.filter;
       state.page = 1;
-      renderProjectGrid();
+
+      els.filterButtons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      renderCards();
     });
   });
 
-  els.prevPage.addEventListener("click", () => {
+  els.prevButton.addEventListener("click", () => {
     state.page -= 1;
-    renderProjectGrid();
+    renderCards();
   });
 
-  els.nextPage.addEventListener("click", () => {
+  els.nextButton.addEventListener("click", () => {
     state.page += 1;
-    renderProjectGrid();
+    renderCards();
   });
 
-  els.homeButton.addEventListener("click", () => {
-    resetFilters(true);
-    closeViewer();
-    render();
-  });
+  els.resetButton.addEventListener("click", resetAll);
+  els.closeViewer.addEventListener("click", closeProjectViewer);
 
-  els.resetButton.addEventListener("click", () => {
-    resetFilters(true);
-    closeViewer();
-    render();
-  });
-
-  els.viewerClose.addEventListener("click", closeViewer);
-
-  els.viewerOverlay.addEventListener("click", event => {
-    if (event.target === els.viewerOverlay) closeViewer();
-  });
-
-  els.retryViewer.addEventListener("click", () => {
-    if (state.viewerProject) openViewer(state.viewerProject);
+  els.viewer.addEventListener("click", event => {
+    if (event.target === els.viewer) closeProjectViewer();
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeViewer();
+    if (event.key === "Escape") closeProjectViewer();
   });
 
   ["click", "keydown", "mousemove", "touchstart"].forEach(eventName => {
@@ -383,11 +339,7 @@ function bindEvents() {
 
 function resetInactivityTimer() {
   window.clearTimeout(state.inactivityTimer);
-  state.inactivityTimer = window.setTimeout(() => {
-    resetFilters(true);
-    closeViewer();
-    render();
-  }, INACTIVITY_LIMIT_MS);
+  state.inactivityTimer = window.setTimeout(resetAll, INACTIVITY_LIMIT_MS);
 }
 
 function escapeHtml(value) {
@@ -397,12 +349,6 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-function escapeAttribute(value) {
-  return String(value || "")
-    .replaceAll("\\", "\\\\")
-    .replaceAll("'", "\\'");
 }
 
 bindEvents();
