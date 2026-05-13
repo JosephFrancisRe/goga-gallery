@@ -1,0 +1,178 @@
+html{
+    background-color: #131313;
+    color: #cbcbcb;
+    font-family: verdana;
+}
+h1{
+    text-align: center;
+}
+
+a{
+    Color: #cbcbcb;
+    font-weight: bold;
+}
+
+a:hover{
+    text-decoration-line: none;
+    font-size: 110%;
+}
+.about-header{
+    text-align: center;
+    font-weight: bold;
+}
+#bold{
+    font-size: 1rem;
+    font-weight: bold;
+}
+.satire{
+    font-size: .50rem;
+}
+.unable{
+    animation: color-shift;
+    animation-duration: 5s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+
+@keyframes color-shift{
+    from{background-color: #131313;}
+    
+    to{background-color: gray;}
+    
+}
+table, th, tr, td{
+    border: 1px solid #cbcbcb;
+}
+.the-movie{
+    animation: opaque;
+    animation-duration: 15s;
+    
+}
+@keyframes opaque{
+    from{
+        filter: opacity(0%);
+    }
+    to{
+        filter: opacity(100%);
+    }
+}
+.container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "menu content"
+    "footer footer";
+  grid-template-columns: 1fr 3fr;
+  gap: 3px;
+  background-color: #cbcbcb;
+  padding: 5px;
+}
+.container div {
+  background-color: #131313;
+  padding: 10px;
+}
+.container div.header {
+  grid-area: header;
+  text-align: center;
+}
+.container div.menu {
+  grid-area: menu;
+  text-align: center;
+  place-content: center;
+}
+.container div.content {
+  grid-area: content;
+}
+.container div.footer {
+  grid-area: footer;
+  text-align: center;  
+}
+.thing{
+    display: grid;
+    grid-template-columns: 1fr, 1fr;
+    background-color: #131313;
+    row-gap: 50%;
+}
+.thing div {
+  background-color: #131313;
+  border: 5px solid #cbcbcb;
+  text-align: center;
+}
+.no{
+    display: grid;
+    background-color: #131313;
+}
+.no div {
+  background-color: #131313;
+  border: 5px solid #cbcbcb;
+  text-align: center;
+}
+.reviews {
+  display: grid;
+  grid-template-areas:
+  "reviews-one reviews-two"
+  "reviews-footer reviews-footer";
+  gap: 3px;
+  background-color: #cbcbcb;
+  padding: 5px;
+}
+.reviews div {
+  background-color: #131313;
+  padding: 10px;
+}
+.reviews div.reviews-one{
+    grid-area: reviews-one;
+    place-content: center;
+}
+.reviews div.reviews-two{
+    grid-area: reviews-two;
+    place-content: center;
+}
+.reviews div.reviews-footer{
+    grid-area: reviews-footer;
+    text-align: center;
+    place-content: center;
+}
+.greg {
+  display: grid;
+  grid-template-areas:
+    "g g"
+    "r e"
+    "other-g other-g";
+  grid-template-columns: 1fr 3fr;
+  gap: 3px;
+  background-color: #cbcbcb;
+  padding: 5px;
+}
+.greg div {
+  background-color: #131313;
+  padding: 10px;
+}
+.greg div.g {
+  grid-area: g;
+  text-align: center;
+}
+.greg div.r {
+  grid-area: r;
+  text-align: center;
+  place-content: center;
+}
+.greg div.r {
+  grid-area: r;
+}
+.greg div.other-g {
+  grid-area: other-g;
+  text-align: center;  
+}
+img {
+   height: 17rem;
+   width: 20rem;
+   align: 
+}
+#nav{
+    border: solid;
+    border-color: #cbcbcb;
+    background-color: black;
+    text-align: center;
+    font-size: 1.5rem;
+}

@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    font-family: Arial, sans-serif;
+    background-color: #F7F3EB;
+    color:#2F5233;
+    
+}
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 3.75rem;
+    background-color:#fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow:0 0.125rem 0.8rem rgba(0,0,0,0.1);
+}
+.logo {
+    font-weight: bold;
+    font-size: 3rem;
+    color: #2F5233;
+}
+.navlinks{
+ display: flex;
+ list-style: none;
+ gap: 1.2rem;
+}
+.navlinks a{
+    text-decoration:none;
+    color: #2F5233;
+    font-weight: Bold;
+    transition: color 0.3s ease;
+}
+navlinks a:hover, .navlinks a.active {
+    color: #A6C36F;
+}
+.container {
+    width: 100%;
+    max-width: 31.25rem;
+    margin:3.125rem auto;
+    background:white;
+    padding:1.25rem;
+    border-radius:0.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0, 0.1);
+}
+h2{
+    text-align: center;
+    margin-bottom:1.25rem;
+}
+.ticket-option{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom:0.67rem;
+}
+.ticket-option label{
+    font-size: 1rem;
+}
+.ticket-option input{
+    padding:0.25rem;
+    font-size:1rem;
+    width: 4rem;
+    text-align: center;
+}
+.ticket-option button{
+    padding:0.75rem 1rem;
+    background-color: #28a745;
+    color:white;
+    border:none;
+    border-radius:0.25rem;
+    cursor: pointer;
+}
+.ticket-option button:hover{
+    background-color:#218838;
+}
+.total{
+    margin-top:1.25rem;
+    font-size:1.25rem;
+    text-align: center;
+}
+.payment-section {
+    margin-top:2rem;
+}
+.payment-section h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.payment-field {
+    margin-bottom: 1rem;
+}
+.payment-field label {
+    display: block;
+    margin-bottom:0.25rem;
+    font-weight: bold;
+}
+.payment-field input{
+    width:100%;
+    padding:0.5rem;
+    font-size:1rem;
+}
+.submit-btn{
+    display: block;
+    width: 100%;
+    padding:0.67rem;
+    background-color:#A6C36F;
+    color:white;
+    font-size:1.125rem;
+    border:none;
+    border-radius:0.3rem;
+    cursor: pointer;
+    margin-top:1.25rem;
+}
+.submit-btn:hover{
+    backgroud-color:#0056b3;
+}
+footer {
+    background: #2F5233;
+    color: white;
+    text-align: center;
+    padding: 1.25rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}

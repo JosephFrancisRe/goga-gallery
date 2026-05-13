@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:bordedr-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background-color: #F7F3EB;
+    color:#2F5233;
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 3.75rem;
+    background-color:#fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow:0 0.125rem 0.8rem rgba(0,0,0,0.1);
+}
+.logo {
+    font-weight: bold;
+    font-size: 3rem;
+    color: #2F5233;
+}
+.navlinks{
+ display: flex;
+ list-style: none;
+ gap: 1.2rem;
+}
+.navlinks a{
+    text-decoration:none;
+    color: #2F5233;
+    font-weight: Bold;
+    transition: color 0.3s ease;
+}
+navlinks a:hover, .navlinks a:.active {
+    color: #A6C36F;
+}
+.hallheader {
+    background: url('https://codehs.com/uploads/9a655d68bdde58c3cc7ca9ad735ba5e5') center/cover no-repeat;
+    color: white;
+    text-align: center;
+    padding: 7.5rem 1.25rem;
+    position: relative;
+}
+.hallheader::after {
+    content:"";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background; rgba(0,0,0,0.5)
+    z-index: 1;
+}
+.hallheader h1, .hallheader p {
+    position: relative;
+    z-index:2;
+}
+.faq-section {
+    max-wdith: 56.25rem;
+    margin: 3.75rem;
+    padding: 0 1.25rem;
+}
+.faq-section h2{
+    color: #2F5233;
+    margin-bottom: 0.625rem; 
+}
+.faq-section ul{
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+}
+.faq-section ul li {
+   margin :0.625rem;
+   padding-left: 0.625rem;
+}
+footer {
+  background: #2F5233;
+  color: white;
+  text-align: center;
+  padding: 1.25rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<head>
+    <title>Chittenden County Zoo</title>
+    <link rel="stylesheet" href="css/visit.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+        <div class="logo">Chittenden County Zoo</div>
+        <ul class="navlinks">
+            <li><a href="index.html" class="active">Home!</a></li>
+            <li><a href="animals.html">Animals!</a></li>
+            <li><a href="visit.html">Visit!</a></li>
+            <li><a href="apply.html">Apply!</a></li>
+        </ul>
+    </nav>
+    </header>
+    <body>
+    <main>
+    <div class="container">
+        <h2>Buy Your Tickets!</h2>
+        <form id="ticket-form">
+            <div class="ticket-option">
+                <label for "adult">Adults</label>
+                <input type="number" id="adult" name="adult" value="0" min="0" step="1">
+                <span>$15</span>
+            </div>
+            <div class="ticket-option">
+                <label for "child">Children</label>
+                <input type="number" id="child" name="child" value="0" min="0" step="1">
+                <span>$5</span>
+            </div>
+            <div class="ticket-option">
+                <label for "adult">Seniors</label>
+                <input type="number" id="senior" name="senior" value="0" min="0" step="1">
+                <span>$10</span>
+            </div>
+            <div class="total">
+                Total: $<span id="total-price">0</span>
+            </div>
+            <div class="payment-section">
+                <h3>Payment Information</h3>
+                
+                <div class="payment-field">
+                    <label for="card-name">Name of Card Owner</label>
+                    <input type="text" id="card-name" name="card-name" required placeholder="John Doe">
+                </div>
+                <div class="payment-field">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" name="card-number" required maxlength="16" placeholder="1234 5678 9101 1121">
+                </div>
+                <div class="payment-field">
+                    <label for="expiry-date">Expiry Date</label>
+                    <input type="month" id="expiry-date" name="expiry-date" required>
+                </div>
+                <div class="payment-field">
+                    <label for="cvv">CVV</label>
+                    <input type="password" id="cvv" name="cvv" required maxlength="4" placeholder="123">
+                </div>
+                <div class="payment-field">
+                    <label for="promo-code">Promo Code</label>
+                    <input type="text" id="promo-code" name="promo-code" placeholder="Enter Promo Code(optional)">
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Confirm Purchase</button>
+        </form>
+    </div>    
+    </main>
+    <footer>
+    <p>© 2025 Chittenden County Zoo | All Rights Reserved</p>
+</footer>
+    <script>
+    // const is short for constant and is used for variables that should not be reassigened for later uses, this allows it to be the same throughtout and unaffected by change
+    // document.getElementById(blank) is a DOM(Document Object Model) that lets javascript to search for and connect to a HTML element by it's ID attribute
+    // A DOM is similar to a tree-like structure that the browser creates from the HTML so the javascript can see, access, and channge whatever is on the page
+    // parseINT converts a string into a whole number allowing javascript to calculate
+    // function is a block of code used to perform a specfic task
+    
+    
+    
+    
+    
+     const adultInput = document.getElementById('adult');
+    const childInput = document.getElementById('child');
+    const seniorInput = document.getElementById('senior');
+    const totalPriceElement = document.getElementById('total-price');
+    // This function calculate the total based off the user input for example if the user puts 2 adults tickets and 1 senior ticket it would be 15*2+10 and show 40 dollars
+    function calculateTotal() {
+      const adultCount = parseInt(adultInput.value) || 0;
+      const childCount = parseInt(childInput.value) || 0;
+      const seniorCount = parseInt(seniorInput.value) || 0;
+      //  This line of code is how the total calculated
+      let total = (adultCount * 15) + (childCount * 5) + (seniorCount * 10);
+      
+      const promoCode = document.getElementById('promo-code').value.trim().toUpperCase();
+      if (promoCode === "DISCOUNT25") {
+          total *= 0.75; 
+      }
+      
+      totalPriceElement.textContent = total.toFixed(2);
+    }
+
+    adultInput.addEventListener('input', calculateTotal);
+    childInput.addEventListener('input', calculateTotal);
+    seniorInput.addEventListener('input', calculateTotal);
+    document.getElementById('promo-code').addEventListener('input', calculateTotal);
+    
+    document.getElementById('ticket-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Ticket purchase confirmed!');
+    });
+    </script>
+</body>
+</html>
