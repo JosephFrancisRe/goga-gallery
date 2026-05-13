@@ -2,56 +2,62 @@
 
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
+const PROJECTS_PER_PAGE = 6;
 
 const state = {
   activeYear: DEFAULT_YEAR,
   search: "",
   student: "",
   type: "",
+  featuredOnly: false,
+  page: 1,
   viewerProject: null,
   inactivityTimer: null
 };
 
 const els = {
-  activeYearLabel: document.getElementById("activeYearLabel"),
-  yearControls: document.getElementById("yearControls"),
-  featuredGrid: document.getElementById("featuredGrid"),
-  projectGrid: document.getElementById("projectGrid"),
+  yearButtons: document.getElementById("yearButtons"),
   searchInput: document.getElementById("searchInput"),
   studentSelect: document.getElementById("studentSelect"),
-  typeSelect: document.getElementById("typeSelect"),
-  resultsSummary: document.getElementById("resultsSummary"),
-  backHomeButton: document.getElementById("backHomeButton"),
-  resetGalleryButton: document.getElementById("resetGalleryButton"),
-  resetGalleryTop: document.getElementById("resetGalleryTop"),
+  filterButtons: document.querySelectorAll(".filter-button"),
+  homeButton: document.getElementById("homeButton"),
+  resetButton: document.getElementById("resetButton"),
+  featuredRow: document.getElementById("featuredRow"),
+  projectGrid: document.getElementById("projectGrid"),
+  resultCount: document.getElementById("resultCount"),
+  pageLabel: document.getElementById("pageLabel"),
+  prevPage: document.getElementById("prevPage"),
+  nextPage: document.getElementById("nextPage"),
+  modeLabel: document.getElementById("modeLabel"),
+  galleryTitle: document.getElementById("galleryTitle"),
   viewerOverlay: document.getElementById("viewerOverlay"),
   viewerClose: document.getElementById("viewerClose"),
   viewerTitle: document.getElementById("viewerTitle"),
   viewerStudent: document.getElementById("viewerStudent"),
   projectFrame: document.getElementById("projectFrame"),
-  viewerMessage: document.getElementById("viewerMessage"),
-  retryViewerButton: document.getElementById("retryViewerButton")
+  viewerFallback: document.getElementById("viewerFallback"),
+  retryViewer: document.getElementById("retryViewer")
 };
 
 function projects() {
   return Array.isArray(window.GOGA_PROJECTS) ? window.GOGA_PROJECTS : [];
 }
 
-function getProjectYear(project) {
+function getYear(project) {
   return String(project.year || DEFAULT_YEAR);
 }
 
-function getProjectTitle(project) {
-  const rawTitle = (project.projectTitle || "").trim();
-  if (rawTitle) return rawTitle;
+function getTitle(project) {
+  const title = String(project.projectTitle || "").trim();
+  if (title) return title;
 
-  const type = (project.projectType || "Project").trim();
-  if (type.toLowerCase().includes("game")) return "Student Game Project";
-  if (type.toLowerCase().includes("web")) return "Student Website Project";
+  const type = String(project.projectType || "").toLowerCase();
+  if (type.includes("game")) return "Student Game Project";
+  if (type.includes("web")) return "Student Website Project";
   return "Student Digital Project";
 }
 
-function normalizeText(value) {
+function normalize(value) {
   return String(value || "").trim().toLowerCase();
 }
 
@@ -59,224 +65,216 @@ function uniqueSorted(values) {
   return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
 }
 
-function projectMatches(project) {
-  const yearMatches = getProjectYear(project) === state.activeYear;
-  if (!yearMatches) return false;
-
-  const searchNeedle = normalizeText(state.search);
-  const haystack = [
-    project.studentDisplayName,
-    getProjectTitle(project),
-    project.projectType,
-    project.featured ? "featured" : ""
-  ].map(normalizeText).join(" ");
-
-  const searchMatches = !searchNeedle || haystack.includes(searchNeedle);
-  const studentMatches = !state.student || project.studentDisplayName === state.student;
-  const typeMatches = !state.type || project.projectType === state.type;
-
-  return searchMatches && studentMatches && typeMatches;
-}
-
-function getAvailableYears() {
-  const years = uniqueSorted(projects().map(getProjectYear));
-  if (!years.includes(DEFAULT_YEAR)) years.unshift(DEFAULT_YEAR);
+function getYears() {
+  const years = uniqueSorted(projects().map(getYear));
+  if (!years.includes(DEFAULT_YEAR)) years.push(DEFAULT_YEAR);
   return years.sort((a, b) => Number(b) - Number(a));
 }
 
-function renderYearControls() {
-  const years = getAvailableYears();
-
-  els.yearControls.innerHTML = years.map((year) => {
-    const activeClass = year === state.activeYear ? " active" : "";
-    const current = year === state.activeYear ? " aria-current=\"true\"" : "";
-    return `<button class="year-button${activeClass}" type="button" data-year="${escapeHtml(year)}"${current}>${escapeHtml(year)}</button>`;
+function renderYears() {
+  els.yearButtons.innerHTML = getYears().map(year => {
+    const active = year === state.activeYear ? " active" : "";
+    return `<button type="button" class="year-button${active}" data-year="${escapeHtml(year)}">${escapeHtml(year)}</button>`;
   }).join("");
 
-  els.activeYearLabel.textContent = state.activeYear;
-
-  els.yearControls.querySelectorAll("[data-year]").forEach((button) => {
+  els.yearButtons.querySelectorAll("[data-year]").forEach(button => {
     button.addEventListener("click", () => {
       state.activeYear = button.dataset.year;
-      resetFiltersOnly();
-      renderAll();
-      scrollToSection("gallery");
+      resetFilters(false);
+      render();
     });
   });
 }
 
-function populateFilters() {
-  const yearProjects = projects().filter((project) => getProjectYear(project) === state.activeYear);
-  const students = uniqueSorted(yearProjects.map((project) => project.studentDisplayName));
-  const types = uniqueSorted(yearProjects.map((project) => project.projectType));
+function populateStudentSelect() {
+  const students = uniqueSorted(projects()
+    .filter(project => getYear(project) === state.activeYear)
+    .map(project => project.studentDisplayName));
 
-  const currentStudent = state.student;
-  const currentType = state.type;
-
-  els.studentSelect.innerHTML = `<option value="">All students</option>` + students.map((student) => {
+  els.studentSelect.innerHTML = `<option value="">All students</option>` + students.map(student => {
     return `<option value="${escapeHtml(student)}">${escapeHtml(student)}</option>`;
   }).join("");
 
-  els.typeSelect.innerHTML = `<option value="">All project types</option>` + types.map((type) => {
-    return `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`;
-  }).join("");
-
-  if (students.includes(currentStudent)) els.studentSelect.value = currentStudent;
-  if (types.includes(currentType)) els.typeSelect.value = currentType;
-}
-
-function renderAll() {
-  renderYearControls();
-  populateFilters();
-  renderFeatured();
-  renderGallery();
-}
-
-function renderFeatured() {
-  const featured = projects()
-    .filter((project) => getProjectYear(project) === state.activeYear && Boolean(project.featured))
-    .slice()
-    .sort((a, b) => getProjectTitle(a).localeCompare(getProjectTitle(b)));
-
-  if (featured.length === 0) {
-    els.featuredGrid.innerHTML = `
-      <div class="empty-state">
-        <strong>No featured projects have been added for ${escapeHtml(state.activeYear)} yet.</strong><br />
-        Mark a project with <code>featured: true</code> in <code>students.js</code> to show it here.
-      </div>
-    `;
-    return;
+  if (students.includes(state.student)) {
+    els.studentSelect.value = state.student;
   }
-
-  els.featuredGrid.innerHTML = featured.map((project, index) => projectCard(project, index, true)).join("");
-  attachProjectButtons(els.featuredGrid);
 }
 
-function renderGallery() {
-  const filtered = projects()
-    .filter(projectMatches)
+function matches(project) {
+  if (getYear(project) !== state.activeYear) return false;
+
+  const search = normalize(state.search);
+  const haystack = [
+    project.studentDisplayName,
+    getTitle(project),
+    project.projectType,
+    project.featured ? "featured" : ""
+  ].map(normalize).join(" ");
+
+  const searchMatches = !search || haystack.includes(search);
+  const studentMatches = !state.student || project.studentDisplayName === state.student;
+  const typeMatches = !state.type || normalize(project.projectType) === normalize(state.type);
+  const featuredMatches = !state.featuredOnly || Boolean(project.featured);
+
+  return searchMatches && studentMatches && typeMatches && featuredMatches;
+}
+
+function getFilteredProjects() {
+  return projects()
+    .filter(matches)
     .slice()
     .sort((a, b) => {
-      const nameCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
-      if (nameCompare !== 0) return nameCompare;
-      return getProjectTitle(a).localeCompare(getProjectTitle(b));
+      const studentCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
+      if (studentCompare !== 0) return studentCompare;
+      return getTitle(a).localeCompare(getTitle(b));
     });
+}
 
-  const totalForYear = projects().filter((project) => getProjectYear(project) === state.activeYear).length;
-  const resultWord = filtered.length === 1 ? "project" : "projects";
-  els.resultsSummary.textContent = `Showing ${filtered.length} of ${totalForYear} ${state.activeYear} ${resultWord}.`;
+function renderFeaturedRow() {
+  const featured = projects()
+    .filter(project => getYear(project) === state.activeYear && Boolean(project.featured))
+    .slice(0, 3);
 
-  if (filtered.length === 0) {
+  if (featured.length === 0) {
+    els.featuredRow.innerHTML = `
+      <div class="empty-state">No featured projects have been added yet.</div>
+    `;
+    return;
+  }
+
+  els.featuredRow.innerHTML = featured.map(project => {
+    const index = projects().indexOf(project);
+    return `
+      <article class="feature-mini">
+        <div class="feature-title">
+          <strong>${escapeHtml(getTitle(project))}</strong>
+          <span>${escapeHtml(project.studentDisplayName || "Student")} · ${escapeHtml(project.projectType || "Project")}</span>
+        </div>
+        <button type="button" data-project-index="${index}">View Featured Project</button>
+      </article>
+    `;
+  }).join("");
+
+  attachViewerButtons(els.featuredRow);
+}
+
+function renderProjectGrid() {
+  const filtered = getFilteredProjects();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PROJECTS_PER_PAGE));
+
+  if (state.page > totalPages) state.page = totalPages;
+  if (state.page < 1) state.page = 1;
+
+  const start = (state.page - 1) * PROJECTS_PER_PAGE;
+  const visible = filtered.slice(start, start + PROJECTS_PER_PAGE);
+
+  const projectWord = filtered.length === 1 ? "project" : "projects";
+  els.resultCount.textContent = `${filtered.length} ${projectWord}`;
+  els.pageLabel.textContent = `Page ${state.page} of ${totalPages}`;
+  els.prevPage.disabled = state.page <= 1;
+  els.nextPage.disabled = state.page >= totalPages;
+
+  if (state.featuredOnly) {
+    els.modeLabel.textContent = "Featured Work";
+    els.galleryTitle.textContent = "Featured projects";
+  } else if (state.student) {
+    els.modeLabel.textContent = "Selected Student";
+    els.galleryTitle.textContent = `${state.student}'s projects`;
+  } else if (state.type) {
+    els.modeLabel.textContent = state.type;
+    els.galleryTitle.textContent = `${state.type} projects`;
+  } else {
+    els.modeLabel.textContent = "Student Gallery";
+    els.galleryTitle.textContent = "Select a student project";
+  }
+
+  if (visible.length === 0) {
     els.projectGrid.innerHTML = `
       <div class="empty-state">
-        <strong>No projects match the current search.</strong><br />
-        Try clearing the search, changing the student dropdown, or selecting all project types.
+        No projects match this search. Press Reset to return to the full gallery.
       </div>
     `;
     return;
   }
 
-  els.projectGrid.innerHTML = filtered.map((project, index) => projectCard(project, index, false)).join("");
-  attachProjectButtons(els.projectGrid);
+  els.projectGrid.innerHTML = visible.map(projectCard).join("");
+  attachViewerButtons(els.projectGrid);
 }
 
-function projectCard(project, index, forceFeaturedStyle) {
-  const title = getProjectTitle(project);
-  const student = project.studentDisplayName || "Student";
+function projectCard(project) {
+  const index = projects().indexOf(project);
   const type = project.projectType || "Project";
-  const featured = Boolean(project.featured);
-  const cardClasses = ["project-card"];
-  if (featured || forceFeaturedStyle) cardClasses.push("featured-card");
+  const typeClass = normalize(type).includes("web") ? "website" : "game";
+  const thumbClasses = ["project-thumb", typeClass];
 
-  const thumbnailStyle = project.thumbnail
-    ? ` style="background-image: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.42)), url('${escapeAttribute(project.thumbnail)}');"`
-    : "";
-
-  const thumbClasses = ["project-thumb", cssSafeType(type)];
-  if (featured || forceFeaturedStyle) thumbClasses.push("featured");
+  if (project.featured) thumbClasses.push("featured");
   if (project.thumbnail) thumbClasses.push("has-image");
 
-  const projectIndex = projects().indexOf(project);
+  const thumbStyle = project.thumbnail
+    ? ` style="background-image: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.35)), url('${escapeAttribute(project.thumbnail)}');"`
+    : "";
 
   return `
-    <article class="${cardClasses.join(" ")}">
-      <div class="${thumbClasses.join(" ")}"${thumbnailStyle}>
-        <span class="project-type-chip">${escapeHtml(type)}</span>
-      </div>
-      <div class="project-content">
-        <h3>${escapeHtml(title)}</h3>
-        <p class="project-student">${escapeHtml(student)}</p>
-        <div class="project-badges" aria-label="Project labels">
-          <span class="badge">${escapeHtml(getProjectYear(project))}</span>
+    <article class="project-card">
+      <div class="${thumbClasses.join(" ")}"${thumbStyle}>${escapeHtml(type)}</div>
+      <div class="project-info">
+        <h3>${escapeHtml(getTitle(project))}</h3>
+        <p class="student-name">${escapeHtml(project.studentDisplayName || "Student")}</p>
+        <div class="badges">
+          <span class="badge">${escapeHtml(getYear(project))}</span>
           <span class="badge">${escapeHtml(type)}</span>
-          ${featured ? `<span class="badge featured-badge">Featured Work</span>` : ""}
+          ${project.featured ? `<span class="badge featured">Featured</span>` : ""}
         </div>
-        <button class="card-button" type="button" data-project-index="${projectIndex}">View Project</button>
+        <button class="view-button" type="button" data-project-index="${index}">View Project</button>
       </div>
     </article>
   `;
 }
 
-function cssSafeType(type) {
-  const text = normalizeText(type);
-  if (text.includes("web")) return "website";
-  if (text.includes("game")) return "game";
-  return "project";
-}
-
-function attachProjectButtons(root) {
-  root.querySelectorAll("[data-project-index]").forEach((button) => {
+function attachViewerButtons(root) {
+  root.querySelectorAll("[data-project-index]").forEach(button => {
     button.addEventListener("click", () => {
       const project = projects()[Number(button.dataset.projectIndex)];
-      openProjectViewer(project);
+      openViewer(project);
     });
   });
 }
 
-function openProjectViewer(project) {
+function openViewer(project) {
   if (!project) return;
 
   state.viewerProject = project;
-
-  els.viewerTitle.textContent = getProjectTitle(project);
+  els.viewerTitle.textContent = getTitle(project);
   els.viewerStudent.textContent = `${project.studentDisplayName || "Student"} · ${project.projectType || "Project"}`;
-  els.viewerMessage.hidden = true;
+  els.viewerFallback.hidden = true;
 
-  const projectUrl = (project.projectLink || "").trim();
-
-  if (!projectUrl) {
-    els.projectFrame.removeAttribute("src");
-    els.viewerMessage.hidden = false;
+  const link = String(project.projectLink || "").trim();
+  if (link) {
+    els.projectFrame.src = getEmbedUrl(link);
   } else {
-    els.projectFrame.src = getEmbedUrl(projectUrl);
+    els.projectFrame.removeAttribute("src");
+    els.viewerFallback.hidden = false;
   }
 
   els.viewerOverlay.classList.add("open");
   els.viewerOverlay.setAttribute("aria-hidden", "false");
-  document.body.classList.add("viewer-is-open");
   els.viewerClose.focus();
-
-  window.setTimeout(() => {
-    if (els.viewerOverlay.classList.contains("open")) {
-      els.viewerMessage.hidden = true;
-    }
-  }, 2500);
 }
 
-function closeProjectViewer() {
+function closeViewer() {
   els.viewerOverlay.classList.remove("open");
   els.viewerOverlay.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("viewer-is-open");
   els.projectFrame.removeAttribute("src");
+  els.viewerFallback.hidden = true;
   state.viewerProject = null;
 }
 
 function getEmbedUrl(url) {
-  const cleanUrl = String(url || "").trim();
-  if (!cleanUrl) return "";
+  const clean = String(url || "").trim();
+  if (!clean) return "";
 
   try {
-    const parsed = new URL(cleanUrl);
+    const parsed = new URL(clean);
     const host = parsed.hostname.toLowerCase();
 
     if (host.includes("codehs.com") && !parsed.pathname.endsWith("/embed")) {
@@ -286,80 +284,110 @@ function getEmbedUrl(url) {
 
     return parsed.toString();
   } catch {
-    return cleanUrl;
+    return clean;
   }
 }
 
-function resetFiltersOnly() {
+function setFilterButtonState(clickedButton) {
+  els.filterButtons.forEach(button => button.classList.remove("active"));
+  clickedButton.classList.add("active");
+}
+
+function resetFilters(resetYear = true) {
+  if (resetYear) state.activeYear = DEFAULT_YEAR;
   state.search = "";
   state.student = "";
   state.type = "";
+  state.featuredOnly = false;
+  state.page = 1;
+
   els.searchInput.value = "";
   els.studentSelect.value = "";
-  els.typeSelect.value = "";
+
+  els.filterButtons.forEach(button => {
+    const isAll = !button.dataset.type && !button.dataset.featured;
+    button.classList.toggle("active", isAll);
+  });
 }
 
-function resetGallery() {
-  resetFiltersOnly();
-  closeProjectViewer();
-  state.activeYear = DEFAULT_YEAR;
-  renderAll();
-  scrollToSection("home");
-}
-
-function scrollToSection(id) {
-  const target = document.getElementById(id);
-  if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+function render() {
+  renderYears();
+  populateStudentSelect();
+  renderFeaturedRow();
+  renderProjectGrid();
 }
 
 function bindEvents() {
-  document.querySelectorAll("[data-scroll-target]").forEach((button) => {
-    button.addEventListener("click", () => scrollToSection(button.dataset.scrollTarget));
-  });
-
   els.searchInput.addEventListener("input", () => {
     state.search = els.searchInput.value;
-    renderGallery();
+    state.page = 1;
+    renderProjectGrid();
   });
 
   els.studentSelect.addEventListener("change", () => {
     state.student = els.studentSelect.value;
-    renderGallery();
+    state.page = 1;
+    renderProjectGrid();
   });
 
-  els.typeSelect.addEventListener("change", () => {
-    state.type = els.typeSelect.value;
-    renderGallery();
+  els.filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      setFilterButtonState(button);
+      state.type = button.dataset.type || "";
+      state.featuredOnly = button.dataset.featured === "true";
+      state.page = 1;
+      renderProjectGrid();
+    });
   });
 
-  els.backHomeButton.addEventListener("click", () => scrollToSection("home"));
-  els.resetGalleryButton.addEventListener("click", resetGallery);
-  els.resetGalleryTop.addEventListener("click", resetGallery);
-
-  els.viewerClose.addEventListener("click", closeProjectViewer);
-
-  els.viewerOverlay.addEventListener("click", (event) => {
-    if (event.target === els.viewerOverlay) closeProjectViewer();
+  els.prevPage.addEventListener("click", () => {
+    state.page -= 1;
+    renderProjectGrid();
   });
 
-  els.retryViewerButton.addEventListener("click", () => {
-    if (state.viewerProject) openProjectViewer(state.viewerProject);
+  els.nextPage.addEventListener("click", () => {
+    state.page += 1;
+    renderProjectGrid();
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && els.viewerOverlay.classList.contains("open")) {
-      closeProjectViewer();
-    }
+  els.homeButton.addEventListener("click", () => {
+    resetFilters(true);
+    closeViewer();
+    render();
   });
 
-  ["click", "keydown", "mousemove", "touchstart", "scroll"].forEach((eventName) => {
+  els.resetButton.addEventListener("click", () => {
+    resetFilters(true);
+    closeViewer();
+    render();
+  });
+
+  els.viewerClose.addEventListener("click", closeViewer);
+
+  els.viewerOverlay.addEventListener("click", event => {
+    if (event.target === els.viewerOverlay) closeViewer();
+  });
+
+  els.retryViewer.addEventListener("click", () => {
+    if (state.viewerProject) openViewer(state.viewerProject);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeViewer();
+  });
+
+  ["click", "keydown", "mousemove", "touchstart"].forEach(eventName => {
     window.addEventListener(eventName, resetInactivityTimer, { passive: true });
   });
 }
 
 function resetInactivityTimer() {
   window.clearTimeout(state.inactivityTimer);
-  state.inactivityTimer = window.setTimeout(resetGallery, INACTIVITY_LIMIT_MS);
+  state.inactivityTimer = window.setTimeout(() => {
+    resetFilters(true);
+    closeViewer();
+    render();
+  }, INACTIVITY_LIMIT_MS);
 }
 
 function escapeHtml(value) {
@@ -378,5 +406,5 @@ function escapeAttribute(value) {
 }
 
 bindEvents();
-renderAll();
+render();
 resetInactivityTimer();
