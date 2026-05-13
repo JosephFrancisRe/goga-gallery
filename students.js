@@ -14,7 +14,7 @@ window.GOGA_PROJECTS = [
     "studentDisplayName": "ERIC L.",
     "projectTitle": "CodeHS",
     "projectType": "Website",
-    "projectLink": "https://codehs.com/sandbox/ericlangerman/pizzaandgelato",
+    "projectLink": "student-sites/01-eric-l-website/index.html",
     "featured": true,
     "year": "2026"
   },
