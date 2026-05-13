@@ -1,0 +1,136 @@
+.title{
+    text-align:center;
+    font-size:50px;
+    font-family:Copperplate;
+}
+body{
+    background-image: linear-gradient(to bottom, #C6011F 0%, #C6011F 500px, white 0%, white 800px);
+    height: 100%;
+    width: 100%;
+}
+
+.homelogo{
+    height:500px;
+    width:500px;
+    display:block;
+    margin:0 auto;
+    position:relative;
+    top: -350px;
+    transition: transform 1s ease-in-out;
+    max-width:100%;
+    height:auto;
+    margin-bottom:130px;
+}
+.homelogo:hover{
+  transform: rotate(360deg);
+}
+.directions{
+    font-size:30px;
+    text-align:center;
+    font-family:Verdana;
+    position:relative;
+    top: -500px;
+}
+
+.store-info{
+    text-align:center;
+    font-size:50px;
+    position:relative;
+    top: -500px;
+    font-family:copperplate;
+}
+
+.location{
+    float:right;
+}
+.navbar{
+    font-size:45px;
+    color:black;
+    position:relative;
+    top: -70px;
+    
+}
+.navbar a{
+    color:black;
+}
+.navbar a:hover{
+    color:#FF8C00;
+}
+li{
+    list-style-type:none;
+}
+.hometable{
+    position:relative;
+    font-size:25px;
+    font-family:Verdana;
+    margin:auto;
+    border-spacing:60px 0;
+    padding:10px;
+    margin-bottom: 100px;
+}
+
+
+
+
+
+
+.pizzatable{
+    position:relative;
+    font-size:25px;
+    font-family:Verdana;
+    margin:auto;
+    text-align:center;
+    top: -550px;
+    border-spacing: 70px;
+    vertical-align: middle;
+}
+
+.pizzaimg{
+    width:400px;
+    height: 400px;
+    padding:10px;
+}
+.navimg{
+    height:200px;
+    width:200px;
+}
+.home-body{
+    top:-300px;
+}
+.footer{
+     background-color:#C6011F;
+}
+.toppings{
+    font-size:25px;
+    border-spacing:12px;
+    background-color:#C6011F;
+    display:flex;
+    font-family:Verdana;
+    justify-content: center;
+    margin-top: -500px;
+}
+.containcenter{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    width:100%;
+}
+.p-about{
+    position:relative;
+    top: -450px;
+    width:60%;
+    font-size:30px;
+    font-family:Verdana;
+    margin:auto;
+    text-align:center;
+}
+.pizza-body{
+
+}
+.slogan{
+    margin: 0;
+    text-align:center;
+    font-family:Verdana;
+    font-size:20px;
+}
