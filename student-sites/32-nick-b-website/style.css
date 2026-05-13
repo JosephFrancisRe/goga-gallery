@@ -1,0 +1,134 @@
+html{
+    font-family:"Gill Sans", "Gill Sans MT", "Trebuchet MS", sans-serif;
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+    position:relative;
+    align-items:center;
+}
+.logo{
+    height:9rem;
+    width:9rem;
+    padding-left:4rem;
+    padding-bottom:2rem;
+    transition: transform 0.7s ease-in-out;
+}
+.logo:hover {
+    transform: rotate(360deg);
+}
+nav{
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding-top:3rem;
+    background-color:#FF1778;
+    margin-right:2%;
+    margin-top:0;
+    border:0.2rem solid white;
+}
+.navlinks{
+    list-style:none;
+    flex-basis:85%;
+    text-align:right;
+    color:white;
+    font-size:1.8rem;
+    padding-top:1.8rem;
+}
+.navlinks>li{
+    display: inline-block; 
+    margin-right: 50px;
+}
+main{
+     position:relative;
+     text-align:center;
+     padding-top:2rem;
+     padding-bottom:20rem;
+     color:#FFD617;
+     background-color:#33354F;
+}
+h1{
+    font-size:4rem;
+    text-decoration:underline;
+    
+}
+h2{
+    font-size:3rem;
+    
+}
+h3{
+    font-size:2rem;
+    
+}
+h4{
+    1rem
+}
+ul{
+    list-style:none;
+}
+main>ul>button>li>a{
+    color:white;
+    text-decoration:underline;
+    font-size:1.5rem;
+    margin-right:2%;
+    background-color:;
+}
+main>ul>button{
+    background-color:#fc0377;
+    border-radius:10px;
+    padding: 10px 10px 10px 10px;
+    margin-bottom:2rem;
+}
+h1 h2 ul button li a img .flex-container .flex-left .flex-right {
+    margin-left: 5%;
+}
+.navlinks a {
+    color: white;
+    text-decoration: none;
+}
+
+.navlinks a:hover {
+    text-decoration: underline; 
+    color:#FFD617;
+    font-size:2rem;
+}
+
+main>ul>button>li>a:hover {
+    font-size:2rem;
+    color:#FFD617;
+}
+hr{
+    border:0.1rem solid white;
+}
+.flex-container {
+  display: flex;
+  align-items: center;       
+  justify-content: center;   
+  gap: 2rem;                 
+  margin-top: 2rem;
+}
+
+
+.flex-left img {
+  max-width: 300px;         
+  height: auto;
+  transition: transform .2s ease-in-out;
+}
+
+
+.flex-right {
+  max-width: 600px;          
+  color: #FFD617;
+  font-size: 1.1rem;
+  text-align: left;
+  line-height: 1.5;
+}
+h3 h4{
+    margin-left: 50%;
+}
+p{
+    font-size:1.5rem;
+}
+.appetizers ul, .main-course ul {
+    padding: 0;
+    margin: 0 auto; 
+    max-width: 600px; 
+}

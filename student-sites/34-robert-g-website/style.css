@@ -1,0 +1,465 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+ul{
+    list-style-type: none;
+}
+
+
+
+body {
+    height:auto;
+}
+
+.concrete{
+        background-color:#ffd5c7;
+        color: black;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0px;
+        width: 76%;
+    }
+
+
+
+
+.side-imgs .left-side,
+.side-imgs .right-side {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.side-imgs .left-side {
+    left: 0;
+    background-image: url("https://blogger.googleusercontent.com/img/a/AVvXsEiLLTt1vvosY27lYzEO2AzYqU_V3xXtLCBPzWkBxR9F-d884LzsBlBDNxdxysPeJ3V3PDjy-l7ciUQIeBSDEGJs3y7EcKhOgYG3HG9SR2Q1iFX5LK_dtWFTNV7IhVcmiINc4SOFWRLrnodI7JIOylvcXjI6nIYk9m6FYjwEezlLtuGOa5pOul9z20efAi8");
+}
+
+.side-imgs .right-side {
+    right: 0;
+    background-image: url('https://blogger.googleusercontent.com/img/a/AVvXsEhYOqTs7RgGLpcfHxrwMW0NAvgAp2Xq17ZPGq4Y0y22bZ0nUjyRcEfuoQ2vV17KVYL2VSyX3CQx8aAWg_LlPuI0o6PG8ZDx7q7gabGxP7F7wgaXGxSXYrQntH-qjRw8ttyv-bDASP9M0Qq8mIJTlVCEGPtPoX6k7GD8heM5ZMK4yl4SirE28igmVNPGqY8');
+}
+
+
+
+.links{
+    display: flex;
+    justify-content:center;
+    position: absolute;
+    width: 95%;
+}
+
+.logo_text{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+
+.logo img{
+    width:5rem;
+    height:5rem;
+    border-bottom:1px;
+    
+}
+.logo_text h1{
+    display:inline-flex;
+    text-align: center;
+    font-size: 2rem;
+    font-family:Georgia;
+    font-weight: bold;
+    flex-wrap: wrap;
+    margin:0;
+    padding:0;
+    
+}
+
+#total_logo{
+    margin-left:1rem;
+}
+
+
+.container_middle{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 3rem;
+    position: relative;
+}
+
+
+.boxed{
+    margin: 0 auto; 
+    padding: 2rem; 
+    border: 2px solid black; 
+    border-radius: 6px;
+    max-width: 90rem;
+}
+
+.boxed:hover{
+    max-width: 120rem;
+}
+
+.boxed_table{
+    margin: 0 auto; 
+    padding: 2rem; 
+    border: 2px solid black; 
+    border-radius: 6px;
+    max-width: 110rem;
+}
+
+
+
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 0rem;
+    background-color:Black;
+    color:white;
+}
+
+
+.container-fluid{
+    display: flex;
+    
+}
+
+
+
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.image_cell {
+    padding: 20px;
+    text-align: center;
+    vertical-align: middle;
+    height: 200px;
+}
+
+
+.box{
+    background-color: black;
+    display: inline-block;
+    border: groove;
+    border-color:gold;
+    width:100px;
+    height:100px;
+    transition: background-image 1s linear 0.2s;
+}
+
+
+
+
+/*1 cell*/
+
+.image-cell-1{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/6/6c/JohnMarston-RDR1.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-1:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/6/64/RobWi_RDR_New2.png");
+}
+
+/*2 cell*/
+
+.image-cell-2{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/e/e4/Dutch_1911_PS5.jpeg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-2:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/a/ac/Benjamin_Byron_Davis.jpg");
+}
+
+/*3 cell*/
+
+.image-cell-3{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/3/38/Abigail_1911_PS5.jpeg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-3:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/d/da/Sophiamarzocchi.jpg");
+}
+
+/*4 cell*/
+
+.image-cell-4{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/8/8c/Jack_1914_PS5.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-4:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/c/c3/Joshblaylock.jpg");
+}
+
+/*5 cell*/
+
+.image-cell-5{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/a/a3/Bonnierdo2.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-5:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/a/a3/Bonnierdo2.jpg");
+}
+
+/*6 cell*/
+
+.image-cell-6{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/7/7c/Billw1911.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-6:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/2/23/StevePalmer_NewImage.png");
+}
+
+/*7 cell*/
+
+.image-cell-7{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/d/df/JavierEscuella-Redemption.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-7:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/a/a5/Antonio_Jaramillo.jpg");
+}
+
+/*8 cell*/
+
+.image-cell-8{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/1/18/EdgarRoss-Redemption-Epilogue.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-8:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/5/56/Jimbentley.jpg");
+}
+
+/*9 cell*/
+
+.image-cell-9{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/6/69/Nigel_West_Dickens_PS5.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-9:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/a/a5/Don_Creech.jpg");
+}
+
+/*10 cell*/
+
+.image-cell-10{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/1/1a/Rdr_drew_macfarlane.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-10:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/9/94/Chuck_Kelley.jpg");
+}
+
+/*11 cell*/
+
+.image-cell-11{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/3/30/Arthur_Morgan_Level_2.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-11:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/c/c0/Roger_Clark.jpg");
+}
+
+/*12 cell*/
+
+.image-cell-12{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/8/87/RDR2_Dutch_van_der_Linde_PC.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-12:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/a/ac/Benjamin_Byron_Davis.jpg");
+}
+
+/*13 cell*/
+
+.image-cell-13{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/7/73/John_Marston_TBTN_5_Cropped.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-13:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/6/64/RobWi_RDR_New2.png");
+}
+
+/*14 cell*/
+
+.image-cell-14{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/2/2b/Sadie.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-14:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/1/10/Alex_McKenna.jpg");
+}
+
+/*15 cell*/
+
+.image-cell-15{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/8/84/Micah_.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-15:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/2/2a/PeterBlomquist_Actor.jpg");
+}
+
+/*16 cell*/
+
+.image-cell-16{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/d/d1/Hosea_injured.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-16:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/7/71/Curzon_Dobell.jpg");
+}
+
+/*17 cell*/
+
+.image-cell-17{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/e/e7/Charles.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-17:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/b/b7/NoshirDalal-0.jpg");
+}
+
+/*18 cell*/
+
+.image-cell-18{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/d/d2/Ajmrdrleopoldstrauss.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-18:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/e/e0/Howard_Pinhasik.jpg");
+}
+
+/*19 cell*/
+
+.image-cell-19{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/c/ce/LennySummers_Chap3.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-19:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/7/70/Harron_Atkins.jpg");
+}
+
+/*20 cell*/
+
+.image-cell-20{
+    background-image: url("https://static.wikia.nocookie.net/reddeadredemption/images/b/b4/UncleNew.PNG");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 300px;
+    height: 400px;
+}
+
+.image-cell-20:hover{
+    background-image:url("https://static.wikia.nocookie.net/reddeadredemption/images/1/1d/3c92b292-ec44-4d5d-b801-49603a836c1f.jpg");
+}

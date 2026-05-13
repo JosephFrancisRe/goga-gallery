@@ -1,0 +1,147 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+* {
+  flex-wrap:wrap;
+  
+ 
+}
+ol {
+  display: flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  flex-direction:column;
+  gap:15px
+}
+
+.content-body {
+  width: 70%;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+  border-style:solid;
+  border-color:red;
+  color:red;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+body {
+  background-image:url('https://codehs.com/uploads/ab600ceec771ed5a759d6d8918079c43' );
+  background-size:cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+}
+
+img {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  max-width:  100%;
+  height: auto;
+}
+.logo {
+  
+  position: fixed;
+  top: 5px;
+  left: 10px;
+  width: 50px;
+  height: auto;
+  
+}
+.logo:hover {
+  animation:invert-filter 2s forwards;
+}
+
+iframe {
+  width: 1000px;
+  height: 500px;
+}
+
+p {
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+  
+  color:red;
+  
+}
+
+h1 {
+  margin-top:100px ;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+  font-style: normal;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color:red;
+  font-size: 30px;
+  border-color:red;
+  border-style:solid;
+}
+.navBar{
+  background-color: white;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px ;
+  padding:10px 5px;
+  border-radius:10px 5px;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.navBar a[aria-current="page"] {
+  background-color: lightcoral;
+  color: white;
+  font-weight: 600;
+  outline: 2px solid darkred;
+}
+ a{
+  background-color: white;
+  color: black;
+  padding:5px;
+  border-radius: 5px;
+  border-color:red;
+  border-style:solid;
+  color:red;
+  text-decoration: none;
+  
+}
+a:hover{
+  background-color: lightgrey;
+  
+
+}
+nav a:active{
+  background-color: grey;
+
+
+}
+
+
+@keyframes invert-filter {
+    from {
+        filter: invert(0%);
+    }
+
+    to {
+        filter: invert(100%);
+    }
+}

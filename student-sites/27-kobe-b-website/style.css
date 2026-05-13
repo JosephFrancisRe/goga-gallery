@@ -1,0 +1,141 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    "header logo"
+    "main information"
+    "footer footer";
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+  background-color: black;
+  padding: 5px;
+text-align:center;
+font-size:20px;
+}
+.container div {
+  background-color: white;
+  padding: 20px;
+  
+}
+.container div.header {
+  grid-area: header;
+  text-align: center;
+    background-image: url('');
+}
+.container div.main {
+  grid-area: main;
+}
+.container div.information {
+  grid-area: information;
+}
+.container div.footer {
+  grid-area: footer;
+  text-align: center; 
+  background-color:#dbba32;
+}
+
+.container div.logo{
+    background-color :#ffefda;
+
+    
+}
+
+
+.animated-img{
+ 
+}
+
+
+
+
+
+
+.gif{
+    
+    background-color:#dbba32;
+    height:300px;
+    width:300px;
+}
+
+
+.animated-img:active {
+
+    
+}
+
+
+.boom{
+      float:right;
+}
+
+.boom:active{
+     height: 200px;
+     width:200px;
+    filter: brightness(150%);
+}
+
+
+.boom2:active{
+     height: 200px;
+     width:200px;
+    filter: brightness(150%);
+}
+
+
+
+.boom3:active{
+     height: 750px;
+     width:750px;
+    filter: brightness(150%);
+}
+
+
+h1{
+    text-align:center;
+}
+
+html{
+     background-color :#ffefda;
+      animation: my-animation;
+    animation-duration: 5s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+   filter: brightness(100%);
+  font-family: "Lucida Handwriting Std", cursive;
+}
+ 
+
+
+
+
+@keyframes my-animation {
+    from {color:#cc8428;}
+    to {color:#743c12;}
+  my-animation
+}
+
+
+
+
+.image-css:active {
+    transform: rotate(360deg);
+    border-color:#743c12;
+    border:solid;
+    width:200px;
+    height:200px;
+}
+
+
+.
+
+img{
+    height:125px;
+    width:125px;
+    transition: transform 1s, width 1s, height 1s;
+}
+
+
+
+p{
+    text-align:center;
+    font-size:20px;
+}

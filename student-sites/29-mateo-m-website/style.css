@@ -1,0 +1,219 @@
+body{
+    color: white;
+    
+    font-family: Arial;
+    background-color: #222222;
+}
+
+
+
+.container{
+    display: grid;
+    grid-template-areas:
+    'logo header header header header'
+    'nav nav nav nav nav'
+    'main main main main main'
+    'footer footer footer footer footer';
+    gap: 10px;
+    
+    align-items: center;
+    text-align: center;
+    
+    background-color: #343434;
+    
+    padding:45px;
+    
+    border: 1px solid black;
+    box-shadow:5px 5px 10px rgb(0, 0, 0, 0.5);
+    border-radius: 25px;
+
+}
+
+
+
+.container > * {
+    background-color: #555555;
+    padding:10px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    
+    border: 1px solid black;
+    box-shadow:5px 5px 10px rgb(0, 0, 0, 0.5);
+    border-radius: 25px;
+
+}
+
+
+
+.logo{
+    grid-area: logo;
+    height: 110px;
+    width: 110px;
+    margin: auto;
+    
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+
+
+.logo img{
+    height: 100px;
+    width: 100px;
+    margin: auto;
+    
+    transition: transform 1s ease-in-out;
+}
+
+.logo img:hover{
+    animation:stepping 0.25s infinite alternate;
+}
+
+@keyframes stepping{
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+header{
+    grid-area: header;
+    
+    display: flex; 
+    justify-content: center; 
+    
+    align-items: center;
+    height: 100px;
+}
+
+
+
+nav{
+    grid-area: nav;
+    
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    
+    
+}
+
+
+
+nav ul{
+    text-align: center;
+    margin:auto;
+    
+    list-style-type: none;
+    
+    
+}
+
+
+
+nav ul li {
+  float: left;
+  text-align: center;
+}
+
+
+
+nav ul li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+
+
+a{
+    color:white;
+    text-decoration:none;
+    padding:5px;
+}
+
+
+
+a:hover{
+    color:purple;
+}
+
+
+
+a:active{
+    color:red;
+}
+
+
+
+/*a:visited{
+    color:orange;
+}*/
+
+
+
+main{
+    grid-area: main;
+    width:60%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    
+    
+}
+
+
+
+main p{
+    margin:10px;
+}
+
+
+
+main li{
+    margin:5px;
+    
+}
+
+
+
+main ul{
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+
+
+table{
+    border:1px solid;
+    
+    table-layout:auto;
+    width:auto;
+    
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    
+
+}
+
+
+
+th, td{
+    border:1px solid;
+    
+    
+}
+
+
+
+footer{
+    grid-area: footer;
+    
+    
+}

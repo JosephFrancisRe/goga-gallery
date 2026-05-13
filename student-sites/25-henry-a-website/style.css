@@ -1,0 +1,72 @@
+.my-logo{
+    aspect-ratio: 1.35/1;
+}
+
+.navbar .nav-link {
+    color: white !important;
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+    
+}
+.navbar .nav-link:hover {
+    color: #cfcfcf !important;
+}
+
+.order-button{
+    max-width: 15vw;
+}
+
+body {
+    background-image: url("https://images.pexels.com/photos/19130186/pexels-photo-19130186.jpeg?cs=srgb&dl=pexels-unkdevil-19130186.jpg&fm=jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    overflow-y: hidden;
+}
+html {
+    width: 100%;
+    height: 100%;
+}
+
+.slogan-text{
+    color: white;
+    font-size: 8vh;
+    padding: 3rem;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.slogan{
+    display: flex;
+    align-items: center;
+    margin-top: 10vh;
+    margin-left: 30vw;
+    margin-right: 30vw;
+}
+.slogan-footer-text{
+    color: white;
+    font-size: 1rem;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    float: right;
+    margin: 0.25rem;
+    position: fixed;
+    bottom: 0.45rem;
+    left: 4.75rem;
+}
+footer{
+    width: 100%;
+    background-color: #212529;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+}
+
+.footer-logo {
+    margin: 1rem;
+}
