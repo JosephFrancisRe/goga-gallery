@@ -174,7 +174,7 @@ window.GOGA_PROJECTS = [
     "studentDisplayName": "AITOR Q.",
     "projectTitle": "CodeHS",
     "projectType": "Website",
-    "projectLink": "https://16056054-s.codehs.io/index.html",
+    "projectLink": "https://codehs.com/sandbox/aitorquito57/cat-pizzeria/embed",
     "featured": true,
     "year": "2026"
   },
