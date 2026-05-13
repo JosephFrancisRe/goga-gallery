@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GOGA Software Engineering Showcase</title>
+  <meta name="description" content="GOGA Software Engineering Showcase: Gallery of Gateway Art at Gateway Tech." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#gallery">Skip to student gallery</a>
+
+  <header class="site-header" id="home">
+    <nav class="topbar" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="GOGA home">
+        <img src="assets/gateway-logo.png" alt="Gateway Tech logo" class="brand-logo" />
+        <span class="brand-text">
+          <span class="brand-school">Gateway Tech</span>
+          <span class="brand-subtitle">Software Engineering Showcase</span>
+        </span>
+      </a>
+
+      <div class="nav-actions">
+        <button class="nav-button" type="button" data-scroll-target="featured">Featured</button>
+        <button class="nav-button" type="button" data-scroll-target="gallery">Find Student</button>
+        <button class="nav-button" type="button" data-scroll-target="about">About</button>
+        <button class="nav-button nav-button-strong" type="button" id="resetGalleryTop">Reset Gallery</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Gallery of Gateway Art</p>
+        <h1><span>GOGA</span> Software Engineering Showcase</h1>
+        <p class="hero-lede">
+          A student portfolio showcase of games, websites, and interactive digital projects created by Gateway Tech students.
+        </p>
+
+        <div class="hero-meta" aria-label="Showcase details">
+          <div>
+            <span class="meta-label">School</span>
+            <span class="meta-value">Gateway Tech</span>
+          </div>
+          <div>
+            <span class="meta-label">Year</span>
+            <span class="meta-value" id="activeYearLabel">2026</span>
+          </div>
+          <div>
+            <span class="meta-label">Instructor</span>
+            <span class="meta-value">Mr. Re</span>
+          </div>
+        </div>
+
+        <div class="hero-buttons">
+          <button class="primary-button" type="button" data-scroll-target="gallery">Find a Student Project</button>
+          <button class="secondary-button" type="button" data-scroll-target="featured">View Featured Work</button>
+        </div>
+      </div>
+
+      <div class="hero-panel" aria-label="GOGA overview card">
+        <div class="hero-panel-top">
+          <span class="status-dot"></span>
+          <span>Live Exhibit Gallery</span>
+        </div>
+        <div class="hero-goga-mark">GOGA</div>
+        <p>Browse student work without leaving this page. Select any project to open it in the exhibit viewer.</p>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="section intro-section" aria-labelledby="welcome-title">
+      <div class="section-heading">
+        <p class="eyebrow">Welcome</p>
+        <h2 id="welcome-title">Explore student-created digital work.</h2>
+      </div>
+      <div class="intro-grid">
+        <article class="info-card">
+          <h3>Featured Work</h3>
+          <p>Begin with a curated selection of student projects highlighted for creativity, craft, technical effort, or overall polish.</p>
+        </article>
+        <article class="info-card">
+          <h3>Find Your Student</h3>
+          <p>Use the search bar or student dropdown to locate a specific student by first name and last initial.</p>
+        </article>
+        <article class="info-card">
+          <h3>Browse the Gallery</h3>
+          <p>View all available games and websites from this year’s GOGA Software Engineering Showcase.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section archive-section" aria-labelledby="archive-title">
+      <div class="section-heading compact">
+        <p class="eyebrow">Archive</p>
+        <h2 id="archive-title">Select a showcase year.</h2>
+      </div>
+
+      <div class="year-controls" id="yearControls" aria-label="Showcase year filters"></div>
+    </section>
+
+    <section class="section featured-section" id="featured" aria-labelledby="featured-title">
+      <div class="section-heading">
+        <p class="eyebrow">Featured Work</p>
+        <h2 id="featured-title">Featured student projects</h2>
+        <p>These projects represent a sample of strong student work from the showcase.</p>
+      </div>
+
+      <div class="project-grid featured-grid" id="featuredGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="section gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <div class="section-heading">
+        <p class="eyebrow">Student Gallery</p>
+        <h2 id="gallery-title">Find a student project</h2>
+        <p>Search by student name, select from the dropdown, or browse every available project card.</p>
+      </div>
+
+      <div class="gallery-tools" role="region" aria-label="Gallery search and filters">
+        <label class="field">
+          <span>Search by student or project</span>
+          <input id="searchInput" type="search" placeholder="Example: Maria R. or maze game" autocomplete="off" />
+        </label>
+
+        <label class="field">
+          <span>Select student</span>
+          <select id="studentSelect">
+            <option value="">All students</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Project type</span>
+          <select id="typeSelect">
+            <option value="">All project types</option>
+          </select>
+        </label>
+
+        <div class="tool-buttons">
+          <button class="secondary-button compact-button" type="button" id="backHomeButton">Back to Home</button>
+          <button class="secondary-button compact-button" type="button" id="resetGalleryButton">Reset Gallery</button>
+        </div>
+      </div>
+
+      <div class="results-summary" id="resultsSummary" aria-live="polite"></div>
+      <div class="project-grid" id="projectGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="section about-section" id="about" aria-labelledby="about-title">
+      <div class="about-card">
+        <div>
+          <p class="eyebrow">About the Showcase</p>
+          <h2 id="about-title">Gateway Tech Software Engineering</h2>
+        </div>
+        <p>
+          The GOGA Software Engineering Showcase highlights student work as a portfolio of creative problem-solving, design,
+          programming, debugging, and technical communication. Projects may include games, websites, and other interactive
+          digital artifacts developed through the Software Engineering pathway.
+        </p>
+        <p>
+          This gallery is designed for families, students, faculty, and community members to explore student work in a clear,
+          accessible, and event-friendly format.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <img src="assets/gateway-logo.png" alt="" aria-hidden="true" />
+    <div>
+      <strong>GOGA Software Engineering Showcase</strong>
+      <span>Gallery of Gateway Art · Gateway Tech · Mr. Re</span>
+    </div>
+  </footer>
+
+  <div class="viewer-overlay" id="viewerOverlay" aria-hidden="true">
+    <div class="viewer-shell" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+      <div class="viewer-header">
+        <div>
+          <p class="viewer-kicker" id="viewerStudent"></p>
+          <h2 id="viewerTitle">Project Viewer</h2>
+        </div>
+        <button class="viewer-close" type="button" id="viewerClose" aria-label="Close project viewer">×</button>
+      </div>
+
+      <div class="viewer-body">
+        <iframe id="projectFrame" title="Student project viewer" loading="lazy" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
+        <div class="viewer-message" id="viewerMessage" hidden>
+          <h3>This project may not allow embedded viewing.</h3>
+          <p>
+            Some outside pages block iframe display. For the cleanest GOGA experience, use CodeHS share or embed links when possible.
+          </p>
+          <button class="primary-button" type="button" id="retryViewerButton">Try loading again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="students.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
