@@ -1,0 +1,55 @@
+nav{
+    text-align:center;
+    background-color:#246b30;
+}
+
+li a {
+    color:white;
+    text-decoration:none;
+    padding:35px;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+}
+
+main {
+    background-color:#246b30;
+    background-image:url("https://upload.wikimedia.org/wikipedia/commons/9/90/Artificial_Jungle.jpg");
+}
+
+footer {
+    background-color:#246b30;
+    text-align:center;
+}
+
+body {
+    text-align:center;
+    color:white;
+    background-image:url("https://upload.wikimedia.org/wikipedia/commons/9/90/Artificial_Jungle.jpg");
+}
+
+div h1 {
+    font-family: serif;
+}
+
+
+.container {
+  text-align: center;
+  display:block;
+  margin:0 auto;
+  border:solid black 5px;
+  padding:10px;
+  text-align:center;
+  background-color:black;
+}
+
+.paragraph {
+    background-color:black;
+    display:flex;
+}
+
+.fun-active {
+    background-color:#246b30;
+}
