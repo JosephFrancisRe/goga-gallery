@@ -1,34 +1,26 @@
-# GOGA Gallery Site - Curated Titles, Descriptions, and Featured Work
+# GOGA Software Engineering Showcase
 
-This package includes updated gallery files plus a curated `students.js`.
+This package contains the updated GOGA kiosk site.
 
-## Included changes
+## Major updates
 
-- Project titles cleaned up.
-- Parent-facing card descriptions added.
-- Featured selections changed from "everyone" to a curated set of 12 projects.
-- Cards now display a short description under the student name.
-- The existing dark-mode/default toggle behavior is preserved.
-- The existing responsive pagination behavior is preserved.
+- Replaced the unofficial black-background logo with official Gateway logo assets.
+- Added official logo variants in `assets/`:
+  - `gateway-logo-icon.png`
+  - `gateway-logo-white-fill.png`
+  - `gateway-logo-white-outline.png`
+- Reworked the header:
+  - `Gateway Tech` appears in red.
+  - `GOGA` and `Gallery of Gateway Art` are left-aligned as a brand lockup.
+  - `Software Engineering Showcase` is now the centered kiosk title.
+  - `Pathway Stats` moved to the header instead of the filter row.
+  - Year label is centered above the year dropdown.
+- Added a premium Featured Showcase carousel.
+- Removed Featured as a gallery filter.
+- Gallery filters are now: All, Games, Websites, Other.
+- Pathway Stats remains a separate dashboard view.
+- Grade/class metadata remains stored on projects at time of submission.
 
 ## Upload to GitHub
 
-Upload/replace these files in the root of your GitHub Pages repository:
-
-```text
-index.html
-styles.css
-script.js
-students.js
-README.md
-assets/gateway-logo.png
-```
-
-Do not delete the existing `student-sites/` folder.
-
-
-## Pathway Stats Update
-
-This version includes `pathway-stats.js`, which powers the Pathway Stats view in the kiosk. The stats use CodeHS time tracking exports and display the public-facing label "Time Spent Coding."
-
-Project records in `students.js` now store `submissionYear`, `classCode`, `className`, `courseComponent`, `gradeAtSubmission`, and `gradeLabelAtSubmission` so historical projects can keep the class/grade context from the year they were submitted.
+Upload/replace the files in your GitHub Pages repo with this package. Do not delete `student-sites/`.

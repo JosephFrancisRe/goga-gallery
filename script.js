@@ -1,18 +1,22 @@
 /* global GOGA_CONFIG, GOGA_PROJECTS, GOGA_PATHWAY_STATS */
 
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
-const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "featured";
+const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "all";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
 const MAX_PROJECT_ROWS = 4;
 const ESTIMATED_CARD_HEIGHT = 168;
 const CARD_GRID_GAP = 10;
+const FEATURED_INTERVAL_MS = 8500;
 
 const state = {
   year: DEFAULT_YEAR,
   search: "",
   student: "",
   filter: DEFAULT_FILTER,
+  mode: "gallery",
   page: 1,
+  featuredIndex: 0,
+  featuredTimer: null,
   inactivityTimer: null,
   activeProject: null
 };
@@ -23,6 +27,12 @@ const els = {
   studentSelect: document.getElementById("studentSelect"),
   filterButtons: document.querySelectorAll(".filter"),
   resetButton: document.getElementById("resetButton"),
+  statsButton: document.getElementById("statsButton"),
+  featuredShowcase: document.getElementById("featuredShowcase"),
+  featuredTrack: document.getElementById("featuredTrack"),
+  featuredPrev: document.getElementById("featuredPrev"),
+  featuredNext: document.getElementById("featuredNext"),
+  featuredPosition: document.getElementById("featuredPosition"),
   projectGrid: document.getElementById("projectGrid"),
   projectCount: document.getElementById("projectCount"),
   pageLabel: document.getElementById("pageLabel"),
@@ -46,7 +56,7 @@ function projects() {
 }
 
 function getYear(project) {
-  return String(project.year || DEFAULT_YEAR);
+  return String(project.year || project.submissionYear || DEFAULT_YEAR);
 }
 
 function getTitle(project) {
@@ -71,6 +81,13 @@ function getYears() {
   const years = uniqueSorted(projects().map(getYear));
   if (!years.includes(DEFAULT_YEAR)) years.push(DEFAULT_YEAR);
   return years.sort((a, b) => Number(b) - Number(a));
+}
+
+function featuredProjects() {
+  return projects()
+    .filter(project => getYear(project) === state.year && project.featured)
+    .slice()
+    .sort((a, b) => getTitle(a).localeCompare(getTitle(b)));
 }
 
 function setupYears() {
@@ -102,6 +119,14 @@ function setupFilterButtons() {
   });
 }
 
+function setupStatsButton() {
+  if (!els.statsButton) return;
+  const active = state.mode === "stats";
+  els.statsButton.classList.toggle("active", active);
+  els.statsButton.setAttribute("aria-pressed", String(active));
+  els.statsButton.textContent = active ? "Back to Gallery" : "Pathway Stats";
+}
+
 function matches(project) {
   if (getYear(project) !== state.year) return false;
 
@@ -121,9 +146,9 @@ function matches(project) {
 
   const type = normalize(project.projectType);
 
-  if (state.filter === "featured" && !project.featured) return false;
   if (state.filter === "game" && !type.includes("game")) return false;
   if (state.filter === "website" && !type.includes("web")) return false;
+  if (state.filter === "other" && (type.includes("game") || type.includes("web"))) return false;
 
   return true;
 }
@@ -133,6 +158,7 @@ function filteredProjects() {
     .filter(matches)
     .slice()
     .sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
       const nameCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
       if (nameCompare !== 0) return nameCompare;
       return getTitle(a).localeCompare(getTitle(b));
@@ -140,12 +166,14 @@ function filteredProjects() {
 }
 
 function render() {
+  document.body.classList.toggle("stats-view", state.mode === "stats");
   setupYears();
   setupStudents();
   setupFilterButtons();
+  setupStatsButton();
+  renderFeaturedCarousel();
   renderCards();
 }
-
 
 function getProjectsPerPage() {
   const width = window.innerWidth;
@@ -153,27 +181,100 @@ function getProjectsPerPage() {
 
   let columns = 1;
 
-  if (width > 1300) {
-    columns = 4;
-  } else if (width > 900) {
-    columns = 3;
-  }
+  if (width > 1300) columns = 4;
+  else if (width > 900) columns = 3;
 
-  if (width <= 900) {
-    return 12;
-  }
+  if (width <= 900) return 12;
 
   const rowsFromHeight = gridHeight > 0
     ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
     : 3;
 
   const rows = Math.max(2, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
-
   return columns * rows;
 }
 
+function renderFeaturedCarousel() {
+  const list = featuredProjects();
+
+  if (!els.featuredShowcase || !els.featuredTrack) return;
+
+  if (state.mode === "stats" || list.length === 0) {
+    els.featuredShowcase.hidden = true;
+    stopFeaturedTimer();
+    return;
+  }
+
+  els.featuredShowcase.hidden = false;
+  if (state.featuredIndex >= list.length) state.featuredIndex = 0;
+  if (state.featuredIndex < 0) state.featuredIndex = list.length - 1;
+
+  els.featuredTrack.innerHTML = list.map((project, index) => featuredCard(project, index)).join("");
+  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(button => {
+    button.addEventListener("click", () => {
+      openViewer(list[Number(button.dataset.featuredIndex)]);
+    });
+  });
+
+  requestAnimationFrame(() => scrollFeaturedToIndex(state.featuredIndex, "auto"));
+  updateFeaturedPosition(list.length);
+  startFeaturedTimer();
+}
+
+function featuredCard(project, index) {
+  const type = project.projectType || "Project";
+  const description = project.description || "A featured student project from the GOGA Software Engineering Showcase.";
+  return `
+    <article class="featured-card">
+      <div class="featured-card-topline">Selected Highlight</div>
+      <h3>${escapeHtml(getTitle(project))}</h3>
+      <p class="featured-student">${escapeHtml(project.studentDisplayName || "Student")}</p>
+      <p class="featured-description">${escapeHtml(description)}</p>
+      <div class="featured-card-bottom">
+        <div class="featured-badges">
+          <span>${escapeHtml(type)}</span>
+          ${project.classCode ? `<span>${escapeHtml(project.classCode)}</span>` : ""}
+          ${project.gradeLabelAtSubmission ? `<span>${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
+        </div>
+        <button type="button" data-featured-index="${index}">View Project</button>
+      </div>
+    </article>
+  `;
+}
+
+function scrollFeaturedToIndex(index, behavior = "smooth") {
+  if (!els.featuredTrack) return;
+  const card = els.featuredTrack.querySelectorAll(".featured-card")[index];
+  if (!card) return;
+  els.featuredTrack.scrollTo({ left: card.offsetLeft, behavior });
+}
+
+function updateFeaturedPosition(total) {
+  if (els.featuredPosition) els.featuredPosition.textContent = `${state.featuredIndex + 1} of ${total}`;
+}
+
+function advanceFeatured(step) {
+  const list = featuredProjects();
+  if (list.length === 0) return;
+  state.featuredIndex = (state.featuredIndex + step + list.length) % list.length;
+  scrollFeaturedToIndex(state.featuredIndex);
+  updateFeaturedPosition(list.length);
+}
+
+function startFeaturedTimer() {
+  stopFeaturedTimer();
+  state.featuredTimer = window.setInterval(() => {
+    if (state.mode === "gallery" && !state.activeProject) advanceFeatured(1);
+  }, FEATURED_INTERVAL_MS);
+}
+
+function stopFeaturedTimer() {
+  if (state.featuredTimer) window.clearInterval(state.featuredTimer);
+  state.featuredTimer = null;
+}
+
 function renderCards() {
-  if (state.filter === "stats") {
+  if (state.mode === "stats") {
     renderPathwayStats();
     return;
   }
@@ -200,7 +301,7 @@ function renderCards() {
   updateHeading();
 
   if (visible.length === 0) {
-    els.projectGrid.innerHTML = `<div class="empty">No projects match this search. Press Reset to return to the featured gallery.</div>`;
+    els.projectGrid.innerHTML = `<div class="empty">No projects match this search. Press Reset to return to the full gallery.</div>`;
     return;
   }
 
@@ -213,7 +314,7 @@ function renderCards() {
 }
 
 function updateHeading() {
-  if (state.filter === "stats") {
+  if (state.mode === "stats") {
     els.modeLabel.textContent = "Pathway Impact";
     els.galleryTitle.textContent = "Time Spent Coding Across the Software Engineering Pathway";
     return;
@@ -225,9 +326,9 @@ function updateHeading() {
     return;
   }
 
-  if (state.filter === "featured") {
-    els.modeLabel.textContent = "Featured Work";
-    els.galleryTitle.textContent = "Featured Student Projects";
+  if (state.search) {
+    els.modeLabel.textContent = "Search Results";
+    els.galleryTitle.textContent = "Matching Student Projects";
     return;
   }
 
@@ -243,7 +344,13 @@ function updateHeading() {
     return;
   }
 
-  els.modeLabel.textContent = "All Projects";
+  if (state.filter === "other") {
+    els.modeLabel.textContent = "Other Projects";
+    els.galleryTitle.textContent = "Miscellaneous Student Projects";
+    return;
+  }
+
+  els.modeLabel.textContent = "Gallery";
   els.galleryTitle.textContent = "Student Project Gallery";
 }
 
@@ -253,9 +360,9 @@ function projectCard(project) {
   const isWebsite = normalize(type).includes("web");
   const classes = ["card"];
   if (isWebsite) classes.push("website");
-  if (project.featured && state.filter !== "featured") classes.push("featured");
+  if (project.featured) classes.push("featured");
 
-  const description = project.description || "A student-created website submitted for the GOGA Software Engineering Showcase.";
+  const description = project.description || "A student-created project submitted for the GOGA Software Engineering Showcase.";
 
   return `
     <article class="${classes.join(" ")}">
@@ -267,13 +374,12 @@ function projectCard(project) {
         <span class="badge">${escapeHtml(getYear(project))}</span>
         ${project.classCode ? `<span class="badge">${escapeHtml(project.classCode)}</span>` : ""}
         ${project.gradeLabelAtSubmission ? `<span class="badge">${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
-        ${project.featured && state.filter !== "featured" ? `<span class="badge featured-badge">Featured</span>` : ""}
+        ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
       </div>
       <button type="button" data-project-index="${index}">View Project</button>
     </article>
   `;
 }
-
 
 function renderPathwayStats() {
   const stats = window.GOGA_PATHWAY_STATS;
@@ -301,9 +407,12 @@ function renderPathwayStats() {
     ? stats.aggregateClasses.find(item => item.classCode === "SE11")
     : null;
 
+  const totalHours = totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600);
+  const se11Hours = totals.se11HoursRounded || Math.round((totals.se11Seconds || 0) / 3600);
+
   const kpis = [
     {
-      value: formatNumber(totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600)),
+      value: formatNumber(totalHours),
       label: "Total Hours",
       detail: "Time spent coding across the pathway"
     },
@@ -313,7 +422,7 @@ function renderPathwayStats() {
       detail: "Unique students represented in CodeHS exports"
     },
     {
-      value: formatNumber(totals.se11HoursRounded || Math.round((totals.se11Seconds || 0) / 3600)),
+      value: formatNumber(se11Hours),
       label: "SE11 Hours",
       detail: "Web Design + Game Development"
     },
@@ -329,7 +438,7 @@ function renderPathwayStats() {
       <div class="stats-hero">
         <div>
           <p class="stats-kicker">Gateway Tech Software Engineering</p>
-          <h3>Students have logged ${formatNumber(totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600))} hours of time spent coding.</h3>
+          <h3>Students have logged ${formatNumber(totalHours)} hours of time spent coding.</h3>
           <p>These totals come from CodeHS activity across AP Computer Science Principles, Web Design, Game Development, and AP Computer Science A.</p>
         </div>
         <div class="stats-year-pill">${escapeHtml(stats.year || state.year)}</div>
@@ -422,11 +531,11 @@ function closeProjectViewer() {
 }
 
 function getEmbedUrl(url) {
-  const clean = String(url || "").trim();
-  if (!clean) return "";
+  const cleanUrl = String(url || "").trim();
+  if (!cleanUrl) return "";
 
   try {
-    const parsed = new URL(clean);
+    const parsed = new URL(cleanUrl);
     const host = parsed.hostname.toLowerCase();
 
     if (host.includes("codehs.com") && !parsed.pathname.endsWith("/embed")) {
@@ -436,7 +545,7 @@ function getEmbedUrl(url) {
 
     return parsed.toString();
   } catch {
-    return clean;
+    return cleanUrl;
   }
 }
 
@@ -445,7 +554,9 @@ function resetAll() {
   state.search = "";
   state.student = "";
   state.filter = DEFAULT_FILTER;
+  state.mode = "gallery";
   state.page = 1;
+  state.featuredIndex = 0;
 
   els.searchInput.value = "";
   els.studentSelect.value = "";
@@ -454,7 +565,6 @@ function resetAll() {
   closeProjectViewer();
   render();
 }
-
 
 function applyTheme(theme) {
   const isDark = theme !== "light";
@@ -478,6 +588,12 @@ function setupTheme() {
   applyTheme(savedTheme);
 }
 
+function returnToGallery() {
+  state.mode = "gallery";
+  state.page = 1;
+  render();
+}
+
 function bindEvents() {
   if (els.themeToggle) {
     els.themeToggle.addEventListener("click", () => {
@@ -486,30 +602,59 @@ function bindEvents() {
     });
   }
 
+  if (els.statsButton) {
+    els.statsButton.addEventListener("click", () => {
+      state.mode = state.mode === "stats" ? "gallery" : "stats";
+      state.page = 1;
+      render();
+    });
+  }
+
+  if (els.featuredPrev) {
+    els.featuredPrev.addEventListener("click", () => advanceFeatured(-1));
+  }
+
+  if (els.featuredNext) {
+    els.featuredNext.addEventListener("click", () => advanceFeatured(1));
+  }
+
+  if (els.featuredTrack) {
+    els.featuredTrack.addEventListener("mouseenter", stopFeaturedTimer);
+    els.featuredTrack.addEventListener("mouseleave", startFeaturedTimer);
+  }
+
   els.yearSelect.addEventListener("change", () => {
     state.year = els.yearSelect.value;
     state.page = 1;
     state.student = "";
+    state.featuredIndex = 0;
     render();
   });
 
   els.searchInput.addEventListener("input", () => {
     state.search = els.searchInput.value;
     state.page = 1;
+    if (state.mode === "stats") state.mode = "gallery";
     renderCards();
+    setupStatsButton();
   });
 
   els.studentSelect.addEventListener("change", () => {
     state.student = els.studentSelect.value;
     state.page = 1;
+    if (state.mode === "stats") state.mode = "gallery";
     renderCards();
+    setupStatsButton();
   });
 
   els.filterButtons.forEach(button => {
     button.addEventListener("click", () => {
       state.filter = button.dataset.filter;
+      state.mode = "gallery";
       state.page = 1;
       setupFilterButtons();
+      setupStatsButton();
+      renderFeaturedCarousel();
       renderCards();
     });
   });
@@ -535,13 +680,13 @@ function bindEvents() {
     if (event.key === "Escape") closeProjectViewer();
   });
 
-
   let resizeTimer = null;
   window.addEventListener("resize", () => {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       state.page = 1;
       renderCards();
+      renderFeaturedCarousel();
     }, 150);
   });
 

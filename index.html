@@ -10,16 +10,26 @@
 <body class="dark-mode">
   <main class="app">
     <header class="header">
-      <div class="brand">
-        <img src="assets/gateway-logo.png" alt="Gateway Tech logo" />
-        <div>
+      <div class="brand" aria-label="Gateway Tech GOGA">
+        <div class="brand-logo-wrap">
+          <img class="brand-logo brand-logo-light" src="assets/gateway-logo-icon.png" alt="Gateway Tech logo" />
+          <img class="brand-logo brand-logo-dark" src="assets/gateway-logo-white-outline.png" alt="Gateway Tech logo" />
+        </div>
+        <div class="brand-text">
           <p class="school">Gateway Tech</p>
           <h1>GOGA</h1>
-          <p class="subtitle">Gallery of Gateway Art · Software Engineering Showcase</p>
+          <p class="subtitle">Gallery of Gateway Art</p>
         </div>
       </div>
 
+      <div class="showcase-title" aria-label="Kiosk title">
+        <p>Software Engineering Showcase</p>
+        <span>Student websites, games, and creative coding projects</span>
+      </div>
+
       <div class="header-controls">
+        <button type="button" class="header-action" id="statsButton" aria-pressed="false">Pathway Stats</button>
+
         <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" aria-pressed="true">
           <span class="theme-toggle-track" aria-hidden="true">
             <span class="theme-toggle-thumb"></span>
@@ -34,7 +44,22 @@
       </div>
     </header>
 
-    <section class="search-panel" aria-label="Find a student project">
+    <section class="featured-showcase" id="featuredShowcase" aria-label="Featured showcase carousel">
+      <div class="featured-showcase-top">
+        <div>
+          <p>Featured Showcase</p>
+          <h2>Selected Student Highlights</h2>
+        </div>
+        <div class="carousel-actions" aria-label="Featured showcase controls">
+          <button type="button" id="featuredPrev" aria-label="Previous featured project">‹</button>
+          <span id="featuredPosition">1 of 1</span>
+          <button type="button" id="featuredNext" aria-label="Next featured project">›</button>
+        </div>
+      </div>
+      <div class="featured-track" id="featuredTrack" aria-live="polite"></div>
+    </section>
+
+    <section class="search-panel" id="searchPanel" aria-label="Find a student project">
       <div class="search-title">
         <p>Find Your Student</p>
         <h2>Type a name, select a student, or browse the gallery.</h2>
@@ -54,11 +79,10 @@
         </label>
 
         <div class="filters" aria-label="Project filters">
-          <button type="button" class="filter" data-filter="all">All</button>
-          <button type="button" class="filter active" data-filter="featured">Featured</button>
+          <button type="button" class="filter active" data-filter="all">All</button>
           <button type="button" class="filter" data-filter="game">Games</button>
           <button type="button" class="filter" data-filter="website">Websites</button>
-          <button type="button" class="filter" data-filter="stats">Pathway Stats</button>
+          <button type="button" class="filter" data-filter="other">Other</button>
         </div>
 
         <button type="button" class="reset" id="resetButton">Reset</button>
@@ -68,8 +92,8 @@
     <section class="gallery-panel" aria-label="Project gallery">
       <div class="gallery-heading">
         <div>
-          <p id="modeLabel">Featured Work</p>
-          <h2 id="galleryTitle">Featured Student Projects</h2>
+          <p id="modeLabel">All Projects</p>
+          <h2 id="galleryTitle">Student Project Gallery</h2>
         </div>
         <strong id="projectCount">0 projects</strong>
       </div>
