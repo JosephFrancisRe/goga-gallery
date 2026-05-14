@@ -214,7 +214,7 @@ window.GOGA_PROJECTS = [
     "studentDisplayName": "ROMULO R.",
     "projectTitle": "",
     "projectType": "Website",
-    "projectLink": "https://romulos-pizzaria-16065955.codehs.me/",
+    "projectLink": "student-sites/28-romulo-r-website/index.html",
     "featured": true,
     "year": "2026"
   },
