@@ -219,23 +219,22 @@ function renderFeaturedCarousel() {
 
   els.featuredShowcase.hidden = false;
 
-  const middleBase = list.length > 1 ? list.length * 2 : 0;
-  const safeMin = middleBase;
-  const safeMax = middleBase + list.length - 1;
+  if (!Number.isFinite(state.featuredIndex)) state.featuredIndex = 0;
+  state.featuredIndex = ((state.featuredIndex % list.length) + list.length) % list.length;
 
-  if (list.length > 1) {
-    if (!Number.isFinite(state.featuredIndex) || state.featuredIndex < safeMin || state.featuredIndex > safeMax) {
-      state.featuredIndex = middleBase;
-    }
-  } else {
-    state.featuredIndex = 0;
-  }
+  const displayList = list.map((_, offset) => {
+    const originalIndex = (state.featuredIndex + offset) % list.length;
+    return {
+      project: list[originalIndex],
+      originalIndex
+    };
+  });
 
-  const displayList = list.length > 1 ? [...list, ...list, ...list, ...list, ...list] : list;
-  els.featuredTrack.innerHTML = displayList.map((project, displayIndex) => {
-    const originalIndex = list.length > 1 ? displayIndex % list.length : displayIndex;
-    return featuredCard(project, displayIndex, originalIndex);
+  els.featuredTrack.innerHTML = displayList.map((item, displayIndex) => {
+    return featuredCard(item.project, displayIndex, item.originalIndex);
   }).join("");
+
+  els.featuredTrack.scrollLeft = 0;
 
   els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
     const open = () => {
@@ -253,8 +252,6 @@ function renderFeaturedCarousel() {
   });
 
   setupCarouselGestures();
-
-  requestAnimationFrame(() => scrollFeaturedToIndex(state.featuredIndex, "auto"));
   updateFeaturedPosition(list.length);
   startFeaturedTimer();
 }
@@ -281,43 +278,14 @@ function featuredCard(project, displayIndex, originalIndex = displayIndex) {
 }
 
 function scrollFeaturedToIndex(index, behavior = "smooth") {
+  // The carousel now uses circular data rotation instead of scrolling to duplicated offscreen cards.
   if (!els.featuredTrack) return;
-  const card = els.featuredTrack.querySelectorAll(".featured-card")[index];
-  if (!card) return;
-  els.featuredTrack.scrollTo({ left: card.offsetLeft, behavior });
+  els.featuredTrack.scrollTo({ left: 0, behavior });
 }
 
 function updateFeaturedPosition(total) {
   if (els.featuredPosition) {
-    els.featuredPosition.textContent = `${((state.featuredIndex % total) + total) % total + 1} of ${total}`;
-  }
-}
-
-function normalizeFeaturedIndex() {
-  const list = featuredProjects();
-  if (!els.featuredTrack || list.length <= 1) return;
-
-  const cards = [...els.featuredTrack.querySelectorAll(".featured-card")];
-  if (cards.length === 0) return;
-
-  let nearestIndex = state.featuredIndex;
-  let nearestDistance = Infinity;
-
-  cards.forEach((card, index) => {
-    const distance = Math.abs(card.offsetLeft - els.featuredTrack.scrollLeft);
-    if (distance < nearestDistance) {
-      nearestDistance = distance;
-      nearestIndex = index;
-    }
-  });
-
-  const normalized = ((nearestIndex % list.length) + list.length) % list.length;
-  const middleIndex = list.length * 2 + normalized;
-
-  state.featuredIndex = middleIndex;
-
-  if (nearestIndex < list.length * 2 || nearestIndex >= list.length * 3) {
-    scrollFeaturedToIndex(middleIndex, "auto");
+    els.featuredPosition.textContent = `${state.featuredIndex + 1} of ${total}`;
   }
 }
 
@@ -325,14 +293,12 @@ function advanceFeatured(step) {
   const list = featuredProjects();
   if (list.length === 0) return;
 
-  state.featuredIndex += step;
-  scrollFeaturedToIndex(state.featuredIndex);
-  updateFeaturedPosition(list.length);
-  window.setTimeout(normalizeFeaturedIndex, 520);
+  state.featuredIndex = (state.featuredIndex + step + list.length) % list.length;
+  renderFeaturedCarousel();
 }
 
 let featuredGestureReady = false;
-let featuredScrollTimer = null;
+let featuredWheelReady = true;
 
 function setupCarouselGestures() {
   if (!els.featuredTrack || featuredGestureReady) return;
@@ -340,26 +306,20 @@ function setupCarouselGestures() {
 
   let dragging = false;
   let startX = 0;
-  let startScrollLeft = 0;
   let moved = false;
 
-  const pauseAndNormalize = () => {
-    stopFeaturedTimer();
-    window.clearTimeout(featuredScrollTimer);
-    featuredScrollTimer = window.setTimeout(() => {
-      normalizeFeaturedIndex();
-      startFeaturedTimer();
-    }, 650);
-  };
-
   els.featuredTrack.addEventListener("wheel", event => {
-    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-      event.preventDefault();
-      els.featuredTrack.scrollLeft += event.deltaY;
-    } else {
-      els.featuredTrack.scrollLeft += event.deltaX;
-    }
-    pauseAndNormalize();
+    event.preventDefault();
+
+    if (!featuredWheelReady) return;
+    featuredWheelReady = false;
+
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    advanceFeatured(delta > 0 ? 1 : -1);
+
+    window.setTimeout(() => {
+      featuredWheelReady = true;
+    }, 260);
   }, { passive: false });
 
   els.featuredTrack.addEventListener("pointerdown", event => {
@@ -367,7 +327,6 @@ function setupCarouselGestures() {
     moved = false;
     state.carouselWasDragged = false;
     startX = event.clientX;
-    startScrollLeft = els.featuredTrack.scrollLeft;
     els.featuredTrack.classList.add("dragging");
     els.featuredTrack.setPointerCapture(event.pointerId);
     stopFeaturedTimer();
@@ -375,27 +334,33 @@ function setupCarouselGestures() {
 
   els.featuredTrack.addEventListener("pointermove", event => {
     if (!dragging) return;
-    const dx = event.clientX - startX;
-    if (Math.abs(dx) > 5) moved = true;
-    els.featuredTrack.scrollLeft = startScrollLeft - dx;
+    if (Math.abs(event.clientX - startX) > 8) moved = true;
   });
 
   function endDrag(event) {
     if (!dragging) return;
+
     dragging = false;
-    state.carouselWasDragged = moved;
     els.featuredTrack.classList.remove("dragging");
+
     try { els.featuredTrack.releasePointerCapture(event.pointerId); } catch {}
-    window.setTimeout(() => {
-      normalizeFeaturedIndex();
+
+    const dx = event.clientX - startX;
+    state.carouselWasDragged = moved;
+
+    if (Math.abs(dx) > 55) {
+      advanceFeatured(dx < 0 ? 1 : -1);
+    } else {
       startFeaturedTimer();
-      window.setTimeout(() => { state.carouselWasDragged = false; }, 80);
-    }, moved ? 250 : 0);
+    }
+
+    window.setTimeout(() => {
+      state.carouselWasDragged = false;
+    }, 100);
   }
 
   els.featuredTrack.addEventListener("pointerup", endDrag);
   els.featuredTrack.addEventListener("pointercancel", endDrag);
-  els.featuredTrack.addEventListener("scroll", pauseAndNormalize, { passive: true });
 }
 
 

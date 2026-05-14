@@ -71,3 +71,12 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Kept the stats footer pinned to the bottom through stats-specific app row sizing.
 - Enlarged Pathway Stats section headings.
 - Adjusted the grade-level pie chart so the chart is left-aligned and the legend is right-aligned.
+
+
+## Circular carousel + stats-space utilization update
+
+- The carousel now uses true circular data rotation: pressing left from the first card shows the last card immediately.
+- Removed the duplicated-track scroll jump behavior.
+- Wheel and drag gestures now rotate the carousel one card at a time.
+- Pathway Stats cards now use available vertical space more aggressively.
+- Course bars, pie chart, legend, and pathway context text scale up to reduce unused whitespace.
