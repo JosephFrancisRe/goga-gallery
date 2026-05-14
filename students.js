@@ -19,6 +19,14 @@ window.GOGA_PROJECTS = [
     "year": "2026"
   },
   {
+  "studentDisplayName": "KILLIAN C.",
+  "projectTitle": "Student Website Project",
+  "projectType": "Website",
+  "projectLink": "student-sites/09-killian-c-website/index.html",
+  "featured": true,
+  "year": "2026"
+  },
+  {
     "studentDisplayName": "LEAROY L.",
     "projectTitle": "",
     "projectType": "Website",
