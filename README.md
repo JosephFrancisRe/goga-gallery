@@ -1,18 +1,15 @@
-# GOGA Gallery Site - Dark Mode Polished Version
+# GOGA Gallery Site - Curated Titles, Descriptions, and Featured Work
 
-This package updates the gallery without changing the student project titles.
+This package includes updated gallery files plus a curated `students.js`.
 
-## Changes included
+## Included changes
 
-- Dark mode remains the default.
-- Toggle text shortened to `Dark` / `Light`.
-- Project count, badges, labels, and buttons are visually softer.
-- `View Project` buttons are less dominant and use a smaller call-to-action style.
-- Featured badges are hidden while viewing the Featured tab, reducing repetition.
-- Card contrast is improved in dark mode.
-- Project cards no longer use the heavy featured outline in the Featured tab.
-- Projects per page now adapts to screen height and width, so the layout works better across event laptops, desktop monitors, and different browser zoom levels.
-- `[hidden]` CSS fix remains included.
+- Project titles cleaned up.
+- Parent-facing card descriptions added.
+- Featured selections changed from "everyone" to a curated set of 12 projects.
+- Cards now display a short description under the student name.
+- The existing dark-mode/default toggle behavior is preserved.
+- The existing responsive pagination behavior is preserved.
 
 ## Upload to GitHub
 
@@ -23,7 +20,8 @@ index.html
 styles.css
 script.js
 students.js
+README.md
 assets/gateway-logo.png
 ```
 
-Do not delete your existing `student-sites/` folder.
+Do not delete the existing `student-sites/` folder.

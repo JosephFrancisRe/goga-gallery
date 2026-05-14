@@ -396,14 +396,14 @@ body.dark-mode .reset {
 
 .card {
   min-width: 0;
-  min-height: 112px;
+  min-height: 168px;
   border: 1px solid var(--line);
   border-left: 6px solid var(--red);
   border-radius: var(--small-radius);
   background: var(--card-bg);
   padding: 12px;
   display: grid;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto auto 1fr auto auto;
   gap: 6px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
@@ -441,6 +441,19 @@ body.dark-mode .card {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.project-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  line-height: 1.25;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 
 .badges {
   display: flex;
@@ -740,7 +753,7 @@ body.dark-mode .badge.featured-badge {
   }
 
   .card {
-    min-height: 104px;
+    min-height: 148px;
     padding: 9px;
     gap: 4px;
   }

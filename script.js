@@ -4,7 +4,7 @@ const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "featured";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
 const MAX_PROJECT_ROWS = 4;
-const ESTIMATED_CARD_HEIGHT = 112;
+const ESTIMATED_CARD_HEIGHT = 168;
 const CARD_GRID_GAP = 10;
 
 const state = {
@@ -237,10 +237,13 @@ function projectCard(project) {
   if (isWebsite) classes.push("website");
   if (project.featured && state.filter !== "featured") classes.push("featured");
 
+  const description = project.description || "A student-created website submitted for the GOGA Software Engineering Showcase.";
+
   return `
     <article class="${classes.join(" ")}">
       <h3>${escapeHtml(getTitle(project))}</h3>
       <p class="student">${escapeHtml(project.studentDisplayName || "Student")}</p>
+      <p class="project-description">${escapeHtml(description)}</p>
       <div class="badges">
         <span class="badge">${escapeHtml(type)}</span>
         <span class="badge">${escapeHtml(getYear(project))}</span>

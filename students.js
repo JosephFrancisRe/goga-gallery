@@ -1,6 +1,6 @@
 /*
-  Cleaned students.js for GOGA.
-  Duplicate project entries were removed while preserving the local/self-hosted version when available.
+  Curated students.js for GOGA.
+  Titles, descriptions, and Featured selections were updated after reviewing the submitted student-sites folder.
 */
 
 window.GOGA_CONFIG = {
@@ -12,266 +12,332 @@ window.GOGA_CONFIG = {
 window.GOGA_PROJECTS = [
   {
     "studentDisplayName": "ERIC L.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Eric's Pizza and Gelato",
     "projectType": "Website",
     "projectLink": "student-sites/01-eric-l-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A multi-page pizzeria and gelato shop website with menu pages, prices, images, and store information.",
+    "featureReason": "Strong multi-page restaurant structure with clear menus, images, and store information."
   },
   {
     "studentDisplayName": "HENRY S.",
     "projectTitle": "Forno & Freddo",
     "projectType": "Website",
     "projectLink": "student-sites/31-henry-s-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A pizza and gelato restaurant site with menu pages, prices, images, and a playful origin story.",
+    "featureReason": "Complete and browseable, but less polished visually than the strongest featured sites."
   },
   {
     "studentDisplayName": "AHMAD B.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Freddy Fazbear's Pizzeria",
     "projectType": "Website",
     "projectLink": "student-sites/26-ahmad-b-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A personal and restaurant-themed site combining interests, a themed pizza menu, and a Mario Kart World opinion page.",
+    "featureReason": "Technically ambitious, but the focus is less cohesive than the strongest showcase pieces."
   },
   {
-  "studentDisplayName": "KILLIAN C.",
-  "projectTitle": "Student Website Project",
-  "projectType": "Website",
-  "projectLink": "student-sites/09-killian-c-website/index.html",
-  "featured": true,
-  "year": "2026"
+    "studentDisplayName": "KILLIAN C.",
+    "projectTitle": "Whoopsies! Gelato",
+    "projectType": "Website",
+    "projectLink": "student-sites/09-killian-c-website/index.html",
+    "featured": true,
+    "year": "2026",
+    "description": "A polished gelato shop website with pages for flavors, locations, about information, and image credits.",
+    "featureReason": "One of the most complete and cohesive sites, with strong navigation, many images, and clear concept."
   },
   {
     "studentDisplayName": "LEAROY L.",
-    "projectTitle": "",
+    "projectTitle": "Vesuvio's",
     "projectType": "Website",
     "projectLink": "student-sites/02-learoy-l-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A simple restaurant contact and about site with basic navigation and contact information.",
+    "featureReason": "Useful start, but comparatively limited in structure and visual development."
   },
   {
     "studentDisplayName": "JAYDEN D.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Chittenden County Zoo",
     "projectType": "Website",
     "projectLink": "student-sites/03-jayden-d-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A zoo website with multiple pages for animals, visits, applications, and themed Halloween content.",
+    "featureReason": "Good amount of content, but less styled than the top featured group."
   },
   {
     "studentDisplayName": "GREGORY K.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Greg Gets It!",
     "projectType": "Website",
     "projectLink": "student-sites/04-gregory-k-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A movie-review website with review pages, ratings, about information, and a distinctive critical voice.",
+    "featureReason": "Strong voice, multi-page structure, navigation, and more developed styling."
   },
   {
     "studentDisplayName": "SELINA Z.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Owls and Vultures Conservatory",
     "projectType": "Website",
     "projectLink": "student-sites/05-selina-z-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A bird conservatory-style website about owls and vultures with navigation, images, and informational pages.",
+    "featureReason": "Content-rich, but not as visually cohesive as the selected featured sites."
   },
   {
     "studentDisplayName": "CYRUS C.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Persona Pizza",
     "projectType": "Website",
     "projectLink": "student-sites/06-cyrus-c-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A Persona-themed pizza restaurant site with menu pages, desserts, custom styling, and franchise-inspired writing.",
+    "featureReason": "Strong CSS effort, cohesive theme, multiple pages, and creative concept."
   },
   {
     "studentDisplayName": "XAVIER G.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "WackyPizza",
     "projectType": "Website",
     "projectLink": "student-sites/07-xavier-g-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A playful restaurant website with imaginative menu items, drinks, side dishes, and an origin story.",
+    "featureReason": "Creative and complete, but narrowly missed the featured cutoff."
   },
   {
     "studentDisplayName": "BENJAMIN S.",
     "projectTitle": "Re's Pizza",
     "projectType": "Website",
     "projectLink": "student-sites/08-benjamin-s-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A classic pizza restaurant site with menu items, location information, and product photos.",
+    "featureReason": "Solid restaurant site, but less visually developed than the featured group."
   },
   {
     "studentDisplayName": "ALLISON Q.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Mario's Pizzeria",
     "projectType": "Website",
     "projectLink": "student-sites/10-allison-q-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A themed pizzeria site with menu and dessert pages, images, and an about section.",
+    "featureReason": "Complete multi-page project, but less polished than the strongest featured sites."
   },
   {
     "studentDisplayName": "DECLAN O.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "National City Zoo",
     "projectType": "Website",
     "projectLink": "student-sites/11-declan-o-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A National City Zoo website with animal information, contact/about pages, and a clear navigation structure.",
+    "featureReason": "Clear and complete, but lower visual polish than featured selections."
   },
   {
     "studentDisplayName": "RIO H.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Johnny Pizza's Pizzeria",
     "projectType": "Website",
     "projectLink": "student-sites/12-rio-h-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A complete pizza and gelato restaurant website with menus, image credits, contact information, and polished navigation.",
+    "featureReason": "Very complete restaurant site with multiple pages, tables, credits, and strong organization."
   },
   {
     "studentDisplayName": "DANTE V.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Media Review Project",
     "projectType": "Website",
     "projectLink": "student-sites/13-dante-v-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A media-review site covering movies and video games with separate review pages and a personal about section.",
+    "featureReason": "Strong topic and navigation, but not quite as polished as the featured group."
   },
   {
     "studentDisplayName": "ISAAC G.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "TerraMarr Zoo",
     "projectType": "Website",
     "projectLink": "student-sites/14-isaac-g-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A zoo website with animal information, activities, images, and navigation.",
+    "featureReason": "Good exhibit content, but comparatively simpler styling."
   },
   {
     "studentDisplayName": "HUNTER D.",
-    "projectTitle": "",
+    "projectTitle": "Harlem Zoo",
     "projectType": "Website",
     "projectLink": "student-sites/15-hunter-d-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A Harlem Zoo website with history, animal information, and straightforward navigation.",
+    "featureReason": "Browseable project, but simpler than most of the class set."
   },
   {
     "studentDisplayName": "EDDY R.",
-    "projectTitle": "Zoo/Animal Conservatory | CodeHS",
+    "projectTitle": "Hell's Kitchen Animal Conservatory and Zoo",
     "projectType": "Website",
     "projectLink": "student-sites/16-eddy-r-zoo-animal-conservatory-codehs/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "An animal conservatory and zoo website with a strong story, event information, many images, and credits.",
+    "featureReason": "Strong concept, lots of visual content, clear navigation, and exhibit-ready scope."
   },
   {
     "studentDisplayName": "DECLAN F.",
     "projectTitle": "Walter Wotlamb Pizza",
     "projectType": "Website",
     "projectLink": "student-sites/17-declan-f-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A humorous pizza restaurant site with cast pages, menu content, and a distinctive fictional brand.",
+    "featureReason": "Creative, but less polished structurally and visually than selected featured work."
   },
   {
     "studentDisplayName": "JACOB P.",
-    "projectTitle": "Pizzeria Project",
+    "projectTitle": "New York Pizza Emporium",
     "projectType": "Website",
     "projectLink": "student-sites/20-jacob-p-github-jacobdpete-atschool-pizzeria-project-pizzeria-github/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A detailed pizzeria website with pizza and gelato menus, a founders page, and clear attribution.",
+    "featureReason": "Complete multi-page structure, strong attribution, and substantial menu/content work."
   },
   {
     "studentDisplayName": "AITOR Q.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Hachi's Pawsome Pizzeria",
     "projectType": "Website",
     "projectLink": "student-sites/21-aitor-q-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A cat-run pizzeria website with a creative story, order page, chef-cat section, and image credits.",
+    "featureReason": "Distinctive concept, strong personality, multiple pages, and clear student voice."
   },
   {
     "studentDisplayName": "AMIR V.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Green Valley Zoo",
     "projectType": "Website",
     "projectLink": "student-sites/22-amir-v-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A Green Valley Zoo website with origin story, animal pages, and visitor planning information.",
+    "featureReason": "Complete and coherent, but just outside the featured group."
   },
   {
     "studentDisplayName": "JORDAN W.",
-    "projectTitle": "Lovecraftian creature excebition | CodeHS",
+    "projectTitle": "Lovecraftian Creature Exhibition",
     "projectType": "Website",
     "projectLink": "student-sites/23-jordan-w-lovecraftian-creature-excebition-codehs/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A Lovecraftian creature exhibition site with creature rankings, mythology-inspired pages, and atmospheric content.",
+    "featureReason": "Original topic, strong content volume, multiple pages, and cohesive exhibit concept."
   },
   {
     "studentDisplayName": "ZAMIR K.",
-    "projectTitle": "GitHub - ZamirKarimov/Zoo: Github Repo for the Software Engineering Project \u00b7 GitHub",
+    "projectTitle": "Zoomir",
     "projectType": "Website",
     "projectLink": "student-sites/24-zamir-k-github-zamirkarimov-zoo-github-repo-for-the-software-engineering-project-github/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A large zoo website with animal pages, visit information, and image-based presentation.",
+    "featureReason": "Substantial navigation and content, but less polished styling than featured selections."
   },
   {
     "studentDisplayName": "HENRY A.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Papa's Pizzeria",
     "projectType": "Website",
     "projectLink": "student-sites/25-henry-a-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A Papa's Pizzeria website with pizza and gelato menus, ordering information, and coordinated styling.",
+    "featureReason": "Strong visual styling, organized restaurant sections, and complete restaurant concept."
   },
   {
     "studentDisplayName": "ELLIS A.",
     "projectTitle": "Better Pizza Project",
     "projectType": "Website",
     "projectLink": "https://pizzaproject.oneapp.dev/",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A hosted pizza restaurant website with menu/about/donation navigation and store hours.",
+    "featureReason": "Hosted externally and appears complete, but code was not included in the submitted site bundle for direct comparison."
   },
   {
     "studentDisplayName": "KOBE B.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "The Goof Ball Delight",
     "projectType": "Website",
     "projectLink": "student-sites/27-kobe-b-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A playful restaurant site with menu, contact, and about pages.",
+    "featureReason": "Creative voice, but simpler navigation and polish than featured selections."
   },
   {
     "studentDisplayName": "ROMULO R.",
-    "projectTitle": "",
+    "projectTitle": "Romulo's Pizzeria",
     "projectType": "Website",
     "projectLink": "student-sites/28-romulo-r-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A pizzeria site with menu, dessert, about, and home pages centered on a fictional restaurant brand.",
+    "featureReason": "Solid content and navigation, but less technically styled than featured work."
   },
   {
     "studentDisplayName": "MATEO M.",
-    "projectTitle": "Log In | CodeHS",
+    "projectTitle": "Umamusume Media Review",
     "projectType": "Website",
     "projectLink": "student-sites/29-mateo-m-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A multimedia review site with franchise background, gameplay review, and media review pages.",
+    "featureReason": "Content-rich and well-structured, but not chosen for the featured set."
   },
   {
     "studentDisplayName": "Yasin Y.",
     "projectTitle": "Armored Core VI: Fires of Rubicon",
     "projectType": "Website",
     "projectLink": "student-sites/30-yasin-y-github-yasinyenigun-netizen-ubiquitous-guide-schoolproject-github/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A review site for Armored Core VI with links to major reviews, attributions, and game-review content.",
+    "featureReason": "Good topic and structure, but not as exhibit-ready as the featured group."
   },
   {
     "studentDisplayName": "Nick B.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "TV DINNER",
     "projectType": "Website",
     "projectLink": "student-sites/32-nick-b-website/index.html",
-    "featured": true,
-    "year": "2026"
+    "featured": false,
+    "year": "2026",
+    "description": "A TV Dinner-themed restaurant site with menu, reservations, and about pages.",
+    "featureReason": "Coherent concept and navigation, but not in the top featured tier."
   },
   {
     "studentDisplayName": "JOSIAH R.",
-    "projectTitle": "CodeHS",
+    "projectTitle": "Re's Pizza",
     "projectType": "Website",
     "projectLink": "student-sites/33-josiah-r-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A polished Re's Pizza site with homepage, menu, locations, about content, and cohesive restaurant branding.",
+    "featureReason": "Strong CSS effort, cohesive branding, multiple pages, and polished restaurant-site structure."
   },
   {
     "studentDisplayName": "Robert G.",
-    "projectTitle": "",
+    "projectTitle": "Red Dead Redemption Blog",
     "projectType": "Website",
     "projectLink": "student-sites/34-robert-g-website/index.html",
     "featured": true,
-    "year": "2026"
+    "year": "2026",
+    "description": "A Red Dead Redemption blog with historical context, opinion writing, lore pages, and strong styling.",
+    "featureReason": "One of the strongest non-restaurant sites, with substantial CSS, writing, and multi-page structure."
   }
 ];
