@@ -105,3 +105,11 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Kept the no-partial-card layout by calculating the number of full cards that fit.
 - Updated auto-scroll so it uses the same circular `advanceFeatured()` pathway as arrow/wheel/drag navigation.
 - Added a guard so transition completion cannot double-fire during automatic scrolling.
+
+
+## Featured Project click-open fix
+
+- Featured Project cards now use delegated click handling from the carousel track.
+- Removed pointer-capture behavior that could prevent card clicks from reaching the card.
+- Dragging the carousel still suppresses accidental project opening.
+- Normal clicks on featured cards now open the same viewer used by gallery cards.

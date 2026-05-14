@@ -2020,3 +2020,20 @@ body.stats-view .stats-kpi p {
     right: -42px;
   }
 }
+
+
+
+/* --- Featured Project click-open fix --- */
+
+.featured-card {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.featured-card * {
+  pointer-events: auto;
+}
+
+.featured-track.dragging .featured-card {
+  cursor: grabbing;
+}
