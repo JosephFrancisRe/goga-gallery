@@ -3,19 +3,16 @@
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "all";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
-const MAX_PROJECT_ROWS = 3;
-const ESTIMATED_CARD_HEIGHT = 136;
-const CARD_GRID_GAP = 10;
-const FEATURED_INTERVAL_MS = 8500;
-const FEATURED_MIN_CARD_WIDTH = 380;
-const FEATURED_GAP = 16;
+const FEATURED_INTERVAL_MS = 9500;
+const CARD_GRID_GAP = 12;
+const ESTIMATED_CARD_HEIGHT = 210;
 
 const state = {
   year: DEFAULT_YEAR,
   search: "",
   student: "",
   filter: DEFAULT_FILTER,
-  mode: "gallery",
+  mode: "home",
   page: 1,
   featuredIndex: 0,
   featuredTimer: null,
@@ -30,19 +27,27 @@ const els = {
   filterButtons: document.querySelectorAll(".filter"),
   resetButton: document.getElementById("resetButton"),
   statsButton: document.getElementById("statsButton"),
-  featuredShowcase: document.getElementById("featuredShowcase"),
+  spotlightWall: document.getElementById("spotlightWall"),
+  spotlightArtwork: document.getElementById("spotlightArtwork"),
+  wallLabel: document.getElementById("wallLabel"),
   featuredTrack: document.getElementById("featuredTrack"),
   featuredPrev: document.getElementById("featuredPrev"),
   featuredNext: document.getElementById("featuredNext"),
   featuredPosition: document.getElementById("featuredPosition"),
+  browsePanel: document.getElementById("browsePanel"),
+  galleryPanel: document.getElementById("galleryPanel"),
+  statsPanel: document.getElementById("statsPanel"),
+  statsContent: document.getElementById("statsContent"),
+  statsYearPill: document.getElementById("statsYearPill"),
   projectGrid: document.getElementById("projectGrid"),
   projectCount: document.getElementById("projectCount"),
   pageLabel: document.getElementById("pageLabel"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
-  pager: document.querySelector(".pager"),
   modeLabel: document.getElementById("modeLabel"),
   galleryTitle: document.getElementById("galleryTitle"),
+  backHomeButton: document.getElementById("backHomeButton"),
+  statsBackButton: document.getElementById("statsBackButton"),
   viewer: document.getElementById("viewer"),
   closeViewer: document.getElementById("closeViewer"),
   viewerTitle: document.getElementById("viewerTitle"),
@@ -57,6 +62,10 @@ function projects() {
   return Array.isArray(window.GOGA_PROJECTS) ? window.GOGA_PROJECTS : [];
 }
 
+function normalize(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
 function getYear(project) {
   return String(project.year || project.submissionYear || DEFAULT_YEAR);
 }
@@ -65,14 +74,10 @@ function getTitle(project) {
   const title = String(project.projectTitle || "").trim();
   if (title) return title;
 
-  const type = String(project.projectType || "").toLowerCase();
+  const type = normalize(project.projectType);
   if (type.includes("game")) return "Student Game Project";
   if (type.includes("web")) return "Student Website Project";
   return "Student Digital Project";
-}
-
-function normalize(value) {
-  return String(value || "").trim().toLowerCase();
 }
 
 function uniqueSorted(values) {
@@ -85,48 +90,57 @@ function getYears() {
   return years.sort((a, b) => Number(b) - Number(a));
 }
 
+function circularIndex(index, total) {
+  return ((index % total) + total) % total;
+}
+
+function projectKind(project) {
+  const type = normalize(project.projectType);
+  if (type.includes("web")) return "website";
+  if (type.includes("game")) return "game";
+  return "other";
+}
+
+function galleryName(projectOrFilter) {
+  const value = typeof projectOrFilter === "string" ? projectOrFilter : projectKind(projectOrFilter);
+
+  if (value === "website") return "Website Gallery";
+  if (value === "game") return "Game Arcade";
+  if (value === "other") return "Creative Coding Lab";
+  return "All Projects";
+}
+
+function courseLabel(project) {
+  return project.className || "Software Engineering";
+}
+
+function neutralProjectNote(project) {
+  const kind = projectKind(project);
+  const assignment = String(project.codehsAssignment || project.projectTitle || "").trim();
+
+  if (kind === "website") {
+    return "A student-created website submitted during the Web Design portion of the Software Engineering pathway. It is presented here as a snapshot of student work from this course.";
+  }
+
+  if (kind === "game") {
+    const gameName = assignment ? `${assignment} ` : "";
+    return `A student-created ${gameName}game submitted during the Game Development portion of the Software Engineering pathway. CodeHS games open best in a separate tab.`;
+  }
+
+  return "A student-created creative coding project submitted during the Software Engineering pathway. This project uses graphics, animation, or drawing commands.";
+}
+
 function featuredProjects() {
-  return projects()
+  const list = projects()
     .filter(project => getYear(project) === state.year && project.featured)
     .slice()
     .sort((a, b) => getTitle(a).localeCompare(getTitle(b)));
-}
 
-function setupYears() {
-  els.yearSelect.innerHTML = getYears().map(year => {
-    return `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`;
-  }).join("");
-  els.yearSelect.value = state.year;
-}
+  if (list.length > 0) return list;
 
-function setupStudents() {
-  const students = uniqueSorted(projects()
+  return projects()
     .filter(project => getYear(project) === state.year)
-    .map(project => project.studentDisplayName));
-
-  els.studentSelect.innerHTML = `<option value="">All students</option>` + students.map(student => {
-    return `<option value="${escapeHtml(student)}">${escapeHtml(student)}</option>`;
-  }).join("");
-
-  if (students.includes(state.student)) {
-    els.studentSelect.value = state.student;
-  } else {
-    state.student = "";
-  }
-}
-
-function setupFilterButtons() {
-  els.filterButtons.forEach(button => {
-    button.classList.toggle("active", button.dataset.filter === state.filter);
-  });
-}
-
-function setupStatsButton() {
-  if (!els.statsButton) return;
-  const active = state.mode === "stats";
-  els.statsButton.classList.toggle("active", active);
-  els.statsButton.setAttribute("aria-pressed", String(active));
-  els.statsButton.textContent = active ? "Back to Gallery" : "Pathway Stats";
+    .slice(0, 12);
 }
 
 function matches(project) {
@@ -140,204 +154,182 @@ function matches(project) {
     project.classCode,
     project.className,
     project.gradeLabelAtSubmission,
+    project.codehsAssignment,
     project.featured ? "featured" : ""
   ].map(normalize).join(" ");
 
   if (search && !haystack.includes(search)) return false;
   if (state.student && project.studentDisplayName !== state.student) return false;
 
-  const type = normalize(project.projectType);
-
-  if (state.filter === "game" && !type.includes("game")) return false;
-  if (state.filter === "website" && !type.includes("web")) return false;
-  if (state.filter === "other" && (type.includes("game") || type.includes("web"))) return false;
+  const kind = projectKind(project);
+  if (state.filter !== "all" && kind !== state.filter) return false;
 
   return true;
 }
 
 function filteredProjects() {
-  const defaultBrowse = state.mode === "gallery" && !state.student && !state.search && state.filter === "all";
-
   return projects()
     .filter(matches)
     .slice()
     .sort((a, b) => {
-      if (defaultBrowse && a.featured !== b.featured) return a.featured ? 1 : -1;
+      const kindCompare = galleryName(projectKind(a)).localeCompare(galleryName(projectKind(b)));
+      if (state.filter === "all" && kindCompare !== 0) return kindCompare;
 
-      const nameCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
-      if (nameCompare !== 0) return nameCompare;
+      const studentCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
+      if (studentCompare !== 0) return studentCompare;
+
       return getTitle(a).localeCompare(getTitle(b));
     });
 }
 
+function setupYears() {
+  els.yearSelect.innerHTML = getYears().map(year => `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`).join("");
+  els.yearSelect.value = state.year;
+}
+
+function setupStudents() {
+  const students = uniqueSorted(projects()
+    .filter(project => getYear(project) === state.year)
+    .map(project => project.studentDisplayName));
+
+  els.studentSelect.innerHTML = `<option value="">All students</option>` + students
+    .map(student => `<option value="${escapeHtml(student)}">${escapeHtml(student)}</option>`)
+    .join("");
+
+  if (students.includes(state.student)) {
+    els.studentSelect.value = state.student;
+  } else {
+    state.student = "";
+    els.studentSelect.value = "";
+  }
+}
+
+function setupFilterButtons() {
+  els.filterButtons.forEach(button => {
+    button.classList.toggle("active", button.dataset.filter === state.filter);
+  });
+}
+
 function render() {
-  document.body.classList.toggle("stats-view", state.mode === "stats");
+  document.body.classList.toggle("mode-home", state.mode === "home");
+  document.body.classList.toggle("mode-gallery", state.mode === "gallery");
+  document.body.classList.toggle("mode-stats", state.mode === "stats");
+
   setupYears();
   setupStudents();
   setupFilterButtons();
   setupStatsButton();
-  renderFeaturedCarousel();
-  renderCards();
-}
 
-function getProjectsPerPage() {
-  const width = window.innerWidth;
-  const gridHeight = els.projectGrid ? els.projectGrid.getBoundingClientRect().height : 0;
+  els.spotlightWall.hidden = state.mode !== "home";
+  els.browsePanel.hidden = state.mode === "stats";
+  els.galleryPanel.hidden = state.mode !== "gallery";
+  els.statsPanel.hidden = state.mode !== "stats";
 
-  let columns = 1;
-
-  if (width > 1800) columns = 5;
-  else if (width > 1300) columns = 4;
-  else if (width > 900) columns = 3;
-
-  if (width <= 900) {
-    if (els.projectGrid) els.projectGrid.style.removeProperty("--gallery-rows");
-    return 12;
+  if (state.mode === "home") {
+    renderSpotlight();
+    stopFeaturedTimer();
+    startFeaturedTimer();
+  } else {
+    stopFeaturedTimer();
   }
 
-  const rowsFromHeight = gridHeight > 0
-    ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
-    : 3;
-
-  const rows = Math.max(2, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
-  if (els.projectGrid) {
-    els.projectGrid.style.setProperty("--gallery-rows", String(rows));
-    els.projectGrid.style.setProperty("--gallery-columns", String(columns));
-  }
-
-  return columns * rows;
+  if (state.mode === "gallery") renderGallery();
+  if (state.mode === "stats") renderPathwayStats();
 }
 
-function circularIndex(index, total) {
-  return ((index % total) + total) % total;
+function setupStatsButton() {
+  const active = state.mode === "stats";
+  els.statsButton.classList.toggle("active", active);
+  els.statsButton.setAttribute("aria-pressed", String(active));
+  els.statsButton.textContent = active ? "Back to Exhibit" : "Pathway Stats";
 }
 
-function projectGalleryName(project) {
-  const type = normalize(project.projectType);
-  if (type.includes("web")) return "Website Gallery";
-  if (type.includes("game")) return "Game Arcade";
-  return "Creative Coding Lab";
-}
-
-function neutralProjectNote(project) {
-  const explicit = String(project.description || "").trim();
-  if (explicit) return explicit;
-
-  const type = normalize(project.projectType);
-  if (type.includes("web")) return "A student-created website from the web design portion of the Software Engineering pathway.";
-  if (type.includes("game")) return "A student-created CodeHS game from the game development portion of the Software Engineering pathway.";
-  return "A student-created creative coding project from the Software Engineering pathway.";
-}
-
-function renderFeaturedCarousel() {
+function renderSpotlight() {
   const list = featuredProjects();
 
-  if (!els.featuredShowcase || !els.featuredTrack) return;
-
-  const spotlightMain = document.getElementById("spotlightMain");
-  const spotlightLabel = document.getElementById("spotlightLabel");
-
-  if (state.mode === "stats" || list.length === 0) {
-    els.featuredShowcase.hidden = true;
-    stopFeaturedTimer();
+  if (!list.length) {
+    els.spotlightArtwork.innerHTML = `<div class="empty">No featured projects are available for this year.</div>`;
+    els.wallLabel.innerHTML = "";
+    els.featuredTrack.innerHTML = "";
     return;
   }
 
-  els.featuredShowcase.hidden = false;
-
-  if (!Number.isFinite(state.featuredIndex)) state.featuredIndex = 0;
   state.featuredIndex = circularIndex(state.featuredIndex, list.length);
-
   const project = list[state.featuredIndex];
-  const galleryName = projectGalleryName(project);
-  const note = neutralProjectNote(project);
 
-  if (spotlightMain) {
-    spotlightMain.innerHTML = `
-      <p class="spotlight-kicker">${escapeHtml(galleryName)}</p>
-      <h3>${escapeHtml(getTitle(project))}</h3>
-      <p class="spotlight-student">${escapeHtml(project.studentDisplayName || "Student")} · ${escapeHtml(project.projectType || "Project")}</p>
-      <div class="spotlight-meta">
-        ${project.classCode ? `<span>${escapeHtml(project.classCode)}</span>` : ""}
-        ${project.gradeLabelAtSubmission ? `<span>${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
-        <span>${escapeHtml(getYear(project))}</span>
+  els.spotlightArtwork.innerHTML = `
+    <div class="art-frame">
+      ${previewMarkup(project, "spotlight")}
+    </div>
+    <div class="art-caption">
+      <div>
+        <p>${escapeHtml(galleryName(projectKind(project)))}</p>
+        <h3>${escapeHtml(getTitle(project))}</h3>
+        <span>${escapeHtml(project.studentDisplayName || "Student")} · ${escapeHtml(project.projectType || "Project")}</span>
       </div>
       <button type="button" class="spotlight-open">Open Project →</button>
-    `;
+    </div>
+  `;
 
-    const openButton = spotlightMain.querySelector(".spotlight-open");
-    if (openButton) openButton.addEventListener("click", () => openViewer(project));
+  els.spotlightArtwork.querySelector(".spotlight-open").addEventListener("click", event => {
+    event.stopPropagation();
+    openViewer(project);
+  });
 
-    spotlightMain.onclick = event => {
-      if (event.target.closest("button")) return;
-      openViewer(project);
-    };
-  }
+  els.spotlightArtwork.onclick = event => {
+    if (event.target.closest("button")) return;
+    openViewer(project);
+  };
 
-  if (spotlightLabel) {
-    spotlightLabel.innerHTML = `
-      <p class="wall-label-kicker">Wall Label</p>
-      <h3>${escapeHtml(getTitle(project))}</h3>
-      <dl>
-        <div><dt>Student</dt><dd>${escapeHtml(project.studentDisplayName || "Student")}</dd></div>
-        <div><dt>Gallery</dt><dd>${escapeHtml(galleryName)}</dd></div>
-        <div><dt>Course</dt><dd>${escapeHtml(project.className || "Software Engineering")}</dd></div>
-      </dl>
-      <p class="wall-label-note">${escapeHtml(note)}</p>
-    `;
-  }
+  els.wallLabel.innerHTML = `
+    <p class="wall-label-kicker">Wall Label</p>
+    <h3>${escapeHtml(getTitle(project))}</h3>
+    <dl>
+      <div><dt>Student</dt><dd>${escapeHtml(project.studentDisplayName || "Student")}</dd></div>
+      <div><dt>Gallery</dt><dd>${escapeHtml(galleryName(projectKind(project)))}</dd></div>
+      <div><dt>Course</dt><dd>${escapeHtml(courseLabel(project))}</dd></div>
+      <div><dt>Year</dt><dd>${escapeHtml(getYear(project))}</dd></div>
+    </dl>
+    <p class="wall-label-note">${escapeHtml(neutralProjectNote(project))}</p>
+  `;
 
-  const thumbnailCount = Math.min(6, list.length);
-  const thumbnails = Array.from({ length: thumbnailCount }, (_, offset) => {
+  const maxThumbs = Math.min(7, list.length);
+  const thumbs = Array.from({ length: maxThumbs }, (_, offset) => {
     const originalIndex = circularIndex(state.featuredIndex + offset, list.length);
     return { project: list[originalIndex], originalIndex };
   });
 
-  els.featuredTrack.innerHTML = thumbnails.map(item => {
+  els.featuredTrack.innerHTML = thumbs.map(item => {
     const active = item.originalIndex === state.featuredIndex ? " active" : "";
     return `
-      <button type="button" class="spotlight-thumb${active}" data-featured-original-index="${item.originalIndex}">
-        <strong>${escapeHtml(getTitle(item.project))}</strong>
-        <span>${escapeHtml(item.project.studentDisplayName || "Student")}</span>
+      <button type="button" class="rail-card${active}" data-featured-index="${item.originalIndex}">
+        ${previewMarkup(item.project, "thumb")}
+        <span>${escapeHtml(getTitle(item.project))}</span>
       </button>
     `;
   }).join("");
 
-  els.featuredTrack.querySelectorAll("[data-featured-original-index]").forEach(button => {
+  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(button => {
     button.addEventListener("click", () => {
-      state.featuredIndex = Number(button.dataset.featuredOriginalIndex);
-      renderFeaturedCarousel();
+      state.featuredIndex = Number(button.dataset.featuredIndex);
+      renderSpotlight();
     });
   });
 
-  updateFeaturedPosition(list.length);
-  startFeaturedTimer();
-}
-
-function scrollFeaturedToIndex(index, behavior = "smooth") {
-  // Museum spotlight mode does not use track scrolling.
-}
-
-function updateFeaturedPosition(total) {
-  if (els.featuredPosition) {
-    els.featuredPosition.textContent = `${state.featuredIndex + 1} of ${total}`;
-  }
+  if (els.featuredPosition) els.featuredPosition.textContent = `${state.featuredIndex + 1} of ${list.length}`;
 }
 
 function advanceFeatured(step) {
   const list = featuredProjects();
-  if (list.length === 0) return;
+  if (!list.length) return;
   state.featuredIndex = circularIndex(state.featuredIndex + step, list.length);
-  renderFeaturedCarousel();
+  renderSpotlight();
 }
-
 
 function startFeaturedTimer() {
   stopFeaturedTimer();
   state.featuredTimer = window.setInterval(() => {
-    if (state.mode === "gallery" && !state.activeProject && !state.featuredAnimating) {
-      advanceFeatured(1);
-    }
+    if (state.mode === "home" && !state.activeProject) advanceFeatured(1);
   }, FEATURED_INTERVAL_MS);
 }
 
@@ -346,39 +338,56 @@ function stopFeaturedTimer() {
   state.featuredTimer = null;
 }
 
-function renderCards() {
-  if (state.mode === "stats") {
-    renderPathwayStats();
-    return;
+function getProjectsPerPage() {
+  const width = window.innerWidth;
+  const gridHeight = els.projectGrid ? els.projectGrid.getBoundingClientRect().height : 0;
+
+  let columns = 2;
+  if (width >= 1380) columns = 5;
+  else if (width >= 1050) columns = 4;
+  else if (width >= 760) columns = 3;
+
+  if (width < 760) {
+    els.projectGrid.style.removeProperty("--gallery-columns");
+    els.projectGrid.style.removeProperty("--gallery-rows");
+    return 8;
   }
 
-  if (els.pager) els.pager.hidden = false;
-  els.projectGrid.classList.remove("stats-mode");
+  const rowsFromHeight = gridHeight > 0
+    ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
+    : 2;
 
+  const rows = Math.max(1, Math.min(2, rowsFromHeight || 2));
+  els.projectGrid.style.setProperty("--gallery-columns", String(columns));
+  els.projectGrid.style.setProperty("--gallery-rows", String(rows));
+
+  return columns * rows;
+}
+
+function renderGallery() {
   const list = filteredProjects();
-  const projectsPerPage = getProjectsPerPage();
-  const totalPages = Math.max(1, Math.ceil(list.length / projectsPerPage));
+  const perPage = getProjectsPerPage();
+  const totalPages = Math.max(1, Math.ceil(list.length / perPage));
 
-  if (state.page > totalPages) state.page = totalPages;
-  if (state.page < 1) state.page = 1;
+  state.page = Math.max(1, Math.min(state.page, totalPages));
 
-  const start = (state.page - 1) * projectsPerPage;
-  const visible = list.slice(start, start + projectsPerPage);
+  const start = (state.page - 1) * perPage;
+  const visible = list.slice(start, start + perPage);
 
-  const word = list.length === 1 ? "project" : "projects";
-  els.projectCount.textContent = `${list.length} ${word}`;
-  els.pageLabel.textContent = `Page ${state.page} of ${totalPages}`;
-  els.prevButton.disabled = state.page <= 1;
-  els.nextButton.disabled = state.page >= totalPages;
+  updateGalleryHeading(list.length, totalPages);
 
-  updateHeading();
-
-  if (visible.length === 0) {
-    els.projectGrid.innerHTML = `<div class="empty">No projects match this search. Press Reset to return to the full gallery.</div>`;
+  if (!visible.length) {
+    els.projectGrid.innerHTML = `
+      <div class="empty gallery-empty">
+        <h3>No projects match this view.</h3>
+        <p>Try another gallery room, clear the search, or select a different student.</p>
+      </div>
+    `;
     return;
   }
 
   els.projectGrid.innerHTML = visible.map(projectCard).join("");
+
   els.projectGrid.querySelectorAll("[data-project-index]").forEach(card => {
     const open = () => openViewer(projects()[Number(card.dataset.projectIndex)]);
     card.addEventListener("click", open);
@@ -391,212 +400,206 @@ function renderCards() {
   });
 }
 
-function updateHeading() {
-  if (state.mode === "stats") {
-    els.modeLabel.textContent = "Pathway Impact";
-    els.galleryTitle.textContent = "Time Spent Coding Across the Software Engineering Pathway";
-    return;
-  }
+function updateGalleryHeading(count, totalPages) {
+  let title = galleryName(state.filter);
+  let label = "Gallery Room";
 
   if (state.student) {
-    els.modeLabel.textContent = "Selected Student";
-    els.galleryTitle.textContent = `${state.student}'s Projects`;
-    return;
+    title = `${state.student}'s Projects`;
+    label = "Selected Student";
+  } else if (state.search) {
+    title = "Matching Student Projects";
+    label = "Search Results";
   }
 
-  if (state.search) {
-    els.modeLabel.textContent = "Search Results";
-    els.galleryTitle.textContent = "Matching Student Projects";
-    return;
-  }
-
-  if (state.filter === "game") {
-    els.modeLabel.textContent = "Games";
-    els.galleryTitle.textContent = "Student Game Projects";
-    return;
-  }
-
-  if (state.filter === "website") {
-    els.modeLabel.textContent = "Websites";
-    els.galleryTitle.textContent = "Student Website Projects";
-    return;
-  }
-
-  if (state.filter === "other") {
-    els.modeLabel.textContent = "Other Projects";
-    els.galleryTitle.textContent = "Miscellaneous Student Projects";
-    return;
-  }
-
-  els.modeLabel.textContent = "Gallery";
-  els.galleryTitle.textContent = "Student Project Gallery";
+  els.modeLabel.textContent = label;
+  els.galleryTitle.textContent = title;
+  els.projectCount.textContent = `${count} ${count === 1 ? "project" : "projects"}`;
+  els.pageLabel.textContent = `Page ${state.page} of ${totalPages}`;
+  els.prevButton.disabled = state.page <= 1;
+  els.nextButton.disabled = state.page >= totalPages;
 }
 
 function projectCard(project) {
   const index = projects().indexOf(project);
-  const type = project.projectType || "Project";
-  const isWebsite = normalize(type).includes("web");
-  const classes = ["card"];
-  if (isWebsite) classes.push("website");
-  if (project.featured) classes.push("featured");
-
-  const description = project.description || "A student-created project submitted for the GOGA Software Engineering Showcase.";
-
   return `
-    <article class="${classes.join(" ")}" data-project-index="${index}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
-      <h3>${escapeHtml(getTitle(project))}</h3>
-      <p class="student">${escapeHtml(project.studentDisplayName || "Student")}</p>
-      <p class="project-description">${escapeHtml(description)}</p>
-
-      <div class="card-bottom">
-        <div class="badges">
-          <span class="badge">${escapeHtml(type)}</span>
-          <span class="badge">${escapeHtml(getYear(project))}</span>
-          ${project.classCode ? `<span class="badge">${escapeHtml(project.classCode)}</span>` : ""}
-          ${project.gradeLabelAtSubmission ? `<span class="badge">${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
-          ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
+    <article class="project-card ${escapeHtml(projectKind(project))}" data-project-index="${index}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
+      ${previewMarkup(project, "card")}
+      <div class="project-card-info">
+        <div>
+          <p>${escapeHtml(galleryName(projectKind(project)))}</p>
+          <h3>${escapeHtml(getTitle(project))}</h3>
+          <span>${escapeHtml(project.studentDisplayName || "Student")}</span>
         </div>
-
-        <span class="card-open-cue" aria-hidden="true">Open Project →</span>
+        <span class="open-corner" aria-hidden="true">↗</span>
       </div>
     </article>
   `;
 }
 
+function previewMarkup(project, size) {
+  const kind = projectKind(project);
+  const seed = hashProject(project);
+  const hue = seed % 360;
+  const title = getTitle(project);
+  const assignment = normalize(project.codehsAssignment || title);
+  const cssVars = `--hue:${hue}; --hue2:${(hue + 42) % 360};`;
+
+  if (kind === "website") {
+    return `
+      <div class="preview preview-website preview-${size}" style="${cssVars}">
+        <div class="browser-bar"><i></i><i></i><i></i></div>
+        <div class="website-canvas">
+          <div class="website-hero">
+            <strong>${escapeHtml(shortPreviewTitle(title))}</strong>
+            <span></span>
+          </div>
+          <div class="website-layout">
+            <b></b><b></b><b></b>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (assignment.includes("breakout") || assignment.includes("collision")) {
+    return `
+      <div class="preview preview-game preview-breakout preview-${size}" style="${cssVars}">
+        <div class="game-hud"><span></span><span></span><span></span></div>
+        <div class="bricks">${Array.from({ length: 20 }, () => "<i></i>").join("")}</div>
+        <b class="ball"></b><b class="paddle"></b>
+      </div>
+    `;
+  }
+
+  if (assignment.includes("snake") || assignment.includes("finishing touches")) {
+    return `
+      <div class="preview preview-game preview-snake preview-${size}" style="${cssVars}">
+        <div class="snake-grid"></div>
+        <b class="snake s1"></b><b class="snake s2"></b><b class="snake s3"></b><b class="food"></b>
+      </div>
+    `;
+  }
+
+  if (assignment.includes("tic") || assignment.includes("toe")) {
+    return `
+      <div class="preview preview-game preview-tictactoe preview-${size}" style="${cssVars}">
+        <div class="ttt-board"><span>×</span><span>○</span><span>×</span><span></span><span>×</span><span>○</span><span>○</span><span></span><span>×</span></div>
+      </div>
+    `;
+  }
+
+  if (assignment.includes("helicopter")) {
+    return `
+      <div class="preview preview-game preview-heli preview-${size}" style="${cssVars}">
+        <div class="cave top"></div><div class="cave bottom"></div><b class="heli"></b><i></i><i></i><i></i>
+      </div>
+    `;
+  }
+
+  if (kind === "game") {
+    return `
+      <div class="preview preview-game preview-arcade preview-${size}" style="${cssVars}">
+        <div class="arcade-grid"></div><b></b><i></i><i></i><i></i>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="preview preview-other preview-${size}" style="${cssVars}">
+      <span></span><span></span><span></span><span></span>
+      <div class="code-lines"><i></i><i></i><i></i></div>
+    </div>
+  `;
+}
+
+function shortPreviewTitle(title) {
+  const text = String(title || "Student Project").trim();
+  if (text.length <= 24) return text;
+  return `${text.slice(0, 22)}…`;
+}
+
+function hashProject(project) {
+  const text = `${project.studentDisplayName || ""}|${getTitle(project)}|${project.projectType || ""}`;
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  return Math.abs(hash);
+}
+
 function renderPathwayStats() {
   const stats = window.GOGA_PATHWAY_STATS;
-  updateHeading();
-
-  if (els.pager) els.pager.hidden = true;
-  els.projectGrid.classList.add("stats-mode");
 
   if (!stats || !stats.totals) {
-    els.projectCount.textContent = "No stats";
-    els.projectGrid.innerHTML = `<div class="empty">Pathway statistics are not available yet.</div>`;
+    els.statsContent.innerHTML = `<div class="empty">Pathway statistics are not available yet.</div>`;
     return;
   }
 
   const courses = Array.isArray(stats.courses) ? stats.courses : [];
-  const maxHours = Math.max(...courses.map(course => Number(course.totalHours) || 0), 1);
   const totals = stats.totals;
-
-  els.projectCount.textContent = `${escapeHtml(stats.year || state.year)} stats`;
-  els.pageLabel.textContent = "Pathway Stats";
-  els.prevButton.disabled = true;
-  els.nextButton.disabled = true;
-
-  const se11 = Array.isArray(stats.aggregateClasses)
-    ? stats.aggregateClasses.find(item => item.classCode === "SE11")
-    : null;
-
+  const maxHours = Math.max(...courses.map(course => Number(course.totalHours) || 0), 1);
   const totalHours = totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600);
   const se11Hours = totals.se11HoursRounded || Math.round((totals.se11Seconds || 0) / 3600);
   const gradeStats = buildGradeStats(courses);
   const pieStyle = buildPieStyle(gradeStats);
 
-  const kpis = [
-    {
-      value: formatNumber(totalHours),
-      label: "Total Hours",
-      detail: "Time spent coding across the pathway"
-    },
-    {
-      value: formatNumber(totals.uniqueStudents || 0),
-      label: "Students",
-      detail: "Unique students represented in CodeHS exports"
-    },
-    {
-      value: formatNumber(se11Hours),
-      label: "SE11 Hours",
-      detail: "Web Design + Game Development"
-    },
-    {
-      value: formatNumber(totals.courseSections || courses.length),
-      label: "Course Sections",
-      detail: "AP CSP, Web Design, Game Design, AP CSA"
-    }
-  ];
+  els.statsYearPill.textContent = `${escapeHtml(stats.year || state.year)} stats`;
 
-  els.projectGrid.innerHTML = `
-    <section class="stats-dashboard" aria-label="Software engineering pathway statistics">
-      <div class="stats-hero">
-        <div>
-          <p class="stats-kicker">Gateway Tech Software Engineering</p>
-          <h3>Students have logged ${formatNumber(totalHours)} hours of time spent coding.</h3>
-          <p>These totals come from CodeHS activity across AP Computer Science Principles, Web Design, Game Development, and AP Computer Science A.</p>
-        </div>
-        <div class="stats-year-pill">${escapeHtml(stats.year || state.year)}</div>
+  els.statsContent.innerHTML = `
+    <div class="stats-hero">
+      <div>
+        <p>Gateway Tech Software Engineering</p>
+        <h3>${formatNumber(totalHours)} hours of time spent coding</h3>
+        <span>Based on CodeHS activity across AP CSP, Web Design, Game Development, and AP CSA.</span>
       </div>
+      <strong>${escapeHtml(stats.year || state.year)}</strong>
+    </div>
 
-      <div class="stats-kpi-grid">
-        ${kpis.map(kpi => `
-          <article class="stats-kpi">
-            <strong>${escapeHtml(kpi.value)}</strong>
-            <span>${escapeHtml(kpi.label)}</span>
-            <p>${escapeHtml(kpi.detail)}</p>
-          </article>
-        `).join("")}
-      </div>
+    <div class="stats-kpi-grid">
+      <article><strong>${formatNumber(totalHours)}</strong><span>Total Hours</span></article>
+      <article><strong>${formatNumber(totals.uniqueStudents || 0)}</strong><span>Students</span></article>
+      <article><strong>${formatNumber(se11Hours)}</strong><span>SE11 Hours</span></article>
+      <article><strong>${formatNumber(totals.courseSections || courses.length)}</strong><span>Course Sections</span></article>
+    </div>
 
-      <div class="stats-content-grid">
-        <div class="stats-bars-card">
-          <div class="stats-section-heading">
-            <span>Course Breakdown</span>
-            <strong>Time Spent Coding</strong>
-          </div>
-          <div class="stats-bars">
-            ${courses.map(course => {
-              const hours = Number(course.totalHours) || 0;
-              const width = Math.max(8, Math.round((hours / maxHours) * 100));
-              return `
-                <div class="stats-bar-row">
-                  <div class="stats-bar-label">
-                    <strong>${escapeHtml(course.displayName || course.className)}</strong>
-                    <span>${escapeHtml(course.gradeLabel || "")} · ${formatNumber(course.studentCount || 0)} students</span>
-                  </div>
-                  <div class="stats-bar-track" aria-hidden="true">
-                    <div class="stats-bar-fill" style="--bar-width: ${width}%"></div>
-                  </div>
-                  <div class="stats-bar-value">${formatNumber(Math.round(hours))} hrs</div>
-                </div>
-              `;
-            }).join("")}
+    <div class="stats-detail-grid">
+      <article class="stats-card stats-bars-card">
+        <div class="stats-section-heading"><p>Course Breakdown</p><h3>Time Spent Coding</h3></div>
+        <div class="stats-bars">
+          ${courses.map(course => {
+            const hours = Number(course.totalHours) || 0;
+            const width = Math.max(8, Math.round((hours / maxHours) * 100));
+            return `
+              <div class="stats-bar-row">
+                <div><strong>${escapeHtml(course.displayName || course.className)}</strong><span>${escapeHtml(course.gradeLabel || "")} · ${formatNumber(course.studentCount || 0)} students</span></div>
+                <div class="stats-bar-track"><b style="--bar-width:${width}%"></b></div>
+                <em>${formatNumber(Math.round(hours))} hrs</em>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </article>
+
+      <article class="stats-card stats-grade-card">
+        <div class="stats-section-heading"><p>Grade-Level Share</p><h3>Hours by Grade</h3></div>
+        <div class="stats-pie-wrap">
+          <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
+          <div class="stats-pie-legend">
+            ${gradeStats.map(item => `
+              <div><span style="--key-color:${escapeHtml(item.color)}"></span><strong>${escapeHtml(item.label)}</strong><em>${formatNumber(Math.round(item.hours))} hrs</em></div>
+            `).join("")}
           </div>
         </div>
+      </article>
 
-        <div class="stats-grade-card">
-          <div class="stats-section-heading">
-            <span>Grade-Level Share</span>
-            <strong>Hours by Grade</strong>
-          </div>
-          <div class="stats-pie-wrap">
-            <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
-            <div class="stats-pie-legend">
-              ${gradeStats.map(item => `
-                <div class="stats-pie-legend-row">
-                  <span class="stats-pie-key" style="--key-color: ${escapeHtml(item.color)}"></span>
-                  <strong>${escapeHtml(item.label)}</strong>
-                  <em>${formatNumber(Math.round(item.hours))} hrs</em>
-                </div>
-              `).join("")}
-            </div>
-          </div>
-        </div>
-
-        <div class="stats-note-card">
-          <div class="stats-section-heading">
-            <span>Pathway Context</span>
-            <strong>Three-Year Sequence</strong>
-          </div>
-          <ul>
-            <li><strong>SE10:</strong> AP Computer Science Principles introduces foundational computing and programming for sophomores.</li>
-            <li><strong>SE11:</strong> Web Design and Game Development combines first-semester web projects with second-semester games.</li>
-            <li><strong>SE12:</strong> AP Computer Science A focuses on Java and object-oriented programming.</li>
-          </ul>
-          ${se11 ? `<p class="stats-callout">SE11 alone accounts for <strong>${formatNumber(se11.totalHoursRounded || Math.round(se11.totalHours || 0))} hours</strong> of time spent coding across web and game development.</p>` : ""}
-        </div>
-      </div>
-    </section>
+      <article class="stats-card stats-note-card">
+        <div class="stats-section-heading"><p>Pathway Context</p><h3>Three-Year Sequence</h3></div>
+        <ul>
+          <li><strong>SE10:</strong> AP Computer Science Principles introduces foundational computing and programming for sophomores.</li>
+          <li><strong>SE11:</strong> Web Design and Game Development combines first-semester websites with second-semester games.</li>
+          <li><strong>SE12:</strong> AP Computer Science A focuses on Java and object-oriented programming.</li>
+        </ul>
+      </article>
+    </div>
   `;
 }
 
@@ -606,24 +609,18 @@ function buildGradeStats(courses) {
   courses.forEach(course => {
     const label = course.gradeLabel || "Other";
     const seconds = Number(course.totalSeconds) || 0;
-    const existing = byGrade.get(label) || 0;
-    byGrade.set(label, existing + seconds);
+    byGrade.set(label, (byGrade.get(label) || 0) + seconds);
   });
 
   const colors = {
     Sophomore: "var(--red)",
-    Junior: "#7a1f24",
-    Senior: "#666666",
+    Junior: "#8f242b",
+    Senior: "#747474",
     Other: "#999999"
   };
 
   return [...byGrade.entries()]
-    .map(([label, seconds]) => ({
-      label,
-      seconds,
-      hours: seconds / 3600,
-      color: colors[label] || colors.Other
-    }))
+    .map(([label, seconds]) => ({ label, seconds, hours: seconds / 3600, color: colors[label] || colors.Other }))
     .sort((a, b) => {
       const order = { Sophomore: 1, Junior: 2, Senior: 3, Other: 4 };
       return (order[a.label] || 99) - (order[b.label] || 99);
@@ -633,6 +630,7 @@ function buildGradeStats(courses) {
 function buildPieStyle(items) {
   const total = items.reduce((sum, item) => sum + item.seconds, 0) || 1;
   let cursor = 0;
+
   const parts = items.map(item => {
     const start = cursor;
     const end = cursor + (item.seconds / total) * 100;
@@ -643,9 +641,22 @@ function buildPieStyle(items) {
   return `background: conic-gradient(${parts.join(", ")});`;
 }
 
-
 function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(Number(value) || 0);
+}
+
+function enterGallery(filter = state.filter) {
+  state.mode = "gallery";
+  state.filter = filter;
+  state.page = 1;
+  render();
+}
+
+function returnHome() {
+  state.mode = "home";
+  state.page = 1;
+  closeProjectViewer();
+  render();
 }
 
 function openViewer(project) {
@@ -675,11 +686,36 @@ function openViewer(project) {
   els.closeViewer.focus();
 }
 
+function closeProjectViewer() {
+  els.viewer.classList.remove("open");
+  els.viewer.setAttribute("aria-hidden", "true");
+  els.projectFrame.removeAttribute("src");
+  els.projectFrame.removeAttribute("srcdoc");
+  els.viewerNote.hidden = true;
+  state.activeProject = null;
+}
+
 function isCodeHsProject(url) {
   try {
     return new URL(String(url || "").trim()).hostname.toLowerCase().includes("codehs.com");
   } catch {
     return String(url || "").toLowerCase().includes("codehs.com");
+  }
+}
+
+function getEmbedUrl(url) {
+  const cleanUrl = String(url || "").trim();
+  if (!cleanUrl) return "";
+
+  try {
+    const parsed = new URL(cleanUrl);
+    const host = parsed.hostname.toLowerCase();
+
+    if (host.includes("codehs.com")) return parsed.toString();
+
+    return parsed.toString();
+  } catch {
+    return cleanUrl;
   }
 }
 
@@ -696,82 +732,15 @@ function codeHsLaunchScreen(project, link) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
-        html, body {
-          width: 100%;
-          height: 100%;
-          margin: 0;
-          font-family: Arial, Helvetica, sans-serif;
-          background: #111111;
-          color: #ffffff;
-        }
-
-        body {
-          display: grid;
-          place-items: center;
-          padding: 24px;
-          box-sizing: border-box;
-        }
-
-        .launch-card {
-          width: min(760px, 92vw);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 22px;
-          background: linear-gradient(135deg, rgba(237, 28, 36, 0.22), rgba(255, 255, 255, 0.06));
-          box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
-          padding: 34px;
-          text-align: center;
-        }
-
-        .kicker {
-          margin: 0 0 10px;
-          color: #ff5a62;
-          font-size: 0.85rem;
-          font-weight: 900;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-        }
-
-        h1 {
-          margin: 0;
-          font-size: clamp(2rem, 5vw, 3.4rem);
-          line-height: 0.98;
-          letter-spacing: -0.05em;
-        }
-
-        .student {
-          margin: 14px 0 0;
-          color: rgba(255, 255, 255, 0.78);
-          font-size: 1.15rem;
-          font-weight: 800;
-        }
-
-        .note {
-          max-width: 580px;
-          margin: 24px auto 28px;
-          color: rgba(255, 255, 255, 0.72);
-          font-size: 1.05rem;
-          line-height: 1.45;
-        }
-
-        a {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 52px;
-          border-radius: 999px;
-          background: #ed1c24;
-          color: #ffffff;
-          padding: 0 26px;
-          font-size: 1.05rem;
-          font-weight: 950;
-          text-decoration: none;
-        }
-
-        a:hover,
-        a:focus {
-          background: #ff5a62;
-          outline: none;
-        }
+        html, body { width: 100%; height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; background: #111; color: #fff; }
+        body { display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
+        .launch-card { width: min(760px, 92vw); border: 1px solid rgba(255,255,255,.18); border-radius: 22px; background: linear-gradient(135deg, rgba(237,28,36,.22), rgba(255,255,255,.06)); box-shadow: 0 18px 44px rgba(0,0,0,.45); padding: 34px; text-align: center; }
+        .kicker { margin: 0 0 10px; color: #ff5a62; font-size: .85rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+        h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.4rem); line-height: .98; letter-spacing: -.05em; }
+        .student { margin: 14px 0 0; color: rgba(255,255,255,.78); font-size: 1.15rem; font-weight: 800; }
+        .note { max-width: 580px; margin: 24px auto 28px; color: rgba(255,255,255,.72); font-size: 1.05rem; line-height: 1.45; }
+        a { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 999px; background: #ed1c24; color: #fff; padding: 0 26px; font-size: 1.05rem; font-weight: 950; text-decoration: none; }
+        a:hover, a:focus { background: #ff5a62; outline: none; }
       </style>
     </head>
     <body>
@@ -779,7 +748,7 @@ function codeHsLaunchScreen(project, link) {
         <p class="kicker">CodeHS Project</p>
         <h1>${title}</h1>
         <p class="student">${student} · ${type}</p>
-        <p class="note">This CodeHS project opens best in its own browser tab. Click below to launch the student project directly in CodeHS. Please close the tab when you are done.</p>
+        <p class="note">This CodeHS project opens best in its own browser tab. Click below to launch the student project directly in CodeHS.</p>
         <a href="${safeLink}" target="_blank" rel="noopener noreferrer">Open CodeHS Project →</a>
       </main>
     </body>
@@ -787,41 +756,12 @@ function codeHsLaunchScreen(project, link) {
   `;
 }
 
-function closeProjectViewer() {
-  els.viewer.classList.remove("open");
-  els.viewer.setAttribute("aria-hidden", "true");
-  els.projectFrame.removeAttribute("src");
-  els.projectFrame.removeAttribute("srcdoc");
-  els.viewerNote.hidden = true;
-  state.activeProject = null;
-}
-
-function getEmbedUrl(url) {
-  const cleanUrl = String(url || "").trim();
-  if (!cleanUrl) return "";
-
-  try {
-    const parsed = new URL(cleanUrl);
-    const host = parsed.hostname.toLowerCase();
-
-    // CodeHS share links already have their runnable/public route.
-    // Do not append /embed; /share/id/.../run/embed returns Page Not Found.
-    if (host.includes("codehs.com")) {
-      return parsed.toString();
-    }
-
-    return parsed.toString();
-  } catch {
-    return cleanUrl;
-  }
-}
-
 function resetAll() {
   state.year = DEFAULT_YEAR;
   state.search = "";
   state.student = "";
   state.filter = DEFAULT_FILTER;
-  state.mode = "gallery";
+  state.mode = "home";
   state.page = 1;
   state.featuredIndex = 0;
 
@@ -835,7 +775,6 @@ function resetAll() {
 
 function applyTheme(theme) {
   const isDark = theme !== "light";
-
   document.body.classList.toggle("dark-mode", isDark);
 
   if (els.themeToggle) {
@@ -851,14 +790,7 @@ function applyTheme(theme) {
 }
 
 function setupTheme() {
-  const savedTheme = localStorage.getItem("gogaTheme") || "dark";
-  applyTheme(savedTheme);
-}
-
-function returnToGallery() {
-  state.mode = "gallery";
-  state.page = 1;
-  render();
+  applyTheme(localStorage.getItem("gogaTheme") || "dark");
 }
 
 function bindEvents() {
@@ -869,74 +801,63 @@ function bindEvents() {
     });
   }
 
-  if (els.statsButton) {
-    els.statsButton.addEventListener("click", () => {
-      state.mode = state.mode === "stats" ? "gallery" : "stats";
-      state.page = 1;
-      render();
-    });
-  }
+  els.statsButton.addEventListener("click", () => {
+    if (state.mode === "stats") {
+      returnHome();
+      return;
+    }
 
-  if (els.featuredPrev) {
-    els.featuredPrev.addEventListener("click", () => advanceFeatured(-1));
-  }
-
-  if (els.featuredNext) {
-    els.featuredNext.addEventListener("click", () => advanceFeatured(1));
-  }
-
-  if (els.featuredTrack) {
-    els.featuredTrack.addEventListener("mouseenter", stopFeaturedTimer);
-    els.featuredTrack.addEventListener("mouseleave", startFeaturedTimer);
-  }
-
-  els.yearSelect.addEventListener("change", () => {
-    state.year = els.yearSelect.value;
-    state.page = 1;
-    state.student = "";
-    state.featuredIndex = 0;
+    state.mode = "stats";
     render();
+  });
+
+  els.featuredPrev.addEventListener("click", () => advanceFeatured(-1));
+  els.featuredNext.addEventListener("click", () => advanceFeatured(1));
+
+  els.filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      enterGallery(button.dataset.filter || "all");
+    });
   });
 
   els.searchInput.addEventListener("input", () => {
     state.search = els.searchInput.value;
     state.page = 1;
-    if (state.mode === "stats") state.mode = "gallery";
-    renderCards();
-    setupStatsButton();
+    if (state.search && state.mode !== "gallery") state.mode = "gallery";
+    render();
   });
 
   els.studentSelect.addEventListener("change", () => {
     state.student = els.studentSelect.value;
     state.page = 1;
-    if (state.mode === "stats") state.mode = "gallery";
-    renderCards();
-    setupStatsButton();
+    if (state.student && state.mode !== "gallery") state.mode = "gallery";
+    render();
   });
 
-  els.filterButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      state.filter = button.dataset.filter;
-      state.mode = "gallery";
-      state.page = 1;
-      setupFilterButtons();
-      setupStatsButton();
-      renderFeaturedCarousel();
-      renderCards();
-    });
+  els.yearSelect.addEventListener("change", () => {
+    state.year = els.yearSelect.value;
+    state.page = 1;
+    state.student = "";
+    state.search = "";
+    state.featuredIndex = 0;
+    els.searchInput.value = "";
+    render();
   });
+
+  els.resetButton.addEventListener("click", resetAll);
+  els.backHomeButton.addEventListener("click", returnHome);
+  els.statsBackButton.addEventListener("click", returnHome);
 
   els.prevButton.addEventListener("click", () => {
     state.page -= 1;
-    renderCards();
+    renderGallery();
   });
 
   els.nextButton.addEventListener("click", () => {
     state.page += 1;
-    renderCards();
+    renderGallery();
   });
 
-  els.resetButton.addEventListener("click", resetAll);
   els.closeViewer.addEventListener("click", closeProjectViewer);
 
   els.viewer.addEventListener("click", event => {
@@ -945,15 +866,20 @@ function bindEvents() {
 
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeProjectViewer();
+    if (state.mode === "home" && event.key === "ArrowLeft") advanceFeatured(-1);
+    if (state.mode === "home" && event.key === "ArrowRight") advanceFeatured(1);
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopFeaturedTimer();
+    else if (state.mode === "home") startFeaturedTimer();
   });
 
   let resizeTimer = null;
   window.addEventListener("resize", () => {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
-      state.page = 1;
-      renderCards();
-      renderFeaturedCarousel();
+      if (state.mode === "gallery") renderGallery();
     }, 150);
   });
 

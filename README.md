@@ -124,10 +124,14 @@ Added 261 CodeHS project records from `codehs_share_links.csv`.
 - Ignored Unknown Student 31's Tic Tac Toe row as requested
 - CodeHS projects are stored as SE11 / Web Design and Game Development / Game Development
 
+## Museum Exhibit Wall refactor
 
-## Museum Spotlight Wall redesign
+This branch is a major redesign of the kiosk experience.
 
-- Replaced the database-style featured carousel with a museum-style spotlight wall.
-- The homepage now centers one large featured project with a separate wall-label panel.
-- Project descriptions use neutral exhibit language rather than exaggerated praise.
-- Browse controls are reworded as exhibit/gallery-room navigation.
+Major changes:
+- The landing page is now a visual Museum Spotlight Wall instead of a database grid.
+- Featured work is shown through a large image-first preview area and a separate neutral wall label.
+- Project cards are now image-first visual exhibit cards rather than text-heavy database cards.
+- The gallery grid is hidden on the landing page and appears only after choosing a gallery room, searching, or selecting a student.
+- CodeHS projects use a launch screen instead of trying to iframe the regular CodeHS assignment share page.
+- Wall-label language is deliberately neutral so student-level work is not oversold.
