@@ -113,3 +113,13 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Removed pointer-capture behavior that could prevent card clicks from reaching the card.
 - Dragging the carousel still suppresses accidental project opening.
 - Normal clicks on featured cards now open the same viewer used by gallery cards.
+
+
+## CodeHS project link update
+
+Added 261 CodeHS project records from `codehs_share_links.csv`.
+
+- Games: Breakout, Snake, Tic Tac Toe, Helicopter
+- Other: Blinking Rectangles, Increasing Number of Shapes, Parallax, Quilt Tracer
+- Ignored Unknown Student 31's Tic Tac Toe row as requested
+- CodeHS projects are stored as SE11 / Web Design and Game Development / Game Development
