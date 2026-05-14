@@ -7,6 +7,8 @@ const MAX_PROJECT_ROWS = 3;
 const ESTIMATED_CARD_HEIGHT = 136;
 const CARD_GRID_GAP = 10;
 const FEATURED_INTERVAL_MS = 8500;
+const FEATURED_MIN_CARD_WIDTH = 285;
+const FEATURED_GAP = 16;
 
 const state = {
   year: DEFAULT_YEAR,
@@ -206,16 +208,80 @@ function getProjectsPerPage() {
   return columns * rows;
 }
 
-function getFeaturedVisibleCount(total) {
-  if (!els.featuredTrack) return Math.min(3, total);
+function getFeaturedLayout(total) {
+  if (!els.featuredTrack) {
+    return {
+      visibleCount: Math.max(1, Math.min(3, total)),
+      cardWidth: FEATURED_MIN_CARD_WIDTH,
+      gap: FEATURED_GAP,
+      step: FEATURED_MIN_CARD_WIDTH + FEATURED_GAP
+    };
+  }
 
-  const width = els.featuredTrack.getBoundingClientRect().width || window.innerWidth;
+  const width = Math.max(1, Math.floor(els.featuredTrack.getBoundingClientRect().width || window.innerWidth));
+  const visibleCount = Math.max(
+    1,
+    Math.min(
+      total,
+      Math.floor((width + FEATURED_GAP) / (FEATURED_MIN_CARD_WIDTH + FEATURED_GAP))
+    )
+  );
 
-  let count = 1;
-  if (width >= 1320) count = 3;
-  else if (width >= 820) count = 2;
+  const cardWidth = Math.floor((width - FEATURED_GAP * (visibleCount - 1)) / visibleCount);
 
-  return Math.max(1, Math.min(count, total));
+  return {
+    visibleCount,
+    cardWidth,
+    gap: FEATURED_GAP,
+    step: cardWidth + FEATURED_GAP
+  };
+}
+
+function circularIndex(index, total) {
+  return ((index % total) + total) % total;
+}
+
+function featuredItemsFrom(startIndex, count, list) {
+  return Array.from({ length: count }, (_, offset) => {
+    const originalIndex = circularIndex(startIndex + offset, list.length);
+    return {
+      project: list[originalIndex],
+      originalIndex
+    };
+  });
+}
+
+function applyFeaturedLayout(layout, renderCount) {
+  if (!els.featuredTrack) return;
+
+  els.featuredTrack.style.setProperty("--featured-visible-count", String(layout.visibleCount));
+  els.featuredTrack.style.setProperty("--featured-render-count", String(renderCount));
+  els.featuredTrack.style.setProperty("--featured-card-width", `${layout.cardWidth}px`);
+  els.featuredTrack.style.setProperty("--featured-gap", `${layout.gap}px`);
+}
+
+function renderFeaturedItems(items) {
+  if (!els.featuredTrack) return;
+
+  els.featuredTrack.innerHTML = items.map((item, displayIndex) => {
+    return featuredCard(item.project, displayIndex, item.originalIndex);
+  }).join("");
+
+  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
+    const open = () => {
+      if (state.carouselWasDragged || state.featuredAnimating) return;
+      const list = featuredProjects();
+      openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
+    };
+
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
 }
 
 function renderFeaturedCarousel() {
@@ -232,51 +298,15 @@ function renderFeaturedCarousel() {
   els.featuredShowcase.hidden = false;
 
   if (!Number.isFinite(state.featuredIndex)) state.featuredIndex = 0;
-  state.featuredIndex = ((state.featuredIndex % list.length) + list.length) % list.length;
+  state.featuredIndex = circularIndex(state.featuredIndex, list.length);
 
-  const visibleCount = getFeaturedVisibleCount(list.length);
-  els.featuredTrack.style.setProperty("--featured-visible-count", String(visibleCount));
+  const layout = getFeaturedLayout(list.length);
+  applyFeaturedLayout(layout, layout.visibleCount);
 
-  const displayList = Array.from({ length: visibleCount }, (_, offset) => {
-    const originalIndex = (state.featuredIndex + offset) % list.length;
-    return {
-      project: list[originalIndex],
-      originalIndex
-    };
-  });
+  els.featuredTrack.classList.remove("featured-track-animating");
+  els.featuredTrack.style.transform = "translateX(0px)";
 
-  const direction = state.featuredDirection || "";
-  state.featuredDirection = "";
-
-  els.featuredTrack.classList.remove("featured-slide-next", "featured-slide-prev");
-  els.featuredTrack.innerHTML = displayList.map((item, displayIndex) => {
-    return featuredCard(item.project, displayIndex, item.originalIndex);
-  }).join("");
-
-  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
-    const open = () => {
-      if (state.carouselWasDragged) return;
-      openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
-    };
-
-    card.addEventListener("click", open);
-    card.addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
-      }
-    });
-  });
-
-  if (direction) {
-    // Restart the animation cleanly after the card set changes.
-    void els.featuredTrack.offsetWidth;
-    els.featuredTrack.classList.add(direction === "prev" ? "featured-slide-prev" : "featured-slide-next");
-    window.setTimeout(() => {
-      els.featuredTrack.classList.remove("featured-slide-next", "featured-slide-prev");
-    }, 340);
-  }
-
+  renderFeaturedItems(featuredItemsFrom(state.featuredIndex, layout.visibleCount, list));
   setupCarouselGestures();
   updateFeaturedPosition(list.length);
   startFeaturedTimer();
@@ -304,9 +334,7 @@ function featuredCard(project, displayIndex, originalIndex = displayIndex) {
 }
 
 function scrollFeaturedToIndex(index, behavior = "smooth") {
-  // Card widths are now determined by the visible carousel slot count, so no partial cards show.
-  if (!els.featuredTrack) return;
-  els.featuredTrack.scrollTo({ left: 0, behavior: "auto" });
+  // No-op: the carousel now animates actual track translation instead of scrolling.
 }
 
 function updateFeaturedPosition(total) {
@@ -317,11 +345,57 @@ function updateFeaturedPosition(total) {
 
 function advanceFeatured(step) {
   const list = featuredProjects();
-  if (list.length === 0) return;
+  if (list.length === 0 || !els.featuredTrack) return;
+  if (state.featuredAnimating) return;
 
-  state.featuredDirection = step < 0 ? "prev" : "next";
-  state.featuredIndex = (state.featuredIndex + step + list.length) % list.length;
-  renderFeaturedCarousel();
+  const direction = step < 0 ? -1 : 1;
+  const layout = getFeaturedLayout(list.length);
+  const renderCount = Math.min(list.length + 1, layout.visibleCount + 1);
+
+  state.featuredAnimating = true;
+  stopFeaturedTimer();
+
+  els.featuredTrack.classList.remove("featured-track-animating");
+
+  if (direction > 0) {
+    // Current cards plus the next card offscreen on the right.
+    applyFeaturedLayout(layout, renderCount);
+    renderFeaturedItems(featuredItemsFrom(state.featuredIndex, renderCount, list));
+    els.featuredTrack.style.transform = "translateX(0px)";
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.featuredTrack.classList.add("featured-track-animating");
+        els.featuredTrack.style.transform = `translateX(-${layout.step}px)`;
+      });
+    });
+  } else {
+    // Previous card offscreen on the left plus current cards.
+    const startIndex = circularIndex(state.featuredIndex - 1, list.length);
+    applyFeaturedLayout(layout, renderCount);
+    renderFeaturedItems(featuredItemsFrom(startIndex, renderCount, list));
+    els.featuredTrack.style.transform = `translateX(-${layout.step}px)`;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.featuredTrack.classList.add("featured-track-animating");
+        els.featuredTrack.style.transform = "translateX(0px)";
+      });
+    });
+  }
+
+  const finish = () => {
+    els.featuredTrack.removeEventListener("transitionend", finish);
+    state.featuredIndex = circularIndex(state.featuredIndex + direction, list.length);
+    state.featuredAnimating = false;
+    els.featuredTrack.classList.remove("featured-track-animating");
+    renderFeaturedCarousel();
+  };
+
+  els.featuredTrack.addEventListener("transitionend", finish, { once: true });
+  window.setTimeout(() => {
+    if (state.featuredAnimating) finish();
+  }, 520);
 }
 
 let featuredGestureReady = false;
@@ -338,7 +412,7 @@ function setupCarouselGestures() {
   els.featuredTrack.addEventListener("wheel", event => {
     event.preventDefault();
 
-    if (!featuredWheelReady) return;
+    if (!featuredWheelReady || state.featuredAnimating) return;
     featuredWheelReady = false;
 
     const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
@@ -346,10 +420,12 @@ function setupCarouselGestures() {
 
     window.setTimeout(() => {
       featuredWheelReady = true;
-    }, 260);
+    }, 360);
   }, { passive: false });
 
   els.featuredTrack.addEventListener("pointerdown", event => {
+    if (state.featuredAnimating) return;
+
     dragging = true;
     moved = false;
     state.carouselWasDragged = false;
@@ -383,7 +459,7 @@ function setupCarouselGestures() {
 
     window.setTimeout(() => {
       state.carouselWasDragged = false;
-    }, 100);
+    }, 120);
   }
 
   els.featuredTrack.addEventListener("pointerup", endDrag);

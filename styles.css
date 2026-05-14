@@ -1882,3 +1882,43 @@ body.stats-view .stats-kpi p {
     animation: none;
   }
 }
+
+
+
+/* --- True sliding carousel + dynamic full-card fit --- */
+
+.featured-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(var(--featured-render-count, var(--featured-visible-count, 3)), var(--featured-card-width));
+  grid-auto-columns: var(--featured-card-width);
+  gap: var(--featured-gap, 16px);
+  overflow: visible;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  will-change: transform;
+}
+
+.featured-carousel-frame {
+  overflow: hidden;
+}
+
+.featured-track.featured-track-animating {
+  transition: transform 420ms cubic-bezier(0.22, 0.82, 0.23, 1);
+}
+
+.featured-card {
+  width: var(--featured-card-width);
+  min-width: 0;
+}
+
+.featured-track.featured-slide-next .featured-card,
+.featured-track.featured-slide-prev .featured-card {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-track.featured-track-animating {
+    transition: none;
+  }
+}

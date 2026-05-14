@@ -88,3 +88,11 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - The carousel displays only full-width cards, so no card is ever partially visible at the edge.
 - Left/right carousel arrows now animate the incoming cards from the correct direction.
 - Wheel and drag gestures still rotate the carousel as a circular list.
+
+
+## True featured carousel slide update
+
+- Featured card count is now calculated from available carousel width and minimum card width.
+- Wider browsers now show more featured cards while still avoiding partial cards.
+- Arrow navigation now animates the actual track moving from source to destination.
+- The carousel uses one temporary offscreen card during movement, then rotates the circular data after the slide completes.
