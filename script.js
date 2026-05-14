@@ -1,4 +1,4 @@
-/* global GOGA_CONFIG, GOGA_PROJECTS */
+/* global GOGA_CONFIG, GOGA_PROJECTS, GOGA_PATHWAY_STATS */
 
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "featured";
@@ -28,6 +28,7 @@ const els = {
   pageLabel: document.getElementById("pageLabel"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
+  pager: document.querySelector(".pager"),
   modeLabel: document.getElementById("modeLabel"),
   galleryTitle: document.getElementById("galleryTitle"),
   viewer: document.getElementById("viewer"),
@@ -109,6 +110,9 @@ function matches(project) {
     project.studentDisplayName,
     getTitle(project),
     project.projectType,
+    project.classCode,
+    project.className,
+    project.gradeLabelAtSubmission,
     project.featured ? "featured" : ""
   ].map(normalize).join(" ");
 
@@ -169,6 +173,14 @@ function getProjectsPerPage() {
 }
 
 function renderCards() {
+  if (state.filter === "stats") {
+    renderPathwayStats();
+    return;
+  }
+
+  if (els.pager) els.pager.hidden = false;
+  els.projectGrid.classList.remove("stats-mode");
+
   const list = filteredProjects();
   const projectsPerPage = getProjectsPerPage();
   const totalPages = Math.max(1, Math.ceil(list.length / projectsPerPage));
@@ -201,6 +213,12 @@ function renderCards() {
 }
 
 function updateHeading() {
+  if (state.filter === "stats") {
+    els.modeLabel.textContent = "Pathway Impact";
+    els.galleryTitle.textContent = "Time Spent Coding Across the Software Engineering Pathway";
+    return;
+  }
+
   if (state.student) {
     els.modeLabel.textContent = "Selected Student";
     els.galleryTitle.textContent = `${state.student}'s Projects`;
@@ -247,11 +265,131 @@ function projectCard(project) {
       <div class="badges">
         <span class="badge">${escapeHtml(type)}</span>
         <span class="badge">${escapeHtml(getYear(project))}</span>
+        ${project.classCode ? `<span class="badge">${escapeHtml(project.classCode)}</span>` : ""}
+        ${project.gradeLabelAtSubmission ? `<span class="badge">${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
         ${project.featured && state.filter !== "featured" ? `<span class="badge featured-badge">Featured</span>` : ""}
       </div>
       <button type="button" data-project-index="${index}">View Project</button>
     </article>
   `;
+}
+
+
+function renderPathwayStats() {
+  const stats = window.GOGA_PATHWAY_STATS;
+  updateHeading();
+
+  if (els.pager) els.pager.hidden = true;
+  els.projectGrid.classList.add("stats-mode");
+
+  if (!stats || !stats.totals) {
+    els.projectCount.textContent = "No stats";
+    els.projectGrid.innerHTML = `<div class="empty">Pathway statistics are not available yet.</div>`;
+    return;
+  }
+
+  const courses = Array.isArray(stats.courses) ? stats.courses : [];
+  const maxHours = Math.max(...courses.map(course => Number(course.totalHours) || 0), 1);
+  const totals = stats.totals;
+
+  els.projectCount.textContent = `${escapeHtml(stats.year || state.year)} stats`;
+  els.pageLabel.textContent = "Pathway Stats";
+  els.prevButton.disabled = true;
+  els.nextButton.disabled = true;
+
+  const se11 = Array.isArray(stats.aggregateClasses)
+    ? stats.aggregateClasses.find(item => item.classCode === "SE11")
+    : null;
+
+  const kpis = [
+    {
+      value: formatNumber(totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600)),
+      label: "Total Hours",
+      detail: "Time spent coding across the pathway"
+    },
+    {
+      value: formatNumber(totals.uniqueStudents || 0),
+      label: "Students",
+      detail: "Unique students represented in CodeHS exports"
+    },
+    {
+      value: formatNumber(totals.se11HoursRounded || Math.round((totals.se11Seconds || 0) / 3600)),
+      label: "SE11 Hours",
+      detail: "Web Design + Game Development"
+    },
+    {
+      value: formatNumber(totals.courseSections || courses.length),
+      label: "Course Sections",
+      detail: "AP CSP, Web Design, Game Design, AP CSA"
+    }
+  ];
+
+  els.projectGrid.innerHTML = `
+    <section class="stats-dashboard" aria-label="Software engineering pathway statistics">
+      <div class="stats-hero">
+        <div>
+          <p class="stats-kicker">Gateway Tech Software Engineering</p>
+          <h3>Students have logged ${formatNumber(totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600))} hours of time spent coding.</h3>
+          <p>These totals come from CodeHS activity across AP Computer Science Principles, Web Design, Game Development, and AP Computer Science A.</p>
+        </div>
+        <div class="stats-year-pill">${escapeHtml(stats.year || state.year)}</div>
+      </div>
+
+      <div class="stats-kpi-grid">
+        ${kpis.map(kpi => `
+          <article class="stats-kpi">
+            <strong>${escapeHtml(kpi.value)}</strong>
+            <span>${escapeHtml(kpi.label)}</span>
+            <p>${escapeHtml(kpi.detail)}</p>
+          </article>
+        `).join("")}
+      </div>
+
+      <div class="stats-content-grid">
+        <div class="stats-bars-card">
+          <div class="stats-section-heading">
+            <span>Course Breakdown</span>
+            <strong>Time Spent Coding</strong>
+          </div>
+          <div class="stats-bars">
+            ${courses.map(course => {
+              const hours = Number(course.totalHours) || 0;
+              const width = Math.max(8, Math.round((hours / maxHours) * 100));
+              return `
+                <div class="stats-bar-row">
+                  <div class="stats-bar-label">
+                    <strong>${escapeHtml(course.displayName || course.className)}</strong>
+                    <span>${escapeHtml(course.gradeLabel || "")} · ${formatNumber(course.studentCount || 0)} students</span>
+                  </div>
+                  <div class="stats-bar-track" aria-hidden="true">
+                    <div class="stats-bar-fill" style="--bar-width: ${width}%"></div>
+                  </div>
+                  <div class="stats-bar-value">${formatNumber(Math.round(hours))} hrs</div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+
+        <div class="stats-note-card">
+          <div class="stats-section-heading">
+            <span>Pathway Context</span>
+            <strong>Three-Year Sequence</strong>
+          </div>
+          <ul>
+            <li><strong>SE10:</strong> AP Computer Science Principles introduces foundational computing and programming.</li>
+            <li><strong>SE11:</strong> Web Design and Game Development combines first-semester web projects with second-semester games.</li>
+            <li><strong>SE12:</strong> AP Computer Science A focuses on Java and object-oriented programming.</li>
+          </ul>
+          ${se11 ? `<p class="stats-callout">SE11 alone accounts for <strong>${formatNumber(se11.totalHoursRounded || Math.round(se11.totalHours || 0))} hours</strong> of time spent coding across web and game development.</p>` : ""}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function formatNumber(value) {
+  return new Intl.NumberFormat("en-US").format(Number(value) || 0);
 }
 
 function openViewer(project) {

@@ -1,6 +1,6 @@
 /*
   Curated students.js for GOGA.
-  Titles, descriptions, and Featured selections were updated after reviewing the submitted student-sites folder.
+  Project records include grade/class metadata at the time of submission for historical year-by-year archives.
 */
 
 window.GOGA_CONFIG = {
@@ -18,7 +18,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A multi-page pizzeria and gelato shop website with menu pages, prices, images, and store information.",
-    "featureReason": "Strong multi-page restaurant structure with clear menus, images, and store information."
+    "featureReason": "Strong multi-page restaurant structure with clear menus, images, and store information.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "HENRY S.",
@@ -28,7 +34,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A pizza and gelato restaurant site with menu pages, prices, images, and a playful origin story.",
-    "featureReason": "Complete and browseable, but less polished visually than the strongest featured sites."
+    "featureReason": "Complete and browseable, but less polished visually than the strongest featured sites.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "AHMAD B.",
@@ -38,7 +50,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A personal and restaurant-themed site combining interests, a themed pizza menu, and a Mario Kart World opinion page.",
-    "featureReason": "Technically ambitious, but the focus is less cohesive than the strongest showcase pieces."
+    "featureReason": "Technically ambitious, but the focus is less cohesive than the strongest showcase pieces.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "KILLIAN C.",
@@ -48,7 +66,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A polished gelato shop website with pages for flavors, locations, about information, and image credits.",
-    "featureReason": "One of the most complete and cohesive sites, with strong navigation, many images, and clear concept."
+    "featureReason": "One of the most complete and cohesive sites, with strong navigation, many images, and clear concept.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "LEAROY L.",
@@ -58,7 +82,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A simple restaurant contact and about site with basic navigation and contact information.",
-    "featureReason": "Useful start, but comparatively limited in structure and visual development."
+    "featureReason": "Useful start, but comparatively limited in structure and visual development.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "JAYDEN D.",
@@ -68,7 +98,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A zoo website with multiple pages for animals, visits, applications, and themed Halloween content.",
-    "featureReason": "Good amount of content, but less styled than the top featured group."
+    "featureReason": "Good amount of content, but less styled than the top featured group.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "GREGORY K.",
@@ -78,7 +114,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A movie-review website with review pages, ratings, about information, and a distinctive critical voice.",
-    "featureReason": "Strong voice, multi-page structure, navigation, and more developed styling."
+    "featureReason": "Strong voice, multi-page structure, navigation, and more developed styling.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "SELINA Z.",
@@ -88,7 +130,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A bird conservatory-style website about owls and vultures with navigation, images, and informational pages.",
-    "featureReason": "Content-rich, but not as visually cohesive as the selected featured sites."
+    "featureReason": "Content-rich, but not as visually cohesive as the selected featured sites.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "CYRUS C.",
@@ -98,7 +146,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A Persona-themed pizza restaurant site with menu pages, desserts, custom styling, and franchise-inspired writing.",
-    "featureReason": "Strong CSS effort, cohesive theme, multiple pages, and creative concept."
+    "featureReason": "Strong CSS effort, cohesive theme, multiple pages, and creative concept.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "XAVIER G.",
@@ -108,7 +162,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A playful restaurant website with imaginative menu items, drinks, side dishes, and an origin story.",
-    "featureReason": "Creative and complete, but narrowly missed the featured cutoff."
+    "featureReason": "Creative and complete, but narrowly missed the featured cutoff.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "BENJAMIN S.",
@@ -118,7 +178,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A classic pizza restaurant site with menu items, location information, and product photos.",
-    "featureReason": "Solid restaurant site, but less visually developed than the featured group."
+    "featureReason": "Solid restaurant site, but less visually developed than the featured group.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "ALLISON Q.",
@@ -128,7 +194,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A themed pizzeria site with menu and dessert pages, images, and an about section.",
-    "featureReason": "Complete multi-page project, but less polished than the strongest featured sites."
+    "featureReason": "Complete multi-page project, but less polished than the strongest featured sites.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "DECLAN O.",
@@ -138,7 +210,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A National City Zoo website with animal information, contact/about pages, and a clear navigation structure.",
-    "featureReason": "Clear and complete, but lower visual polish than featured selections."
+    "featureReason": "Clear and complete, but lower visual polish than featured selections.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "RIO H.",
@@ -148,7 +226,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A complete pizza and gelato restaurant website with menus, image credits, contact information, and polished navigation.",
-    "featureReason": "Very complete restaurant site with multiple pages, tables, credits, and strong organization."
+    "featureReason": "Very complete restaurant site with multiple pages, tables, credits, and strong organization.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "DANTE V.",
@@ -158,7 +242,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A media-review site covering movies and video games with separate review pages and a personal about section.",
-    "featureReason": "Strong topic and navigation, but not quite as polished as the featured group."
+    "featureReason": "Strong topic and navigation, but not quite as polished as the featured group.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "ISAAC G.",
@@ -168,7 +258,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A zoo website with animal information, activities, images, and navigation.",
-    "featureReason": "Good exhibit content, but comparatively simpler styling."
+    "featureReason": "Good exhibit content, but comparatively simpler styling.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "HUNTER D.",
@@ -178,7 +274,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A Harlem Zoo website with history, animal information, and straightforward navigation.",
-    "featureReason": "Browseable project, but simpler than most of the class set."
+    "featureReason": "Browseable project, but simpler than most of the class set.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "EDDY R.",
@@ -188,7 +290,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "An animal conservatory and zoo website with a strong story, event information, many images, and credits.",
-    "featureReason": "Strong concept, lots of visual content, clear navigation, and exhibit-ready scope."
+    "featureReason": "Strong concept, lots of visual content, clear navigation, and exhibit-ready scope.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "DECLAN F.",
@@ -198,7 +306,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A humorous pizza restaurant site with cast pages, menu content, and a distinctive fictional brand.",
-    "featureReason": "Creative, but less polished structurally and visually than selected featured work."
+    "featureReason": "Creative, but less polished structurally and visually than selected featured work.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "JACOB P.",
@@ -208,7 +322,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A detailed pizzeria website with pizza and gelato menus, a founders page, and clear attribution.",
-    "featureReason": "Complete multi-page structure, strong attribution, and substantial menu/content work."
+    "featureReason": "Complete multi-page structure, strong attribution, and substantial menu/content work.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "AITOR Q.",
@@ -218,7 +338,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A cat-run pizzeria website with a creative story, order page, chef-cat section, and image credits.",
-    "featureReason": "Distinctive concept, strong personality, multiple pages, and clear student voice."
+    "featureReason": "Distinctive concept, strong personality, multiple pages, and clear student voice.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "AMIR V.",
@@ -228,7 +354,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A Green Valley Zoo website with origin story, animal pages, and visitor planning information.",
-    "featureReason": "Complete and coherent, but just outside the featured group."
+    "featureReason": "Complete and coherent, but just outside the featured group.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "JORDAN W.",
@@ -238,7 +370,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A Lovecraftian creature exhibition site with creature rankings, mythology-inspired pages, and atmospheric content.",
-    "featureReason": "Original topic, strong content volume, multiple pages, and cohesive exhibit concept."
+    "featureReason": "Original topic, strong content volume, multiple pages, and cohesive exhibit concept.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "ZAMIR K.",
@@ -248,7 +386,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A large zoo website with animal pages, visit information, and image-based presentation.",
-    "featureReason": "Substantial navigation and content, but less polished styling than featured selections."
+    "featureReason": "Substantial navigation and content, but less polished styling than featured selections.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "HENRY A.",
@@ -258,7 +402,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A Papa's Pizzeria website with pizza and gelato menus, ordering information, and coordinated styling.",
-    "featureReason": "Strong visual styling, organized restaurant sections, and complete restaurant concept."
+    "featureReason": "Strong visual styling, organized restaurant sections, and complete restaurant concept.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "ELLIS A.",
@@ -268,7 +418,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A hosted pizza restaurant website with menu/about/donation navigation and store hours.",
-    "featureReason": "Hosted externally and appears complete, but code was not included in the submitted site bundle for direct comparison."
+    "featureReason": "Hosted externally and appears complete, but code was not included in the submitted site bundle for direct comparison.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "KOBE B.",
@@ -278,7 +434,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A playful restaurant site with menu, contact, and about pages.",
-    "featureReason": "Creative voice, but simpler navigation and polish than featured selections."
+    "featureReason": "Creative voice, but simpler navigation and polish than featured selections.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "ROMULO R.",
@@ -288,7 +450,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A pizzeria site with menu, dessert, about, and home pages centered on a fictional restaurant brand.",
-    "featureReason": "Solid content and navigation, but less technically styled than featured work."
+    "featureReason": "Solid content and navigation, but less technically styled than featured work.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "MATEO M.",
@@ -298,7 +466,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A multimedia review site with franchise background, gameplay review, and media review pages.",
-    "featureReason": "Content-rich and well-structured, but not chosen for the featured set."
+    "featureReason": "Content-rich and well-structured, but not chosen for the featured set.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "Yasin Y.",
@@ -308,7 +482,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A review site for Armored Core VI with links to major reviews, attributions, and game-review content.",
-    "featureReason": "Good topic and structure, but not as exhibit-ready as the featured group."
+    "featureReason": "Good topic and structure, but not as exhibit-ready as the featured group.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "Nick B.",
@@ -318,7 +498,13 @@ window.GOGA_PROJECTS = [
     "featured": false,
     "year": "2026",
     "description": "A TV Dinner-themed restaurant site with menu, reservations, and about pages.",
-    "featureReason": "Coherent concept and navigation, but not in the top featured tier."
+    "featureReason": "Coherent concept and navigation, but not in the top featured tier.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   },
   {
     "studentDisplayName": "JOSIAH R.",
@@ -328,7 +514,13 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A polished Re's Pizza site with homepage, menu, locations, about content, and cohesive restaurant branding.",
-    "featureReason": "Strong CSS effort, cohesive branding, multiple pages, and polished restaurant-site structure."
+    "featureReason": "Strong CSS effort, cohesive branding, multiple pages, and polished restaurant-site structure.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 10,
+    "gradeLabelAtSubmission": "Sophomore"
   },
   {
     "studentDisplayName": "Robert G.",
@@ -338,6 +530,12 @@ window.GOGA_PROJECTS = [
     "featured": true,
     "year": "2026",
     "description": "A Red Dead Redemption blog with historical context, opinion writing, lore pages, and strong styling.",
-    "featureReason": "One of the strongest non-restaurant sites, with substantial CSS, writing, and multi-page structure."
+    "featureReason": "One of the strongest non-restaurant sites, with substantial CSS, writing, and multi-page structure.",
+    "submissionYear": "2026",
+    "classCode": "SE11",
+    "className": "Web Design and Game Development",
+    "courseComponent": "Web Design",
+    "gradeAtSubmission": 11,
+    "gradeLabelAtSubmission": "Junior"
   }
 ];

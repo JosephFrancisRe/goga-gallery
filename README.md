@@ -25,3 +25,10 @@ assets/gateway-logo.png
 ```
 
 Do not delete the existing `student-sites/` folder.
+
+
+## Pathway Stats Update
+
+This version includes `pathway-stats.js`, which powers the Pathway Stats view in the kiosk. The stats use CodeHS time tracking exports and display the public-facing label "Time Spent Coding."
+
+Project records in `students.js` now store `submissionYear`, `classCode`, `className`, `courseComponent`, `gradeAtSubmission`, and `gradeLabelAtSubmission` so historical projects can keep the class/grade context from the year they were submitted.
