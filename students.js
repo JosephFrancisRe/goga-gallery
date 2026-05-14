@@ -78,7 +78,7 @@ window.GOGA_PROJECTS = [
     "studentDisplayName": "BENJAMIN S.",
     "projectTitle": "Re's Pizza",
     "projectType": "Website",
-    "projectLink": "student-sites/08-benjamin-s-github-benstenglein-staticsite-static-website-project-for-se-11-github/index.html",
+    "projectLink": "student-sites/08-benjamin-s-website/index.html",
     "featured": true,
     "year": "2026"
   },
