@@ -80,3 +80,11 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Wheel and drag gestures now rotate the carousel one card at a time.
 - Pathway Stats cards now use available vertical space more aggressively.
 - Course bars, pie chart, legend, and pathway context text scale up to reduce unused whitespace.
+
+
+## Featured Projects dynamic-width update
+
+- Featured Project cards now calculate how many full cards fit in the carousel.
+- The carousel displays only full-width cards, so no card is ever partially visible at the edge.
+- Left/right carousel arrows now animate the incoming cards from the correct direction.
+- Wheel and drag gestures still rotate the carousel as a circular list.

@@ -206,6 +206,18 @@ function getProjectsPerPage() {
   return columns * rows;
 }
 
+function getFeaturedVisibleCount(total) {
+  if (!els.featuredTrack) return Math.min(3, total);
+
+  const width = els.featuredTrack.getBoundingClientRect().width || window.innerWidth;
+
+  let count = 1;
+  if (width >= 1320) count = 3;
+  else if (width >= 820) count = 2;
+
+  return Math.max(1, Math.min(count, total));
+}
+
 function renderFeaturedCarousel() {
   const list = featuredProjects();
 
@@ -222,7 +234,10 @@ function renderFeaturedCarousel() {
   if (!Number.isFinite(state.featuredIndex)) state.featuredIndex = 0;
   state.featuredIndex = ((state.featuredIndex % list.length) + list.length) % list.length;
 
-  const displayList = list.map((_, offset) => {
+  const visibleCount = getFeaturedVisibleCount(list.length);
+  els.featuredTrack.style.setProperty("--featured-visible-count", String(visibleCount));
+
+  const displayList = Array.from({ length: visibleCount }, (_, offset) => {
     const originalIndex = (state.featuredIndex + offset) % list.length;
     return {
       project: list[originalIndex],
@@ -230,11 +245,13 @@ function renderFeaturedCarousel() {
     };
   });
 
+  const direction = state.featuredDirection || "";
+  state.featuredDirection = "";
+
+  els.featuredTrack.classList.remove("featured-slide-next", "featured-slide-prev");
   els.featuredTrack.innerHTML = displayList.map((item, displayIndex) => {
     return featuredCard(item.project, displayIndex, item.originalIndex);
   }).join("");
-
-  els.featuredTrack.scrollLeft = 0;
 
   els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
     const open = () => {
@@ -250,6 +267,15 @@ function renderFeaturedCarousel() {
       }
     });
   });
+
+  if (direction) {
+    // Restart the animation cleanly after the card set changes.
+    void els.featuredTrack.offsetWidth;
+    els.featuredTrack.classList.add(direction === "prev" ? "featured-slide-prev" : "featured-slide-next");
+    window.setTimeout(() => {
+      els.featuredTrack.classList.remove("featured-slide-next", "featured-slide-prev");
+    }, 340);
+  }
 
   setupCarouselGestures();
   updateFeaturedPosition(list.length);
@@ -278,9 +304,9 @@ function featuredCard(project, displayIndex, originalIndex = displayIndex) {
 }
 
 function scrollFeaturedToIndex(index, behavior = "smooth") {
-  // The carousel now uses circular data rotation instead of scrolling to duplicated offscreen cards.
+  // Card widths are now determined by the visible carousel slot count, so no partial cards show.
   if (!els.featuredTrack) return;
-  els.featuredTrack.scrollTo({ left: 0, behavior });
+  els.featuredTrack.scrollTo({ left: 0, behavior: "auto" });
 }
 
 function updateFeaturedPosition(total) {
@@ -293,6 +319,7 @@ function advanceFeatured(step) {
   const list = featuredProjects();
   if (list.length === 0) return;
 
+  state.featuredDirection = step < 0 ? "prev" : "next";
   state.featuredIndex = (state.featuredIndex + step + list.length) % list.length;
   renderFeaturedCarousel();
 }
