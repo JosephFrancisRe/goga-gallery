@@ -3,8 +3,8 @@
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "all";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
-const MAX_PROJECT_ROWS = 2;
-const ESTIMATED_CARD_HEIGHT = 150;
+const MAX_PROJECT_ROWS = 3;
+const ESTIMATED_CARD_HEIGHT = 136;
 const CARD_GRID_GAP = 10;
 const FEATURED_INTERVAL_MS = 8500;
 
@@ -184,7 +184,8 @@ function getProjectsPerPage() {
 
   let columns = 1;
 
-  if (width > 1300) columns = 4;
+  if (width > 1800) columns = 5;
+  else if (width > 1300) columns = 4;
   else if (width > 900) columns = 3;
 
   if (width <= 900) {
@@ -194,10 +195,14 @@ function getProjectsPerPage() {
 
   const rowsFromHeight = gridHeight > 0
     ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
-    : 2;
+    : 3;
 
-  const rows = Math.max(1, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
-  if (els.projectGrid) els.projectGrid.style.setProperty("--gallery-rows", String(rows));
+  const rows = Math.max(2, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
+  if (els.projectGrid) {
+    els.projectGrid.style.setProperty("--gallery-rows", String(rows));
+    els.projectGrid.style.setProperty("--gallery-columns", String(columns));
+  }
+
   return columns * rows;
 }
 
@@ -214,29 +219,35 @@ function renderFeaturedCarousel() {
 
   els.featuredShowcase.hidden = false;
 
+  const middleBase = list.length > 1 ? list.length * 2 : 0;
+  const safeMin = middleBase;
+  const safeMax = middleBase + list.length - 1;
+
   if (list.length > 1) {
-    const min = list.length;
-    const max = list.length * 2 - 1;
-    if (!Number.isFinite(state.featuredIndex) || state.featuredIndex < min || state.featuredIndex > max) {
-      state.featuredIndex = list.length;
+    if (!Number.isFinite(state.featuredIndex) || state.featuredIndex < safeMin || state.featuredIndex > safeMax) {
+      state.featuredIndex = middleBase;
     }
   } else {
     state.featuredIndex = 0;
   }
 
-  const displayList = list.length > 1 ? [...list, ...list, ...list] : list;
+  const displayList = list.length > 1 ? [...list, ...list, ...list, ...list, ...list] : list;
   els.featuredTrack.innerHTML = displayList.map((project, displayIndex) => {
     const originalIndex = list.length > 1 ? displayIndex % list.length : displayIndex;
     return featuredCard(project, displayIndex, originalIndex);
   }).join("");
 
   els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
-    const open = () => openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
+    const open = () => {
+      if (state.carouselWasDragged) return;
+      openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
+    };
+
     card.addEventListener("click", open);
     card.addEventListener("keydown", event => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        open();
+        openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
       }
     });
   });
@@ -277,7 +288,9 @@ function scrollFeaturedToIndex(index, behavior = "smooth") {
 }
 
 function updateFeaturedPosition(total) {
-  if (els.featuredPosition) els.featuredPosition.textContent = `${((state.featuredIndex % total) + total) % total + 1} of ${total}`;
+  if (els.featuredPosition) {
+    els.featuredPosition.textContent = `${((state.featuredIndex % total) + total) % total + 1} of ${total}`;
+  }
 }
 
 function normalizeFeaturedIndex() {
@@ -298,12 +311,12 @@ function normalizeFeaturedIndex() {
     }
   });
 
-  state.featuredIndex = nearestIndex;
   const normalized = ((nearestIndex % list.length) + list.length) % list.length;
-  const middleIndex = list.length + normalized;
+  const middleIndex = list.length * 2 + normalized;
 
-  if (nearestIndex < list.length || nearestIndex >= list.length * 2) {
-    state.featuredIndex = middleIndex;
+  state.featuredIndex = middleIndex;
+
+  if (nearestIndex < list.length * 2 || nearestIndex >= list.length * 3) {
     scrollFeaturedToIndex(middleIndex, "auto");
   }
 }
@@ -311,10 +324,11 @@ function normalizeFeaturedIndex() {
 function advanceFeatured(step) {
   const list = featuredProjects();
   if (list.length === 0) return;
+
   state.featuredIndex += step;
   scrollFeaturedToIndex(state.featuredIndex);
   updateFeaturedPosition(list.length);
-  window.setTimeout(normalizeFeaturedIndex, 480);
+  window.setTimeout(normalizeFeaturedIndex, 520);
 }
 
 let featuredGestureReady = false;
@@ -342,6 +356,8 @@ function setupCarouselGestures() {
     if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
       event.preventDefault();
       els.featuredTrack.scrollLeft += event.deltaY;
+    } else {
+      els.featuredTrack.scrollLeft += event.deltaX;
     }
     pauseAndNormalize();
   }, { passive: false });
@@ -349,6 +365,7 @@ function setupCarouselGestures() {
   els.featuredTrack.addEventListener("pointerdown", event => {
     dragging = true;
     moved = false;
+    state.carouselWasDragged = false;
     startX = event.clientX;
     startScrollLeft = els.featuredTrack.scrollLeft;
     els.featuredTrack.classList.add("dragging");
@@ -359,18 +376,20 @@ function setupCarouselGestures() {
   els.featuredTrack.addEventListener("pointermove", event => {
     if (!dragging) return;
     const dx = event.clientX - startX;
-    if (Math.abs(dx) > 3) moved = true;
+    if (Math.abs(dx) > 5) moved = true;
     els.featuredTrack.scrollLeft = startScrollLeft - dx;
   });
 
   function endDrag(event) {
     if (!dragging) return;
     dragging = false;
+    state.carouselWasDragged = moved;
     els.featuredTrack.classList.remove("dragging");
     try { els.featuredTrack.releasePointerCapture(event.pointerId); } catch {}
     window.setTimeout(() => {
       normalizeFeaturedIndex();
       startFeaturedTimer();
+      window.setTimeout(() => { state.carouselWasDragged = false; }, 80);
     }, moved ? 250 : 0);
   }
 
@@ -378,6 +397,7 @@ function setupCarouselGestures() {
   els.featuredTrack.addEventListener("pointercancel", endDrag);
   els.featuredTrack.addEventListener("scroll", pauseAndNormalize, { passive: true });
 }
+
 
 function startFeaturedTimer() {
   stopFeaturedTimer();
@@ -492,14 +512,18 @@ function projectCard(project) {
       <h3>${escapeHtml(getTitle(project))}</h3>
       <p class="student">${escapeHtml(project.studentDisplayName || "Student")}</p>
       <p class="project-description">${escapeHtml(description)}</p>
-      <div class="badges">
-        <span class="badge">${escapeHtml(type)}</span>
-        <span class="badge">${escapeHtml(getYear(project))}</span>
-        ${project.classCode ? `<span class="badge">${escapeHtml(project.classCode)}</span>` : ""}
-        ${project.gradeLabelAtSubmission ? `<span class="badge">${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
-        ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
+
+      <div class="card-bottom">
+        <div class="badges">
+          <span class="badge">${escapeHtml(type)}</span>
+          <span class="badge">${escapeHtml(getYear(project))}</span>
+          ${project.classCode ? `<span class="badge">${escapeHtml(project.classCode)}</span>` : ""}
+          ${project.gradeLabelAtSubmission ? `<span class="badge">${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
+          ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
+        </div>
+
+        <span class="card-open-cue" aria-hidden="true">Open Project →</span>
       </div>
-      <span class="card-open-cue" aria-hidden="true">Open Project →</span>
     </article>
   `;
 }

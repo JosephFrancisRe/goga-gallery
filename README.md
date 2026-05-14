@@ -48,3 +48,15 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Pathway Stats hides the search/featured rows and uses the full remaining viewport height.
 - Added a grade-level pie chart for time spent coding.
 - Gallery cards now use equal-height rows and dynamically fill the available gallery space.
+
+
+## Final layout polish update
+
+- Featured cards are larger than gallery cards.
+- Gallery uses up to five columns and three dynamic rows on wide screens.
+- Filter buttons now have a FILTER label and align with the student dropdown row.
+- Gallery card metadata and Open Project cue share the same bottom row.
+- Pager controls are centered using a balanced grid.
+- Header side columns were balanced so the main title centers visually.
+- The main title has stronger visual weight.
+- Featured carousel uses a five-copy middle-track loop for smoother endless navigation.
