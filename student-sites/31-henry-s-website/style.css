@@ -1,0 +1,56 @@
+h1 {
+  font-size: 200px;
+  text-align: center;
+}
+
+body {
+  background-image: url("https://www.healtheuropa.com/wp-content/uploads/2023/08/shutterstockDmytro-Tyshchenko_1890721108.jpg");
+}
+
+.pizza {
+  text-align: right;
+  list-style-position: inside;
+  font-size: 90px;
+}
+
+#pizza_img {
+  float: left;
+}
+
+.gelato {
+  text-align: left;
+  font-size: 90px;
+  list-style-position: inside;
+}
+
+.popular {
+  font-size: 70px;
+}
+
+.toppings {
+  font-size: 30px;
+}
+
+.link {
+  font-size: 40px;
+  margin-right: 20px;
+}
+
+#cream {
+  float: right;
+}
+
+.prices {
+  font-size: 65px;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+footer {
+  margin-top: 40px;
+  padding: 20px;
+}
