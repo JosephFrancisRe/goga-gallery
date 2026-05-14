@@ -4,7 +4,7 @@ const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "all";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
 const MAX_PROJECT_ROWS = 2;
-const ESTIMATED_CARD_HEIGHT = 168;
+const ESTIMATED_CARD_HEIGHT = 150;
 const CARD_GRID_GAP = 10;
 const FEATURED_INTERVAL_MS = 8500;
 
@@ -187,13 +187,17 @@ function getProjectsPerPage() {
   if (width > 1300) columns = 4;
   else if (width > 900) columns = 3;
 
-  if (width <= 900) return 12;
+  if (width <= 900) {
+    if (els.projectGrid) els.projectGrid.style.removeProperty("--gallery-rows");
+    return 12;
+  }
 
   const rowsFromHeight = gridHeight > 0
     ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
-    : 3;
+    : 2;
 
-  const rows = Math.max(2, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
+  const rows = Math.max(1, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
+  if (els.projectGrid) els.projectGrid.style.setProperty("--gallery-rows", String(rows));
   return columns * rows;
 }
 
@@ -209,12 +213,25 @@ function renderFeaturedCarousel() {
   }
 
   els.featuredShowcase.hidden = false;
-  if (state.featuredIndex >= list.length) state.featuredIndex = 0;
-  if (state.featuredIndex < 0) state.featuredIndex = list.length - 1;
 
-  els.featuredTrack.innerHTML = list.map((project, index) => featuredCard(project, index)).join("");
+  if (list.length > 1) {
+    const min = list.length;
+    const max = list.length * 2 - 1;
+    if (!Number.isFinite(state.featuredIndex) || state.featuredIndex < min || state.featuredIndex > max) {
+      state.featuredIndex = list.length;
+    }
+  } else {
+    state.featuredIndex = 0;
+  }
+
+  const displayList = list.length > 1 ? [...list, ...list, ...list] : list;
+  els.featuredTrack.innerHTML = displayList.map((project, displayIndex) => {
+    const originalIndex = list.length > 1 ? displayIndex % list.length : displayIndex;
+    return featuredCard(project, displayIndex, originalIndex);
+  }).join("");
+
   els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
-    const open = () => openViewer(list[Number(card.dataset.featuredIndex)]);
+    const open = () => openViewer(list[Number(card.dataset.featuredOriginalIndex)]);
     card.addEventListener("click", open);
     card.addEventListener("keydown", event => {
       if (event.key === "Enter" || event.key === " ") {
@@ -224,16 +241,18 @@ function renderFeaturedCarousel() {
     });
   });
 
+  setupCarouselGestures();
+
   requestAnimationFrame(() => scrollFeaturedToIndex(state.featuredIndex, "auto"));
   updateFeaturedPosition(list.length);
   startFeaturedTimer();
 }
 
-function featuredCard(project, index) {
+function featuredCard(project, displayIndex, originalIndex = displayIndex) {
   const type = project.projectType || "Project";
   const description = project.description || "A featured student project from the GOGA Software Engineering Showcase.";
   return `
-    <article class="featured-card" data-featured-index="${index}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
+    <article class="featured-card" data-featured-index="${displayIndex}" data-featured-original-index="${originalIndex}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
       <div class="featured-card-topline">Selected Highlight</div>
       <h3>${escapeHtml(getTitle(project))}</h3>
       <p class="featured-student">${escapeHtml(project.studentDisplayName || "Student")}</p>
@@ -258,15 +277,106 @@ function scrollFeaturedToIndex(index, behavior = "smooth") {
 }
 
 function updateFeaturedPosition(total) {
-  if (els.featuredPosition) els.featuredPosition.textContent = `${state.featuredIndex + 1} of ${total}`;
+  if (els.featuredPosition) els.featuredPosition.textContent = `${((state.featuredIndex % total) + total) % total + 1} of ${total}`;
+}
+
+function normalizeFeaturedIndex() {
+  const list = featuredProjects();
+  if (!els.featuredTrack || list.length <= 1) return;
+
+  const cards = [...els.featuredTrack.querySelectorAll(".featured-card")];
+  if (cards.length === 0) return;
+
+  let nearestIndex = state.featuredIndex;
+  let nearestDistance = Infinity;
+
+  cards.forEach((card, index) => {
+    const distance = Math.abs(card.offsetLeft - els.featuredTrack.scrollLeft);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestIndex = index;
+    }
+  });
+
+  state.featuredIndex = nearestIndex;
+  const normalized = ((nearestIndex % list.length) + list.length) % list.length;
+  const middleIndex = list.length + normalized;
+
+  if (nearestIndex < list.length || nearestIndex >= list.length * 2) {
+    state.featuredIndex = middleIndex;
+    scrollFeaturedToIndex(middleIndex, "auto");
+  }
 }
 
 function advanceFeatured(step) {
   const list = featuredProjects();
   if (list.length === 0) return;
-  state.featuredIndex = (state.featuredIndex + step + list.length) % list.length;
+  state.featuredIndex += step;
   scrollFeaturedToIndex(state.featuredIndex);
   updateFeaturedPosition(list.length);
+  window.setTimeout(normalizeFeaturedIndex, 480);
+}
+
+let featuredGestureReady = false;
+let featuredScrollTimer = null;
+
+function setupCarouselGestures() {
+  if (!els.featuredTrack || featuredGestureReady) return;
+  featuredGestureReady = true;
+
+  let dragging = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+  let moved = false;
+
+  const pauseAndNormalize = () => {
+    stopFeaturedTimer();
+    window.clearTimeout(featuredScrollTimer);
+    featuredScrollTimer = window.setTimeout(() => {
+      normalizeFeaturedIndex();
+      startFeaturedTimer();
+    }, 650);
+  };
+
+  els.featuredTrack.addEventListener("wheel", event => {
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault();
+      els.featuredTrack.scrollLeft += event.deltaY;
+    }
+    pauseAndNormalize();
+  }, { passive: false });
+
+  els.featuredTrack.addEventListener("pointerdown", event => {
+    dragging = true;
+    moved = false;
+    startX = event.clientX;
+    startScrollLeft = els.featuredTrack.scrollLeft;
+    els.featuredTrack.classList.add("dragging");
+    els.featuredTrack.setPointerCapture(event.pointerId);
+    stopFeaturedTimer();
+  });
+
+  els.featuredTrack.addEventListener("pointermove", event => {
+    if (!dragging) return;
+    const dx = event.clientX - startX;
+    if (Math.abs(dx) > 3) moved = true;
+    els.featuredTrack.scrollLeft = startScrollLeft - dx;
+  });
+
+  function endDrag(event) {
+    if (!dragging) return;
+    dragging = false;
+    els.featuredTrack.classList.remove("dragging");
+    try { els.featuredTrack.releasePointerCapture(event.pointerId); } catch {}
+    window.setTimeout(() => {
+      normalizeFeaturedIndex();
+      startFeaturedTimer();
+    }, moved ? 250 : 0);
+  }
+
+  els.featuredTrack.addEventListener("pointerup", endDrag);
+  els.featuredTrack.addEventListener("pointercancel", endDrag);
+  els.featuredTrack.addEventListener("scroll", pauseAndNormalize, { passive: true });
 }
 
 function startFeaturedTimer() {
@@ -422,6 +532,8 @@ function renderPathwayStats() {
 
   const totalHours = totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600);
   const se11Hours = totals.se11HoursRounded || Math.round((totals.se11Seconds || 0) / 3600);
+  const gradeStats = buildGradeStats(courses);
+  const pieStyle = buildPieStyle(gradeStats);
 
   const kpis = [
     {
@@ -493,13 +605,32 @@ function renderPathwayStats() {
           </div>
         </div>
 
+        <div class="stats-grade-card">
+          <div class="stats-section-heading">
+            <span>Grade-Level Share</span>
+            <strong>Hours by Grade</strong>
+          </div>
+          <div class="stats-pie-wrap">
+            <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
+            <div class="stats-pie-legend">
+              ${gradeStats.map(item => `
+                <div class="stats-pie-legend-row">
+                  <span class="stats-pie-key" style="--key-color: ${escapeHtml(item.color)}"></span>
+                  <strong>${escapeHtml(item.label)}</strong>
+                  <em>${formatNumber(Math.round(item.hours))} hrs</em>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+
         <div class="stats-note-card">
           <div class="stats-section-heading">
             <span>Pathway Context</span>
             <strong>Three-Year Sequence</strong>
           </div>
           <ul>
-            <li><strong>SE10:</strong> AP Computer Science Principles introduces foundational computing and programming.</li>
+            <li><strong>SE10:</strong> AP Computer Science Principles introduces foundational computing and programming for sophomores.</li>
             <li><strong>SE11:</strong> Web Design and Game Development combines first-semester web projects with second-semester games.</li>
             <li><strong>SE12:</strong> AP Computer Science A focuses on Java and object-oriented programming.</li>
           </ul>
@@ -509,6 +640,50 @@ function renderPathwayStats() {
     </section>
   `;
 }
+
+function buildGradeStats(courses) {
+  const byGrade = new Map();
+
+  courses.forEach(course => {
+    const label = course.gradeLabel || "Other";
+    const seconds = Number(course.totalSeconds) || 0;
+    const existing = byGrade.get(label) || 0;
+    byGrade.set(label, existing + seconds);
+  });
+
+  const colors = {
+    Sophomore: "var(--red)",
+    Junior: "#7a1f24",
+    Senior: "#666666",
+    Other: "#999999"
+  };
+
+  return [...byGrade.entries()]
+    .map(([label, seconds]) => ({
+      label,
+      seconds,
+      hours: seconds / 3600,
+      color: colors[label] || colors.Other
+    }))
+    .sort((a, b) => {
+      const order = { Sophomore: 1, Junior: 2, Senior: 3, Other: 4 };
+      return (order[a.label] || 99) - (order[b.label] || 99);
+    });
+}
+
+function buildPieStyle(items) {
+  const total = items.reduce((sum, item) => sum + item.seconds, 0) || 1;
+  let cursor = 0;
+  const parts = items.map(item => {
+    const start = cursor;
+    const end = cursor + (item.seconds / total) * 100;
+    cursor = end;
+    return `${item.color} ${start.toFixed(2)}% ${end.toFixed(2)}%`;
+  });
+
+  return `background: conic-gradient(${parts.join(", ")});`;
+}
+
 
 function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(Number(value) || 0);

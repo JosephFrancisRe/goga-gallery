@@ -39,17 +39,14 @@
 
     <section class="featured-showcase" id="featuredShowcase" aria-label="Featured showcase carousel">
       <div class="featured-showcase-top">
-        <div>
-          <p>Featured Showcase</p>
-          <h2>Selected Student Highlights</h2>
-        </div>
-        <div class="carousel-actions" aria-label="Featured showcase controls">
-          <button type="button" id="featuredPrev" aria-label="Previous featured project">‹</button>
-          <span id="featuredPosition">1 of 1</span>
-          <button type="button" id="featuredNext" aria-label="Next featured project">›</button>
-        </div>
+        <h2>Featured Showcase</h2>
       </div>
-      <div class="featured-track" id="featuredTrack" aria-live="polite"></div>
+
+      <div class="featured-carousel-frame">
+        <button type="button" class="carousel-arrow carousel-arrow-left" id="featuredPrev" aria-label="Previous featured project">‹</button>
+        <div class="featured-track" id="featuredTrack" aria-live="polite"></div>
+        <button type="button" class="carousel-arrow carousel-arrow-right" id="featuredNext" aria-label="Next featured project">›</button>
+      </div>
     </section>
 
     <section class="search-panel" id="searchPanel" aria-label="Find a student project">

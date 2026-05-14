@@ -35,3 +35,16 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Header logo assets were normalized so logo sizing is consistent.
 - Red theme color now matches the current official logo red used in the header logo.
 - Search/Student labels are centered over their fields and search row spacing was tightened.
+
+
+## Latest carousel/stats polish
+
+- Filter buttons and Reset are vertically aligned.
+- Card open cues now sit at the bottom right.
+- Featured carousel supports wheel scrolling and click-drag scrolling.
+- Featured carousel uses large left/right edge arrows instead of a small top-right counter.
+- Featured carousel loops seamlessly using a repeated middle-track strategy.
+- AP CSP pathway stats now correctly label SE10 as Sophomore.
+- Pathway Stats hides the search/featured rows and uses the full remaining viewport height.
+- Added a grade-level pie chart for time spent coding.
+- Gallery cards now use equal-height rows and dynamically fill the available gallery space.
