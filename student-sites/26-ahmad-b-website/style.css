@@ -1,0 +1,290 @@
+h1{
+ color: Cyan;
+  font-size:45px;
+   font-family: "Papyrus", "Jokerman", "Copperplate", fantasy;
+     text-align: center;
+}
+
+img.dr-robotnik {
+    animation: sepiaFilter 0.5s forwards;
+    height: 300px;
+    width: 300px;
+  transition: transform 2s ease-in-out;
+}
+.dr-robotnik:hover {
+  transform: rotate(360deg);
+}
+.dr-robotnik {
+  height: 200px;
+  width: 200px;
+  border: 2px solid white;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  background-image:url("https://static.wikia.nocookie.net/sonic/images/c/c3/EGGMAN_LOGO.png/revision/latest?cb=20161125131956");
+}
+@keyframes sepiaFilter {
+    from {
+        filter: sepia(0%);
+    }
+    
+    to {
+        filter: sepia(100%);
+    }
+}
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+p{
+     font-family: 'Brush Script', monospace;
+    font-size: 15px;
+    color: #2790d8;
+     text-align: center;
+     
+   
+}
+
+
+.eggman{
+    color: #e11e3b;
+     font-family: 'Courier New', monospace;
+    font-size: 22px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6); 
+      color: #cf3031;
+      padding: 10px;
+}
+li{
+    font-family: 'Brush Script', monospace;
+    font-size: 15px;
+    color: #12ed64;
+     text-align: center;
+}
+ol{
+     text-align: center;
+     background-color: rgba(0, 0, 0, 0.6); 
+      color: white;
+      padding: 10px;
+}
+
+
+   body {
+  margin: 0; 
+  padding: 0;
+  background-image: url("https://cdnb.artstation.com/p/assets/images/images/035/789/893/large/justin-gohlke-modern-logo-widescreen.jpg?1615908411"); 
+  background-size: cover;       
+  background-position: center; 
+  background-repeat: no-repeat; 
+  height: 100vh;              
+}
+
+
+h2{
+     font-family: 'Brush Script', monospace;
+    font-size: 15px;
+    color: white;
+     text-align: center;
+}
+a {
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    lightgreen,
+    cyan,
+    violet,
+    cyan,
+    lightgreen,
+    yellow,
+    orange
+  );
+  background-size: 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 5s linear infinite;
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 400%;
+  }
+}
+
+
+.text{
+    background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 10px;
+    
+}
+.freddy{
+    height: 300px;
+  width: 300px;
+  border: 2px solid white;
+
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  background-image:url(https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/4/48/PartyRoom3.png/revision/latest?cb=20141111103357);
+}
+
+.pizza{
+    color: #d0a8f7;
+  font-size:45px;
+   font-family: Monospace Text;
+     text-align: center;
+    background-color: rgba(0, 0, 75, 0.6); 
+
+      padding: 10px;
+}
+.ria{
+    background-color: rgba(0, 0, 0, 0.6); 
+      color: yellow;
+      padding: 5px;
+}
+
+header {
+  font-size: 55px;
+  text-align: center;
+  background: linear-gradient(
+    to right,
+    red,
+    orange,
+    yellow,
+    lightgreen,
+    cyan,
+    violet,
+    cyan,
+    lightgreen,
+    yellow,
+    orange
+  );
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 5s linear infinite;
+  display: inline-block;
+}
+
+
+
+.head{
+    text-align: center;
+     background-color: rgba(0, 0, 0, 0.9); 
+      color: black;
+      padding: 10px;
+    
+}
+
+div.platter{
+    background-size:100% 100%;
+    height:200px;
+    width:200px;
+    background-image:url("https://belluccipizza.com/cdn/shop/products/0S7A0432_1_Plain.jpg?v=1643425019");
+  
+}
+div.plattar{
+    background-size:100% 100%;
+    height:200px;
+    width:200px;
+    background-image:url("https://www.simplysissom.com/wp-content/uploads/2018/04/Frozen-Chicken-Tenders-in-Air-Fryer-FI.jpg");
+       
+}
+div.plattah{
+    background-size:100% 100%;
+    height:200px;
+    width:200px;
+    background-image:url("https://www.burgerfi.com/wp-content/uploads/2025/01/classic-meat-burger-with-fries-scaled.webp");
+
+       
+}
+div.platterer{
+    background-size:100% 100%;
+    height:200px;
+    width:200px;
+    background-image:url("https://i.pinimg.com/736x/ea/3b/c0/ea3bc0d7c6bc0322f2fe4bea620cd347.jpg");
+  
+     
+}
+#pizza:hover {
+  background-color: #ff9900; 
+  cursor: pointer; 
+}
+#chicken:hover {
+  background-color: #000000; 
+  cursor: pointer; 
+}
+#burger:hover {
+  background-color: #ff9900; 
+  cursor: pointer; 
+}
+#present:hover {
+  background-color: #ff9900; 
+  cursor: pointer; 
+}
+.platter:hover .label{
+    visibility:visible;
+}
+.plattar:hover .label{
+    visibility:visible;
+}
+.plattah:hover .label{
+    visibility:visible;
+}
+.platterer:hover .label{
+    visibility:visible;
+}
+.label {
+  visibility: hidden;
+  color: lightgreen;
+  background-color: rgba(0, 0, 0, 0.6); 
+      padding: 10px;
+}
+
+.platter-container{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.mario{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.kart{
+  height: 50px;
+  width: 50px;
+  border: 2px solid white;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.world{
+    background-color: rgba(0, 0, 0, 0.6); 
+      padding: 10px;
+}
