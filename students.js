@@ -19,6 +19,14 @@ window.GOGA_PROJECTS = [
     "year": "2026"
   },
   {
+    "studentDisplayName": "HENRY S.",
+    "projectTitle": "Forno & Freddo",
+    "projectType": "Website",
+    "projectLink": "student-sites/31-henry-s-website/index.html",
+    "featured": true,
+    "year": "2026"
+  },
+  {
     "studentDisplayName": "AHMAD B.",
     "projectTitle": "CodeHS",
     "projectType": "Website",
