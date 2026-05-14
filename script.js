@@ -812,11 +812,17 @@ function openViewer(project) {
   els.viewerNote.hidden = true;
 
   const link = String(project.projectLink || "").trim();
-  if (link) {
-    els.projectFrame.src = getEmbedUrl(link);
-  } else {
+
+  if (!link) {
     els.projectFrame.removeAttribute("src");
+    els.projectFrame.removeAttribute("srcdoc");
     els.viewerNote.hidden = false;
+  } else if (isCodeHsProject(link)) {
+    els.projectFrame.removeAttribute("src");
+    els.projectFrame.srcdoc = codeHsLaunchScreen(project, link);
+  } else {
+    els.projectFrame.removeAttribute("srcdoc");
+    els.projectFrame.src = getEmbedUrl(link);
   }
 
   els.viewer.classList.add("open");
@@ -824,10 +830,123 @@ function openViewer(project) {
   els.closeViewer.focus();
 }
 
+function isCodeHsProject(url) {
+  try {
+    return new URL(String(url || "").trim()).hostname.toLowerCase().includes("codehs.com");
+  } catch {
+    return String(url || "").toLowerCase().includes("codehs.com");
+  }
+}
+
+function codeHsLaunchScreen(project, link) {
+  const title = escapeHtml(getTitle(project));
+  const student = escapeHtml(project.studentDisplayName || "Student");
+  const type = escapeHtml(project.projectType || "Project");
+  const safeLink = escapeHtml(link);
+
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        html, body {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          font-family: Arial, Helvetica, sans-serif;
+          background: #111111;
+          color: #ffffff;
+        }
+
+        body {
+          display: grid;
+          place-items: center;
+          padding: 24px;
+          box-sizing: border-box;
+        }
+
+        .launch-card {
+          width: min(760px, 92vw);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 22px;
+          background: linear-gradient(135deg, rgba(237, 28, 36, 0.22), rgba(255, 255, 255, 0.06));
+          box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+          padding: 34px;
+          text-align: center;
+        }
+
+        .kicker {
+          margin: 0 0 10px;
+          color: #ff5a62;
+          font-size: 0.85rem;
+          font-weight: 900;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        h1 {
+          margin: 0;
+          font-size: clamp(2rem, 5vw, 3.4rem);
+          line-height: 0.98;
+          letter-spacing: -0.05em;
+        }
+
+        .student {
+          margin: 14px 0 0;
+          color: rgba(255, 255, 255, 0.78);
+          font-size: 1.15rem;
+          font-weight: 800;
+        }
+
+        .note {
+          max-width: 580px;
+          margin: 24px auto 28px;
+          color: rgba(255, 255, 255, 0.72);
+          font-size: 1.05rem;
+          line-height: 1.45;
+        }
+
+        a {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 52px;
+          border-radius: 999px;
+          background: #ed1c24;
+          color: #ffffff;
+          padding: 0 26px;
+          font-size: 1.05rem;
+          font-weight: 950;
+          text-decoration: none;
+        }
+
+        a:hover,
+        a:focus {
+          background: #ff5a62;
+          outline: none;
+        }
+      </style>
+    </head>
+    <body>
+      <main class="launch-card">
+        <p class="kicker">CodeHS Project</p>
+        <h1>${title}</h1>
+        <p class="student">${student} · ${type}</p>
+        <p class="note">This CodeHS project opens best in its own browser tab. Click below to launch the student project directly in CodeHS. Please close the tab when you are done.</p>
+        <a href="${safeLink}" target="_blank" rel="noopener noreferrer">Open CodeHS Project →</a>
+      </main>
+    </body>
+    </html>
+  `;
+}
+
 function closeProjectViewer() {
   els.viewer.classList.remove("open");
   els.viewer.setAttribute("aria-hidden", "true");
   els.projectFrame.removeAttribute("src");
+  els.projectFrame.removeAttribute("srcdoc");
   els.viewerNote.hidden = true;
   state.activeProject = null;
 }
