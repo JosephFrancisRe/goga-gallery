@@ -96,3 +96,12 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Wider browsers now show more featured cards while still avoiding partial cards.
 - Arrow navigation now animates the actual track moving from source to destination.
 - The carousel uses one temporary offscreen card during movement, then rotates the circular data after the slide completes.
+
+
+## Wider Featured Projects carousel update
+
+- Increased the minimum featured card width to keep Featured Projects feeling like showcase cards.
+- Restored the large left/right carousel arrows on the sides of the carousel.
+- Kept the no-partial-card layout by calculating the number of full cards that fit.
+- Updated auto-scroll so it uses the same circular `advanceFeatured()` pathway as arrow/wheel/drag navigation.
+- Added a guard so transition completion cannot double-fire during automatic scrolling.

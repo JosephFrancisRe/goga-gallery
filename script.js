@@ -7,7 +7,7 @@ const MAX_PROJECT_ROWS = 3;
 const ESTIMATED_CARD_HEIGHT = 136;
 const CARD_GRID_GAP = 10;
 const FEATURED_INTERVAL_MS = 8500;
-const FEATURED_MIN_CARD_WIDTH = 285;
+const FEATURED_MIN_CARD_WIDTH = 380;
 const FEATURED_GAP = 16;
 
 const state = {
@@ -384,7 +384,12 @@ function advanceFeatured(step) {
     });
   }
 
+  let finished = false;
+
   const finish = () => {
+    if (finished) return;
+    finished = true;
+
     els.featuredTrack.removeEventListener("transitionend", finish);
     state.featuredIndex = circularIndex(state.featuredIndex + direction, list.length);
     state.featuredAnimating = false;
@@ -395,7 +400,7 @@ function advanceFeatured(step) {
   els.featuredTrack.addEventListener("transitionend", finish, { once: true });
   window.setTimeout(() => {
     if (state.featuredAnimating) finish();
-  }, 520);
+  }, 540);
 }
 
 let featuredGestureReady = false;
@@ -470,7 +475,9 @@ function setupCarouselGestures() {
 function startFeaturedTimer() {
   stopFeaturedTimer();
   state.featuredTimer = window.setInterval(() => {
-    if (state.mode === "gallery" && !state.activeProject) advanceFeatured(1);
+    if (state.mode === "gallery" && !state.activeProject && !state.featuredAnimating) {
+      advanceFeatured(1);
+    }
   }, FEATURED_INTERVAL_MS);
 }
 
