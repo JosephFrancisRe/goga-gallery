@@ -840,8 +840,9 @@ function getEmbedUrl(url) {
     const parsed = new URL(cleanUrl);
     const host = parsed.hostname.toLowerCase();
 
-    if (host.includes("codehs.com") && !parsed.pathname.endsWith("/embed")) {
-      parsed.pathname = parsed.pathname.replace(/\/$/, "") + "/embed";
+    // CodeHS share links already have their runnable/public route.
+    // Do not append /embed; /share/id/.../run/embed returns Page Not Found.
+    if (host.includes("codehs.com")) {
       return parsed.toString();
     }
 
