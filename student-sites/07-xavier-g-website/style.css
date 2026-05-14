@@ -1,0 +1,133 @@
+
+body {
+    background-color:#1b461b;
+    color:white;
+}
+
+h1 {
+    font-size:55px;
+    display:flex;
+    text-align:center;
+    color: orange;
+}
+
+h2 {
+    font-size: 35px;
+    text-align:center;
+}
+
+h3 {
+    font-size: 25px;
+    font-style:italic;
+    text-align:center;
+}
+
+header, footer {
+    background-color:#245224;
+    padding: 5px;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+img#logo {
+    height: 80px;
+    margin: 0px;
+}
+
+img {
+    height: 350px;
+    transition: height 2s;
+    margin: auto;
+    display: block;
+}
+
+img:hover {
+    height: 400px;
+}
+
+#home {
+    color: darkorange;
+}
+
+#about {
+    color: #ccace2;
+}
+
+#food {
+    color: #f2f471;
+}
+
+#drinks {
+    color: LightBlue;
+}
+
+.boxed {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem;
+    border: 2px solid #fff;
+    border-radius: 6px;
+}
+
+p.detail-food{
+    padding:5px;
+    background-color: #afaf4b;
+    color:#661a1a;
+}
+
+p.detail-drink{
+    padding: 5px;
+    background-color: LightBlue;
+    color: #5e035e;
+}
+
+a{
+    padding: 0px 25px;
+    font-size:25px;
+    text-decoration: none;
+    border-style: double;
+    border-color: white;
+    color: #530707;
+    background-color: #dc7718;
+    border-width: 2px;
+    filter:brightness(100%);
+}
+
+.credits {
+    background-color: transparent;
+    font-size:15px;
+    color:white;
+    text-decoration: underline;
+    border:none;
+}
+
+a:hover{
+    filter:brightness(125%);
+}
+
+a:active{
+    filter:brightness(75%);
+}
+
+li {
+    list-style-type: none;
+    float:left;
+    font-style: italic;
+}
+
+
+.rubik-distressed-regular {
+  font-family: "Rubik Distressed", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+p{
+    font-size:25px;
+}
