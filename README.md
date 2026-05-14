@@ -1,18 +1,22 @@
-# GOGA Gallery Site - Dark Mode Version
+# GOGA Gallery Site - Dark Mode Polished Version
 
-This package includes the updated GOGA website files.
+This package updates the gallery without changing the student project titles.
 
-## Updated behavior
+## Changes included
 
-- Dark mode is the default.
-- A dark/light toggle appears immediately to the left of the year dropdown.
-- The browser remembers the selected theme using local storage.
-- The `[hidden]` CSS fix is included so the project fallback message does not cover working iframes.
-- `students.js` is the cleaned/de-duplicated version.
+- Dark mode remains the default.
+- Toggle text shortened to `Dark` / `Light`.
+- Project count, badges, labels, and buttons are visually softer.
+- `View Project` buttons are less dominant and use a smaller call-to-action style.
+- Featured badges are hidden while viewing the Featured tab, reducing repetition.
+- Card contrast is improved in dark mode.
+- Project cards no longer use the heavy featured outline in the Featured tab.
+- Projects per page now adapts to screen height and width, so the layout works better across event laptops, desktop monitors, and different browser zoom levels.
+- `[hidden]` CSS fix remains included.
 
 ## Upload to GitHub
 
-Upload/replace these files in your GitHub Pages repository:
+Upload/replace these files in the root of your GitHub Pages repository:
 
 ```text
 index.html
@@ -22,5 +26,4 @@ students.js
 assets/gateway-logo.png
 ```
 
-If your repository already has the `student-sites/` folder, do not delete it.
-This package only updates the main gallery files.
+Do not delete your existing `student-sites/` folder.

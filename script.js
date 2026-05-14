@@ -3,7 +3,9 @@
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "featured";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
-const PROJECTS_PER_PAGE = 12;
+const MAX_PROJECT_ROWS = 4;
+const ESTIMATED_CARD_HEIGHT = 112;
+const CARD_GRID_GAP = 10;
 
 const state = {
   year: DEFAULT_YEAR,
@@ -140,15 +142,42 @@ function render() {
   renderCards();
 }
 
+
+function getProjectsPerPage() {
+  const width = window.innerWidth;
+  const gridHeight = els.projectGrid ? els.projectGrid.getBoundingClientRect().height : 0;
+
+  let columns = 1;
+
+  if (width > 1300) {
+    columns = 4;
+  } else if (width > 900) {
+    columns = 3;
+  }
+
+  if (width <= 900) {
+    return 12;
+  }
+
+  const rowsFromHeight = gridHeight > 0
+    ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
+    : 3;
+
+  const rows = Math.max(2, Math.min(MAX_PROJECT_ROWS, rowsFromHeight));
+
+  return columns * rows;
+}
+
 function renderCards() {
   const list = filteredProjects();
-  const totalPages = Math.max(1, Math.ceil(list.length / PROJECTS_PER_PAGE));
+  const projectsPerPage = getProjectsPerPage();
+  const totalPages = Math.max(1, Math.ceil(list.length / projectsPerPage));
 
   if (state.page > totalPages) state.page = totalPages;
   if (state.page < 1) state.page = 1;
 
-  const start = (state.page - 1) * PROJECTS_PER_PAGE;
-  const visible = list.slice(start, start + PROJECTS_PER_PAGE);
+  const start = (state.page - 1) * projectsPerPage;
+  const visible = list.slice(start, start + projectsPerPage);
 
   const word = list.length === 1 ? "project" : "projects";
   els.projectCount.textContent = `${list.length} ${word}`;
@@ -206,7 +235,7 @@ function projectCard(project) {
   const isWebsite = normalize(type).includes("web");
   const classes = ["card"];
   if (isWebsite) classes.push("website");
-  if (project.featured) classes.push("featured");
+  if (project.featured && state.filter !== "featured") classes.push("featured");
 
   return `
     <article class="${classes.join(" ")}">
@@ -215,7 +244,7 @@ function projectCard(project) {
       <div class="badges">
         <span class="badge">${escapeHtml(type)}</span>
         <span class="badge">${escapeHtml(getYear(project))}</span>
-        ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
+        ${project.featured && state.filter !== "featured" ? `<span class="badge featured-badge">Featured</span>` : ""}
       </div>
       <button type="button" data-project-index="${index}">View Project</button>
     </article>
@@ -293,11 +322,11 @@ function applyTheme(theme) {
 
   if (els.themeToggle) {
     els.themeToggle.setAttribute("aria-pressed", String(isDark));
-    els.themeToggle.setAttribute("aria-label", isDark ? "Toggle light mode" : "Toggle dark mode");
+    els.themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
   }
 
   if (els.themeToggleLabel) {
-    els.themeToggleLabel.textContent = isDark ? "Dark Mode" : "Light Mode";
+    els.themeToggleLabel.textContent = isDark ? "Dark" : "Light";
   }
 
   localStorage.setItem("gogaTheme", isDark ? "dark" : "light");
@@ -363,6 +392,16 @@ function bindEvents() {
 
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeProjectViewer();
+  });
+
+
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      state.page = 1;
+      renderCards();
+    }, 150);
   });
 
   ["click", "keydown", "mousemove", "touchstart"].forEach(eventName => {

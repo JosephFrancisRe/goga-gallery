@@ -36,12 +36,12 @@ body.dark-mode {
   --white: #151515;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 
-  --page-bg-start: #070707;
-  --page-bg-middle: #101010;
-  --page-bg-end: #1b1b1b;
-  --panel-bg: rgba(22, 22, 22, 0.97);
-  --card-bg: #1f1f1f;
-  --card-bg-strong: #252525;
+  --page-bg-start: #050505;
+  --page-bg-middle: #0b0b0b;
+  --page-bg-end: #141414;
+  --panel-bg: rgba(18, 18, 18, 0.98);
+  --card-bg: #252525;
+  --card-bg-strong: #303030;
   --text-main: #f5f5f5;
   --text-muted: #b8b8b8;
   --button-light: #2a2a2a;
@@ -159,7 +159,7 @@ h1 {
 }
 
 .theme-toggle {
-  min-width: 144px;
+  min-width: 104px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--button-light);
@@ -168,8 +168,8 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  font-weight: 950;
+  gap: 8px;
+  font-weight: 850;
   box-shadow: none;
 }
 
@@ -209,7 +209,7 @@ body:not(.dark-mode) .theme-toggle-thumb {
 }
 
 .theme-toggle-label {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   white-space: nowrap;
 }
 
@@ -249,7 +249,7 @@ body:not(.dark-mode) .theme-toggle-thumb {
   margin: 0 0 3px;
   color: var(--red);
   font-size: 0.74rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.17em;
   text-transform: uppercase;
 }
@@ -319,10 +319,9 @@ body:not(.dark-mode) .theme-toggle-thumb {
 .reset,
 .pager button,
 .card button {
-  border: 0;
   border-radius: 999px;
-  padding: 11px 14px;
-  font-weight: 950;
+  padding: 10px 13px;
+  font-weight: 850;
 }
 
 .filter {
@@ -338,11 +337,13 @@ body:not(.dark-mode) .theme-toggle-thumb {
 }
 
 .reset {
+  border: 1px solid #111111;
   background: #111111;
   color: #ffffff;
 }
 
 body.dark-mode .reset {
+  border-color: #ffffff;
   background: #ffffff;
   color: #111111;
 }
@@ -375,16 +376,12 @@ body.dark-mode .reset {
 }
 
 #projectCount {
-  background: #111111;
-  color: #ffffff;
+  background: var(--button-light);
+  color: var(--text-main);
+  border: 1px solid var(--line);
   border-radius: 999px;
   padding: 9px 13px;
   white-space: nowrap;
-}
-
-body.dark-mode #projectCount {
-  background: #ffffff;
-  color: #111111;
 }
 
 .project-grid {
@@ -399,15 +396,21 @@ body.dark-mode #projectCount {
 
 .card {
   min-width: 0;
-  min-height: 132px;
+  min-height: 112px;
   border: 1px solid var(--line);
-  border-left: 9px solid var(--red);
+  border-left: 6px solid var(--red);
   border-radius: var(--small-radius);
   background: var(--card-bg);
   padding: 12px;
   display: grid;
   grid-template-rows: auto auto auto auto;
-  gap: 7px;
+  gap: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+
+body.dark-mode .card {
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.34);
 }
 
 .card.website {
@@ -452,8 +455,8 @@ body.dark-mode #projectCount {
   color: var(--text-muted);
   background: var(--card-bg-strong);
   padding: 3px 7px;
-  font-size: 0.74rem;
-  font-weight: 900;
+  font-size: 0.72rem;
+  font-weight: 750;
 }
 
 .badge.featured-badge {
@@ -467,19 +470,23 @@ body.dark-mode .badge.featured-badge {
 }
 
 .card button {
-  width: 100%;
-  background: #111111;
-  color: #ffffff;
+  width: auto;
+  min-width: 132px;
+  justify-self: start;
   align-self: end;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-main);
+  padding: 8px 14px;
 }
 
-body.dark-mode .card button {
-  background: #ffffff;
-  color: #111111;
+.card button::after {
+  content: " →";
 }
 
 .card button:hover,
 .card button:focus-visible {
+  border-color: var(--red);
   background: var(--red);
   color: #ffffff;
 }
@@ -522,7 +529,7 @@ body.dark-mode .card button {
   min-width: 120px;
   text-align: center;
   color: var(--text-muted);
-  font-weight: 950;
+  font-weight: 900;
 }
 
 .footer {
@@ -575,7 +582,7 @@ body.dark-mode .card button {
   margin: 0 0 2px;
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.76rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.13em;
   text-transform: uppercase;
 }
@@ -733,7 +740,7 @@ body.dark-mode .card button {
   }
 
   .card {
-    min-height: 118px;
+    min-height: 104px;
     padding: 9px;
     gap: 4px;
   }
