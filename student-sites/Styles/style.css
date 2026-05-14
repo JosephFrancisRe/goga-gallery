@@ -1,0 +1,167 @@
+*{
+    margin:0px;
+    padding: 0px;
+}
+h1{
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+header{
+    background-color:red;
+    /* height:40px; */
+    padding: 5px 0px;
+    width: 100%;
+    text-align: center;
+    margin:0px;
+}
+#logo{
+    width:50px;
+    background-color: orange;
+    padding: 2px;
+    margin-left: 5px;
+    font-size: 20px;
+    font-weight:bold;
+    border-radius: 8px;
+    border: solid 5px sienna;
+}
+#logo img{
+    border-radius: 20px;
+}
+nav{
+    background-color: slategray;
+    width:100%;
+}
+main{
+    background-image: url("../Assets/images/pizza_pie1-Photoroom.png");
+    background-position: center;
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+}
+#image1{
+    grid-area:img1;
+}
+#content img{
+    border-radius: 5px;
+    margin:5px;
+}
+img{
+    width:100%;
+}
+#text1{
+    grid-area:text1;
+}
+.maintext{
+    margin-top: auto;
+    margin-bottom: auto;
+    align-items: center;
+}
+.maintext p{
+    font-size: 20px;
+    padding:10px;
+}
+.img img{
+    height:75%;
+    width:98%;
+    border-radius: 5px;
+    margin:5px;
+    
+}
+#image2{
+    grid-area:img2;
+}
+#text2{
+    grid-area:text2;
+}
+footer{
+    background-color: #ccd4db;
+}
+.container{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+}
+.nav_item{
+    background-color: orange;
+    padding: 5px;
+    font-size: 20px;
+    font-weight:bold;
+    border-radius: 8px;
+    border: solid 5px sienna;
+    margin: 5px;
+}
+footer img{
+    height:100px;
+    width:100px;
+    float: left;
+    margin:5px;
+    border-radius:5px;
+}
+footer h2{
+    text-align: center;
+}
+footer p{
+    text-align: center;
+}
+.table {
+    align-items: center;
+    text-align: center;
+    display:flex;
+    justify-content:space-around;
+}
+td{
+    padding:5px;
+    text-decoration: none;
+}
+body{
+    height: 100vh;
+    background-color: #afc7db;
+    margin: 0px;
+} 
+#content{
+    align-self: center-top;
+    background-color: #f0f8ff;
+    text-align: center;
+    width:60%;
+    overflow:auto;
+    height: 100vh;
+    display: grid;
+     grid-template-columns: 1fr 1fr ;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "img1 text1"
+    "img2 text2"
+    "img3 text3"
+    "img4 text4";
+    color:#900000;
+}
+#content img{
+    width:300px;
+    height:300px;
+}
+p{
+    /* margin-top:588px;
+    margin-bottom:588px; */
+}
+.bar_item:hover{
+    filter:brightness(80%);
+}
+.bar_item:active{
+    filter: brightness(120%);
+}
+a{
+    text-decoration:none;
+}
+#image3{
+    grid-area: img3;
+}
+#text3{
+    grid-area:text3;
+}
+#image4{
+    grid-area: img4;
+}
+#text4{
+    grid-area:text4;
+}
