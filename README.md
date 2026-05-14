@@ -60,3 +60,14 @@ Upload/replace the files in your GitHub Pages repo with this package. Do not del
 - Header side columns were balanced so the main title centers visually.
 - The main title has stronger visual weight.
 - Featured carousel uses a five-copy middle-track loop for smoother endless navigation.
+
+
+## Featured Projects / Stats final polish
+
+- Renamed Featured Showcase to FEATURED PROJECTS.
+- Increased the main title subtitle size.
+- Softened the red used in dark mode to reduce eye strain while keeping Gateway branding.
+- Made the stats view use the full remaining viewport height.
+- Kept the stats footer pinned to the bottom through stats-specific app row sizing.
+- Enlarged Pathway Stats section headings.
+- Adjusted the grade-level pie chart so the chart is left-aligned and the legend is right-aligned.
