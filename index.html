@@ -12,8 +12,8 @@
     <header class="header">
       <div class="brand" aria-label="Gateway Tech GOGA">
         <div class="brand-logo-wrap">
-          <img class="brand-logo brand-logo-light" src="assets/gateway-logo-icon.png" alt="Gateway Tech logo" />
-          <img class="brand-logo brand-logo-dark" src="assets/gateway-logo-white-outline.png" alt="Gateway Tech logo" />
+          <img class="brand-logo brand-logo-light" src="assets/gateway-logo-header-light.png" alt="Gateway Tech logo" />
+          <img class="brand-logo brand-logo-dark" src="assets/gateway-logo-header-dark.png" alt="Gateway Tech logo" />
         </div>
         <div class="brand-text">
           <p class="school">Gateway Tech</p>
@@ -29,13 +29,6 @@
 
       <div class="header-controls">
         <button type="button" class="header-action" id="statsButton" aria-pressed="false">Pathway Stats</button>
-
-        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" aria-pressed="true">
-          <span class="theme-toggle-track" aria-hidden="true">
-            <span class="theme-toggle-thumb"></span>
-          </span>
-          <span class="theme-toggle-label" id="themeToggleLabel">Dark</span>
-        </button>
 
         <div class="year-control">
           <label for="yearSelect">Year</label>
@@ -108,8 +101,16 @@
     </section>
 
     <footer class="footer">
-      <span>Mr. Re · Gateway Tech Software Engineering</span>
-      <span>Click any project to view it here. Use X to return to the gallery.</span>
+      <span class="footer-left">Mr. Re · Gateway Tech Software Engineering</span>
+
+      <button type="button" class="theme-toggle footer-theme-toggle" id="themeToggle" aria-label="Switch to light mode" aria-pressed="true">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-thumb"></span>
+        </span>
+        <span class="theme-toggle-label" id="themeToggleLabel">Dark</span>
+      </button>
+
+      <span class="footer-right">Click any project to view it here. Use X to return to the gallery.</span>
     </footer>
   </main>
 

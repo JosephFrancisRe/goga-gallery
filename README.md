@@ -24,3 +24,14 @@ This package contains the updated GOGA kiosk site.
 ## Upload to GitHub
 
 Upload/replace the files in your GitHub Pages repo with this package. Do not delete `student-sites/`.
+
+## Latest visual update
+
+- Featured Showcase now uses larger premium carousel cards.
+- The gallery no longer shows featured projects first by default, reducing immediate duplication.
+- The entire featured/project card is clickable; View Project buttons were replaced with an open cue.
+- Cards now have hover/focus/active visual feedback.
+- Dark/light mode toggle moved from the header to the center of the footer.
+- Header logo assets were normalized so logo sizing is consistent.
+- Red theme color now matches the current official logo red used in the header logo.
+- Search/Student labels are centered over their fields and search row spacing was tightened.

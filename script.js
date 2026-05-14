@@ -3,7 +3,7 @@
 const DEFAULT_YEAR = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultYear) || "2026";
 const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) || "all";
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
-const MAX_PROJECT_ROWS = 4;
+const MAX_PROJECT_ROWS = 2;
 const ESTIMATED_CARD_HEIGHT = 168;
 const CARD_GRID_GAP = 10;
 const FEATURED_INTERVAL_MS = 8500;
@@ -154,11 +154,14 @@ function matches(project) {
 }
 
 function filteredProjects() {
+  const defaultBrowse = state.mode === "gallery" && !state.student && !state.search && state.filter === "all";
+
   return projects()
     .filter(matches)
     .slice()
     .sort((a, b) => {
-      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      if (defaultBrowse && a.featured !== b.featured) return a.featured ? 1 : -1;
+
       const nameCompare = String(a.studentDisplayName || "").localeCompare(String(b.studentDisplayName || ""));
       if (nameCompare !== 0) return nameCompare;
       return getTitle(a).localeCompare(getTitle(b));
@@ -210,9 +213,14 @@ function renderFeaturedCarousel() {
   if (state.featuredIndex < 0) state.featuredIndex = list.length - 1;
 
   els.featuredTrack.innerHTML = list.map((project, index) => featuredCard(project, index)).join("");
-  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(button => {
-    button.addEventListener("click", () => {
-      openViewer(list[Number(button.dataset.featuredIndex)]);
+  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
+    const open = () => openViewer(list[Number(card.dataset.featuredIndex)]);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
     });
   });
 
@@ -225,7 +233,7 @@ function featuredCard(project, index) {
   const type = project.projectType || "Project";
   const description = project.description || "A featured student project from the GOGA Software Engineering Showcase.";
   return `
-    <article class="featured-card">
+    <article class="featured-card" data-featured-index="${index}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
       <div class="featured-card-topline">Selected Highlight</div>
       <h3>${escapeHtml(getTitle(project))}</h3>
       <p class="featured-student">${escapeHtml(project.studentDisplayName || "Student")}</p>
@@ -236,7 +244,7 @@ function featuredCard(project, index) {
           ${project.classCode ? `<span>${escapeHtml(project.classCode)}</span>` : ""}
           ${project.gradeLabelAtSubmission ? `<span>${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
         </div>
-        <button type="button" data-featured-index="${index}">View Project</button>
+        <span class="card-open-cue" aria-hidden="true">Open Project →</span>
       </div>
     </article>
   `;
@@ -306,9 +314,14 @@ function renderCards() {
   }
 
   els.projectGrid.innerHTML = visible.map(projectCard).join("");
-  els.projectGrid.querySelectorAll("[data-project-index]").forEach(button => {
-    button.addEventListener("click", () => {
-      openViewer(projects()[Number(button.dataset.projectIndex)]);
+  els.projectGrid.querySelectorAll("[data-project-index]").forEach(card => {
+    const open = () => openViewer(projects()[Number(card.dataset.projectIndex)]);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
     });
   });
 }
@@ -365,7 +378,7 @@ function projectCard(project) {
   const description = project.description || "A student-created project submitted for the GOGA Software Engineering Showcase.";
 
   return `
-    <article class="${classes.join(" ")}">
+    <article class="${classes.join(" ")}" data-project-index="${index}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
       <h3>${escapeHtml(getTitle(project))}</h3>
       <p class="student">${escapeHtml(project.studentDisplayName || "Student")}</p>
       <p class="project-description">${escapeHtml(description)}</p>
@@ -376,7 +389,7 @@ function projectCard(project) {
         ${project.gradeLabelAtSubmission ? `<span class="badge">${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
         ${project.featured ? `<span class="badge featured-badge">Featured</span>` : ""}
       </div>
-      <button type="button" data-project-index="${index}">View Project</button>
+      <span class="card-open-cue" aria-hidden="true">Open Project →</span>
     </article>
   `;
 }
