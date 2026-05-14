@@ -123,3 +123,11 @@ Added 261 CodeHS project records from `codehs_share_links.csv`.
 - Other: Blinking Rectangles, Increasing Number of Shapes, Parallax, Quilt Tracer
 - Ignored Unknown Student 31's Tic Tac Toe row as requested
 - CodeHS projects are stored as SE11 / Web Design and Game Development / Game Development
+
+
+## Museum Spotlight Wall redesign
+
+- Replaced the database-style featured carousel with a museum-style spotlight wall.
+- The homepage now centers one large featured project with a separate wall-label panel.
+- Project descriptions use neutral exhibit language rather than exaggerated praise.
+- Browse controls are reworded as exhibit/gallery-room navigation.

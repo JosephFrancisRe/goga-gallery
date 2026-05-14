@@ -37,16 +37,21 @@
       </div>
     </header>
 
-    <section class="featured-showcase" id="featuredShowcase" aria-label="Featured showcase carousel">
-      <div class="featured-showcase-top">
-        <h2>Featured Projects</h2>
+    <section class="spotlight-wall" id="featuredShowcase" aria-label="Featured project spotlight wall">
+      <div class="spotlight-heading">
+        <p>Featured Projects</p>
+        <h2>Museum Spotlight Wall</h2>
       </div>
 
-      <div class="featured-carousel-frame">
-        <button type="button" class="carousel-arrow carousel-arrow-left" id="featuredPrev" aria-label="Previous featured project">‹</button>
-        <div class="featured-track" id="featuredTrack" aria-live="polite"></div>
-        <button type="button" class="carousel-arrow carousel-arrow-right" id="featuredNext" aria-label="Next featured project">›</button>
+      <div class="spotlight-layout">
+        <button type="button" class="spotlight-arrow spotlight-arrow-left" id="featuredPrev" aria-label="Previous featured project">‹</button>
+        <article class="spotlight-main" id="spotlightMain" aria-live="polite"></article>
+        <aside class="spotlight-label" id="spotlightLabel" aria-live="polite"></aside>
+        <button type="button" class="spotlight-arrow spotlight-arrow-right" id="featuredNext" aria-label="Next featured project">›</button>
       </div>
+
+      <div class="spotlight-strip" id="featuredTrack" aria-label="Featured project thumbnails"></div>
+      <span id="featuredPosition" class="visually-hidden">1 of 1</span>
     </section>
 
     <section class="search-panel" id="searchPanel" aria-label="Find a student project">
@@ -73,9 +78,9 @@
           <div class="filter-row">
             <div class="filters" aria-label="Project filters">
               <button type="button" class="filter active" data-filter="all">All</button>
-              <button type="button" class="filter" data-filter="game">Games</button>
-              <button type="button" class="filter" data-filter="website">Websites</button>
-              <button type="button" class="filter" data-filter="other">Other</button>
+              <button type="button" class="filter" data-filter="game">Game Arcade</button>
+              <button type="button" class="filter" data-filter="website">Website Gallery</button>
+              <button type="button" class="filter" data-filter="other">Creative Coding Lab</button>
             </div>
 
             <button type="button" class="reset" id="resetButton">Reset</button>

@@ -208,84 +208,34 @@ function getProjectsPerPage() {
   return columns * rows;
 }
 
-function getFeaturedLayout(total) {
-  if (!els.featuredTrack) {
-    return {
-      visibleCount: Math.max(1, Math.min(3, total)),
-      cardWidth: FEATURED_MIN_CARD_WIDTH,
-      gap: FEATURED_GAP,
-      step: FEATURED_MIN_CARD_WIDTH + FEATURED_GAP
-    };
-  }
-
-  const width = Math.max(1, Math.floor(els.featuredTrack.getBoundingClientRect().width || window.innerWidth));
-  const visibleCount = Math.max(
-    1,
-    Math.min(
-      total,
-      Math.floor((width + FEATURED_GAP) / (FEATURED_MIN_CARD_WIDTH + FEATURED_GAP))
-    )
-  );
-
-  const cardWidth = Math.floor((width - FEATURED_GAP * (visibleCount - 1)) / visibleCount);
-
-  return {
-    visibleCount,
-    cardWidth,
-    gap: FEATURED_GAP,
-    step: cardWidth + FEATURED_GAP
-  };
-}
-
 function circularIndex(index, total) {
   return ((index % total) + total) % total;
 }
 
-function featuredItemsFrom(startIndex, count, list) {
-  return Array.from({ length: count }, (_, offset) => {
-    const originalIndex = circularIndex(startIndex + offset, list.length);
-    return {
-      project: list[originalIndex],
-      originalIndex
-    };
-  });
+function projectGalleryName(project) {
+  const type = normalize(project.projectType);
+  if (type.includes("web")) return "Website Gallery";
+  if (type.includes("game")) return "Game Arcade";
+  return "Creative Coding Lab";
 }
 
-function applyFeaturedLayout(layout, renderCount) {
-  if (!els.featuredTrack) return;
+function neutralProjectNote(project) {
+  const explicit = String(project.description || "").trim();
+  if (explicit) return explicit;
 
-  els.featuredTrack.style.setProperty("--featured-visible-count", String(layout.visibleCount));
-  els.featuredTrack.style.setProperty("--featured-render-count", String(renderCount));
-  els.featuredTrack.style.setProperty("--featured-card-width", `${layout.cardWidth}px`);
-  els.featuredTrack.style.setProperty("--featured-gap", `${layout.gap}px`);
+  const type = normalize(project.projectType);
+  if (type.includes("web")) return "A student-created website from the web design portion of the Software Engineering pathway.";
+  if (type.includes("game")) return "A student-created CodeHS game from the game development portion of the Software Engineering pathway.";
+  return "A student-created creative coding project from the Software Engineering pathway.";
 }
-
-function renderFeaturedItems(items) {
-  if (!els.featuredTrack) return;
-
-  els.featuredTrack.innerHTML = items.map((item, displayIndex) => {
-    return featuredCard(item.project, displayIndex, item.originalIndex);
-  }).join("");
-
-  els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(card => {
-    card.addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        if (state.featuredAnimating) return;
-
-        const list = featuredProjects();
-        const project = list[Number(card.dataset.featuredOriginalIndex)];
-        openViewer(project);
-      }
-    });
-  });
-}
-
 
 function renderFeaturedCarousel() {
   const list = featuredProjects();
 
   if (!els.featuredShowcase || !els.featuredTrack) return;
+
+  const spotlightMain = document.getElementById("spotlightMain");
+  const spotlightLabel = document.getElementById("spotlightLabel");
 
   if (state.mode === "stats" || list.length === 0) {
     els.featuredShowcase.hidden = true;
@@ -298,41 +248,74 @@ function renderFeaturedCarousel() {
   if (!Number.isFinite(state.featuredIndex)) state.featuredIndex = 0;
   state.featuredIndex = circularIndex(state.featuredIndex, list.length);
 
-  const layout = getFeaturedLayout(list.length);
-  applyFeaturedLayout(layout, layout.visibleCount);
+  const project = list[state.featuredIndex];
+  const galleryName = projectGalleryName(project);
+  const note = neutralProjectNote(project);
 
-  els.featuredTrack.classList.remove("featured-track-animating");
-  els.featuredTrack.style.transform = "translateX(0px)";
+  if (spotlightMain) {
+    spotlightMain.innerHTML = `
+      <p class="spotlight-kicker">${escapeHtml(galleryName)}</p>
+      <h3>${escapeHtml(getTitle(project))}</h3>
+      <p class="spotlight-student">${escapeHtml(project.studentDisplayName || "Student")} · ${escapeHtml(project.projectType || "Project")}</p>
+      <div class="spotlight-meta">
+        ${project.classCode ? `<span>${escapeHtml(project.classCode)}</span>` : ""}
+        ${project.gradeLabelAtSubmission ? `<span>${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
+        <span>${escapeHtml(getYear(project))}</span>
+      </div>
+      <button type="button" class="spotlight-open">Open Project →</button>
+    `;
 
-  renderFeaturedItems(featuredItemsFrom(state.featuredIndex, layout.visibleCount, list));
-  setupCarouselGestures();
+    const openButton = spotlightMain.querySelector(".spotlight-open");
+    if (openButton) openButton.addEventListener("click", () => openViewer(project));
+
+    spotlightMain.onclick = event => {
+      if (event.target.closest("button")) return;
+      openViewer(project);
+    };
+  }
+
+  if (spotlightLabel) {
+    spotlightLabel.innerHTML = `
+      <p class="wall-label-kicker">Wall Label</p>
+      <h3>${escapeHtml(getTitle(project))}</h3>
+      <dl>
+        <div><dt>Student</dt><dd>${escapeHtml(project.studentDisplayName || "Student")}</dd></div>
+        <div><dt>Gallery</dt><dd>${escapeHtml(galleryName)}</dd></div>
+        <div><dt>Course</dt><dd>${escapeHtml(project.className || "Software Engineering")}</dd></div>
+      </dl>
+      <p class="wall-label-note">${escapeHtml(note)}</p>
+    `;
+  }
+
+  const thumbnailCount = Math.min(6, list.length);
+  const thumbnails = Array.from({ length: thumbnailCount }, (_, offset) => {
+    const originalIndex = circularIndex(state.featuredIndex + offset, list.length);
+    return { project: list[originalIndex], originalIndex };
+  });
+
+  els.featuredTrack.innerHTML = thumbnails.map(item => {
+    const active = item.originalIndex === state.featuredIndex ? " active" : "";
+    return `
+      <button type="button" class="spotlight-thumb${active}" data-featured-original-index="${item.originalIndex}">
+        <strong>${escapeHtml(getTitle(item.project))}</strong>
+        <span>${escapeHtml(item.project.studentDisplayName || "Student")}</span>
+      </button>
+    `;
+  }).join("");
+
+  els.featuredTrack.querySelectorAll("[data-featured-original-index]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.featuredIndex = Number(button.dataset.featuredOriginalIndex);
+      renderFeaturedCarousel();
+    });
+  });
+
   updateFeaturedPosition(list.length);
   startFeaturedTimer();
 }
 
-function featuredCard(project, displayIndex, originalIndex = displayIndex) {
-  const type = project.projectType || "Project";
-  const description = project.description || "A featured student project from the GOGA Software Engineering Showcase.";
-  return `
-    <article class="featured-card" data-featured-index="${displayIndex}" data-featured-original-index="${originalIndex}" role="button" tabindex="0" aria-label="View ${escapeHtml(getTitle(project))} by ${escapeHtml(project.studentDisplayName || "Student")}">
-      <div class="featured-card-topline">Selected Highlight</div>
-      <h3>${escapeHtml(getTitle(project))}</h3>
-      <p class="featured-student">${escapeHtml(project.studentDisplayName || "Student")}</p>
-      <p class="featured-description">${escapeHtml(description)}</p>
-      <div class="featured-card-bottom">
-        <div class="featured-badges">
-          <span>${escapeHtml(type)}</span>
-          ${project.classCode ? `<span>${escapeHtml(project.classCode)}</span>` : ""}
-          ${project.gradeLabelAtSubmission ? `<span>${escapeHtml(project.gradeLabelAtSubmission)}</span>` : ""}
-        </div>
-        <span class="card-open-cue" aria-hidden="true">Open Project →</span>
-      </div>
-    </article>
-  `;
-}
-
 function scrollFeaturedToIndex(index, behavior = "smooth") {
-  // No-op: the carousel now animates actual track translation instead of scrolling.
+  // Museum spotlight mode does not use track scrolling.
 }
 
 function updateFeaturedPosition(total) {
@@ -343,147 +326,9 @@ function updateFeaturedPosition(total) {
 
 function advanceFeatured(step) {
   const list = featuredProjects();
-  if (list.length === 0 || !els.featuredTrack) return;
-  if (state.featuredAnimating) return;
-
-  const direction = step < 0 ? -1 : 1;
-  const layout = getFeaturedLayout(list.length);
-  const renderCount = Math.min(list.length + 1, layout.visibleCount + 1);
-
-  state.featuredAnimating = true;
-  stopFeaturedTimer();
-
-  els.featuredTrack.classList.remove("featured-track-animating");
-
-  if (direction > 0) {
-    // Current cards plus the next card offscreen on the right.
-    applyFeaturedLayout(layout, renderCount);
-    renderFeaturedItems(featuredItemsFrom(state.featuredIndex, renderCount, list));
-    els.featuredTrack.style.transform = "translateX(0px)";
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        els.featuredTrack.classList.add("featured-track-animating");
-        els.featuredTrack.style.transform = `translateX(-${layout.step}px)`;
-      });
-    });
-  } else {
-    // Previous card offscreen on the left plus current cards.
-    const startIndex = circularIndex(state.featuredIndex - 1, list.length);
-    applyFeaturedLayout(layout, renderCount);
-    renderFeaturedItems(featuredItemsFrom(startIndex, renderCount, list));
-    els.featuredTrack.style.transform = `translateX(-${layout.step}px)`;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        els.featuredTrack.classList.add("featured-track-animating");
-        els.featuredTrack.style.transform = "translateX(0px)";
-      });
-    });
-  }
-
-  let finished = false;
-
-  const finish = () => {
-    if (finished) return;
-    finished = true;
-
-    els.featuredTrack.removeEventListener("transitionend", finish);
-    state.featuredIndex = circularIndex(state.featuredIndex + direction, list.length);
-    state.featuredAnimating = false;
-    els.featuredTrack.classList.remove("featured-track-animating");
-    renderFeaturedCarousel();
-  };
-
-  els.featuredTrack.addEventListener("transitionend", finish, { once: true });
-  window.setTimeout(() => {
-    if (state.featuredAnimating) finish();
-  }, 540);
-}
-
-let featuredGestureReady = false;
-let featuredWheelReady = true;
-
-function setupCarouselGestures() {
-  if (!els.featuredTrack || featuredGestureReady) return;
-  featuredGestureReady = true;
-
-  let dragging = false;
-  let startX = 0;
-  let moved = false;
-
-  els.featuredTrack.addEventListener("click", event => {
-    if (state.featuredAnimating || state.featuredSuppressNextClick) return;
-
-    let card = event.target.closest(".featured-card");
-
-    if (!card && typeof document.elementFromPoint === "function") {
-      const elementAtPoint = document.elementFromPoint(event.clientX, event.clientY);
-      card = elementAtPoint ? elementAtPoint.closest(".featured-card") : null;
-    }
-
-    if (!card || !els.featuredTrack.contains(card)) return;
-
-    const list = featuredProjects();
-    const project = list[Number(card.dataset.featuredOriginalIndex)];
-    openViewer(project);
-  });
-
-  els.featuredTrack.addEventListener("wheel", event => {
-    event.preventDefault();
-
-    if (!featuredWheelReady || state.featuredAnimating) return;
-    featuredWheelReady = false;
-
-    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-    advanceFeatured(delta > 0 ? 1 : -1);
-
-    window.setTimeout(() => {
-      featuredWheelReady = true;
-    }, 360);
-  }, { passive: false });
-
-  els.featuredTrack.addEventListener("pointerdown", event => {
-    if (state.featuredAnimating) return;
-
-    dragging = true;
-    moved = false;
-    state.featuredSuppressNextClick = false;
-    startX = event.clientX;
-    els.featuredTrack.classList.add("dragging");
-    stopFeaturedTimer();
-  });
-
-  els.featuredTrack.addEventListener("pointermove", event => {
-    if (!dragging) return;
-    if (Math.abs(event.clientX - startX) > 8) {
-      moved = true;
-      state.featuredSuppressNextClick = true;
-    }
-  });
-
-  function endDrag(event) {
-    if (!dragging) return;
-
-    dragging = false;
-    els.featuredTrack.classList.remove("dragging");
-
-    const dx = event.clientX - startX;
-
-    if (Math.abs(dx) > 55) {
-      state.featuredSuppressNextClick = true;
-      advanceFeatured(dx < 0 ? 1 : -1);
-    } else {
-      startFeaturedTimer();
-    }
-
-    window.setTimeout(() => {
-      state.featuredSuppressNextClick = false;
-    }, 180);
-  }
-
-  els.featuredTrack.addEventListener("pointerup", endDrag);
-  els.featuredTrack.addEventListener("pointercancel", endDrag);
+  if (list.length === 0) return;
+  state.featuredIndex = circularIndex(state.featuredIndex + step, list.length);
+  renderFeaturedCarousel();
 }
 
 
