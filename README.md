@@ -1,56 +1,26 @@
-# GOGA Software Engineering Showcase - Compact Version
+# GOGA Gallery Site - Dark Mode Version
 
-This version keeps the simplified layout but fixes the oversized-card problem.
+This package includes the updated GOGA website files.
 
-## Changes in this version
+## Updated behavior
 
-- Featured is selected by default.
-- Reset returns to Featured, not All.
-- Cards are compact directory tiles.
-- Cards no longer stretch vertically to fill the screen.
-- The page still uses pagination instead of scrolling.
-- Projects still open inside the same-page viewer.
+- Dark mode is the default.
+- A dark/light toggle appears immediately to the left of the year dropdown.
+- The browser remembers the selected theme using local storage.
+- The `[hidden]` CSS fix is included so the project fallback message does not cover working iframes.
+- `students.js` is the cleaned/de-duplicated version.
 
-## Files to upload
+## Upload to GitHub
 
-Upload these files to the root of your GitHub Pages repository:
+Upload/replace these files in your GitHub Pages repository:
 
-- `index.html`
-- `styles.css`
-- `script.js`
-- `students.js`
-- `assets/gateway-logo.png`
-
-## Editing projects
-
-Edit `students.js`.
-
-Example:
-
-```js
-{
-  studentDisplayName: "Maria R.",
-  projectTitle: "Space Dodger",
-  projectType: "Game",
-  projectLink: "https://codehs.com/share/...",
-  featured: true,
-  year: "2026"
-}
+```text
+index.html
+styles.css
+script.js
+students.js
+assets/gateway-logo.png
 ```
 
-## Changing the default tab
-
-In `students.js`, change:
-
-```js
-defaultFilter: "featured"
-```
-
-Options:
-
-```js
-defaultFilter: "all"
-defaultFilter: "featured"
-defaultFilter: "game"
-defaultFilter: "website"
-```
+If your repository already has the `student-sites/` folder, do not delete it.
+This package only updates the main gallery files.

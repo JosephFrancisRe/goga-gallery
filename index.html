@@ -7,7 +7,7 @@
   <meta name="description" content="GOGA Software Engineering Showcase: Gallery of Gateway Art at Gateway Tech." />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="dark-mode">
   <main class="app">
     <header class="header">
       <div class="brand">
@@ -19,9 +19,18 @@
         </div>
       </div>
 
-      <div class="year-control">
-        <label for="yearSelect">Year</label>
-        <select id="yearSelect"></select>
+      <div class="header-controls">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light mode" aria-pressed="true">
+          <span class="theme-toggle-track" aria-hidden="true">
+            <span class="theme-toggle-thumb"></span>
+          </span>
+          <span class="theme-toggle-label" id="themeToggleLabel">Dark Mode</span>
+        </button>
+
+        <div class="year-control">
+          <label for="yearSelect">Year</label>
+          <select id="yearSelect"></select>
+        </div>
       </div>
     </header>
 

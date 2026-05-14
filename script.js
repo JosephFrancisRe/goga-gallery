@@ -33,7 +33,9 @@ const els = {
   viewerTitle: document.getElementById("viewerTitle"),
   viewerStudent: document.getElementById("viewerStudent"),
   projectFrame: document.getElementById("projectFrame"),
-  viewerNote: document.getElementById("viewerNote")
+  viewerNote: document.getElementById("viewerNote"),
+  themeToggle: document.getElementById("themeToggle"),
+  themeToggleLabel: document.getElementById("themeToggleLabel")
 };
 
 function projects() {
@@ -283,7 +285,37 @@ function resetAll() {
   render();
 }
 
+
+function applyTheme(theme) {
+  const isDark = theme !== "light";
+
+  document.body.classList.toggle("dark-mode", isDark);
+
+  if (els.themeToggle) {
+    els.themeToggle.setAttribute("aria-pressed", String(isDark));
+    els.themeToggle.setAttribute("aria-label", isDark ? "Toggle light mode" : "Toggle dark mode");
+  }
+
+  if (els.themeToggleLabel) {
+    els.themeToggleLabel.textContent = isDark ? "Dark Mode" : "Light Mode";
+  }
+
+  localStorage.setItem("gogaTheme", isDark ? "dark" : "light");
+}
+
+function setupTheme() {
+  const savedTheme = localStorage.getItem("gogaTheme") || "dark";
+  applyTheme(savedTheme);
+}
+
 function bindEvents() {
+  if (els.themeToggle) {
+    els.themeToggle.addEventListener("click", () => {
+      const isDark = document.body.classList.contains("dark-mode");
+      applyTheme(isDark ? "light" : "dark");
+    });
+  }
+
   els.yearSelect.addEventListener("change", () => {
     state.year = els.yearSelect.value;
     state.page = 1;
@@ -352,6 +384,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+setupTheme();
 bindEvents();
 render();
 resetInactivityTimer();
