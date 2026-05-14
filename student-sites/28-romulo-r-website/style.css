@@ -1,0 +1,186 @@
+
+.text, .header, .paragraph, p, h1, h2, h3, h4 {
+    font-family:arial;
+    padding:3px 10px 3px 10px;
+}
+
+/* Navbar / Header */
+
+
+
+html {
+    background-color:#244027;
+    border: 15px solid #244027;
+}
+
+
+.link {
+    color:black;
+    text-align:center;
+    padding:14px 16px;
+    text-decoration:none;
+    position:relative;
+}
+
+.header {
+    background-color: #ebd234;
+    padding:3px 10px 3px 10px;
+}
+
+#TheZoo {
+    background-color:white;
+    padding:3px 10px 3px 10px;
+     font-family: "Poppins", sans-serif;
+    color:black; 
+    background: linear-gradient(180deg,rgba(235, 210, 52, 1) 0%, rgba(255, 255, 255, 1) 9%);
+
+}
+
+#TheZoo a {
+    float:right;
+    color:black;
+    text-align:center;
+    padding-right:16px;
+    text-decoration:none;
+    font-size:26px;
+    position:relative;
+}
+
+/* Navbar / Header */
+
+.imgoverlay {
+    background: linear-gradient(0deg,rgba(36, 64, 39, 1) 0%, rgba(36, 64, 39, 0.5) 47%, rgba(88, 122, 88, 0.5) 58%, rgba(106, 143, 106, 0.5) 74%, rgba(36, 64, 39, 1) 100%);
+    width:100%;
+    height:45%;
+    max-width:100%;
+}
+
+.overlay {
+    background: white
+    width:100%;
+    height:40%;
+    max-width:100%;
+    
+}
+
+.image {
+    width:100%;
+    overflow:hidden;
+    position:relative;
+
+    background-image: url('https://giffiles.alphacoders.com/278/2784.gif');
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+.bottom {
+
+    height:100%;
+    background-color:white;
+    padding:3px 10px 3px 10px;
+    overflow:hidden;
+}
+
+/* Index/Home */
+
+.link-text {
+    color:white;
+    font-family:arial;
+}
+
+.grid-container {
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+}
+
+.grid1 {
+    float:center;
+    width:45%;
+    position:relative;
+    margin: 0px 0px 0px 2em;
+    background-image: url("https://online-learning-college.com/wp-content/uploads/2023/12/A-Day-in-the-Life-of-a-Zookeeper-1600x980.jpg");
+}
+.grid2 {
+    float:right;
+        width:45%;
+    position:relative;
+    margin: 0px 2em 0px 0px;
+    background-image: url("https://site-547756.mozfiles.com/files/547756/medium/foxy.jpg");
+    background-repeat:no-repeat;
+    background-color:orange;
+}
+
+.grid-item {
+    height:50%;
+    display:inline-block;
+}
+
+/* About */
+
+#about-img {
+    float: right;
+    aspect-ratio: fixed;
+    width:30%;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:Center;
+    padding:10px 50px 10px 0px;
+}
+
+#founder-img {
+    width:15%;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+}
+
+#about-paragraph {
+    margin: 10px 50px 10px 50px;
+}
+
+/* Animals */
+
+.animal {
+    width:50%;
+    height:50%;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+    border-radius:10px;
+}
+
+th h1 {
+    font-family:arial;
+    margin-top:20px;
+    display:block;
+    text-align:center;
+}
+
+td h3 {
+    text-align:center;
+}
+
+#animal-header {
+    text-align:center;
+    font-family:arial;
+    font-size:30px;
+    width:100%;
+    display:block;
+}
+
+/* Contact */
+
+.logo {
+    width:50px;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+    aspect-ratio:fixed;
+    float:left;
+}
