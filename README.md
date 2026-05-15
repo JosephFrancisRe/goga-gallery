@@ -161,3 +161,16 @@ Changes:
 - Shortened Spanish labels and footer text to reduce wrapping and overlap.
 - Widened wall-label metadata columns so Spanish labels do not collide with their values.
 - Preserved dark/light mode and English/Español switching.
+
+
+## Exhibit Wall update 4
+
+- Improved dark-mode section separation with stronger visual layers:
+  - darker page background
+  - brighter major panels
+  - lifted cards
+  - more visible borders and subtle shadows
+- Gave the header a distinct branded marquee treatment without making it compete with the Featured Projects wall.
+- Kept the Featured Projects wall as the most dramatic section.
+- Kept Browse and Footer quieter so they read as navigation/utility surfaces.
+- Added a comparable but subtler hierarchy for light mode.

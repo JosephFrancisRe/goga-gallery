@@ -1706,3 +1706,219 @@ body.mode-stats .stats-heading {
 body.mode-stats .stats-heading h2 {
   font-size: clamp(1.18rem, 1.75vw, 1.58rem);
 }
+
+
+
+/* Update 4: visual hierarchy, layered dark mode, and branded header marquee */
+
+body.dark-mode {
+  --page-bg: #050506;
+  --panel-bg: rgba(18, 18, 20, 0.97);
+  --card-bg: #252526;
+  --card-bg-strong: #333335;
+  --line: #48484c;
+  --text-main: #f8f8f8;
+  --text-muted: #d1d1d4;
+  --shadow: 0 14px 34px rgba(0, 0, 0, 0.52);
+}
+
+body.dark-mode {
+  background:
+    radial-gradient(circle at 50% -8%, rgba(var(--red-rgb), 0.18), transparent 24rem),
+    radial-gradient(circle at 18% 20%, rgba(var(--red-rgb), 0.08), transparent 20rem),
+    linear-gradient(180deg, #030304 0%, #080809 42%, #111113 100%);
+}
+
+body.dark-mode .header,
+body.dark-mode .spotlight-wall,
+body.dark-mode .browse-panel,
+body.dark-mode .gallery-panel,
+body.dark-mode .stats-panel,
+body.dark-mode .footer {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+/* Header should feel like the permanent exhibit sign, not a generic panel. */
+body.dark-mode .header {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.07), transparent 34%),
+    linear-gradient(180deg, #1a1a1d 0%, #101012 62%, #09090a 100%);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.62),
+    inset 0 -1px 0 rgba(var(--red-rgb), 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .header::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(var(--red-rgb), 0.76), transparent);
+  pointer-events: none;
+}
+
+body.dark-mode .showcase-title p {
+  text-shadow:
+    0 2px 0 rgba(var(--red-rgb), 0.34),
+    0 0 18px rgba(255, 255, 255, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.65);
+}
+
+body.dark-mode .brand-logo-wrap {
+  filter: drop-shadow(0 0 10px rgba(var(--red-rgb), 0.18));
+}
+
+/* Featured wall stays the most dramatic content area, but now reads as a distinct lit gallery wall. */
+body.dark-mode .spotlight-wall {
+  background:
+    radial-gradient(circle at 12% 16%, rgba(var(--red-rgb), 0.24), transparent 24rem),
+    radial-gradient(circle at 68% 18%, rgba(255, 255, 255, 0.035), transparent 18rem),
+    linear-gradient(135deg, #1b1113 0%, #141416 42%, #101011 100%);
+  border-color: rgba(var(--red-rgb), 0.42);
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.58),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+}
+
+/* Functional panels are quieter than the exhibit wall but visibly separated from the page. */
+body.dark-mode .browse-panel,
+body.dark-mode .gallery-panel,
+body.dark-mode .stats-panel {
+  background:
+    linear-gradient(180deg, rgba(24, 24, 26, 0.98), rgba(15, 15, 17, 0.98));
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+body.dark-mode .footer {
+  background:
+    linear-gradient(180deg, rgba(15, 15, 16, 0.98), rgba(8, 8, 9, 0.98));
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+/* Cards should float above panels, not disappear into them. */
+body.dark-mode .spotlight-artwork,
+body.dark-mode .wall-label,
+body.dark-mode .project-card,
+body.dark-mode .stats-card,
+body.dark-mode .stats-kpi-grid article,
+body.dark-mode .did-you-know {
+  background:
+    linear-gradient(180deg, #2a2a2c 0%, #232325 100%);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+body.dark-mode .spotlight-artwork,
+body.dark-mode .wall-label {
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(255, 255, 255, 0.035),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+body.dark-mode .project-card:hover,
+body.dark-mode .project-card:focus-visible,
+body.dark-mode .spotlight-artwork:hover,
+body.dark-mode .rail-card:hover,
+body.dark-mode .rail-card.active {
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(var(--red-rgb), 0.38),
+    0 0 22px rgba(var(--red-rgb), 0.12);
+}
+
+/* Give the browse panel a quieter navigation-desk character. */
+body.dark-mode .room-button,
+body.dark-mode .field input,
+body.dark-mode .field select,
+body.dark-mode .reset,
+body.dark-mode .header-action,
+body.dark-mode .back-home,
+body.dark-mode .pager button,
+body.dark-mode .theme-toggle,
+body.dark-mode .language-toggle {
+  background: #2c2c2f;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+body.dark-mode .room-button.active {
+  background:
+    linear-gradient(180deg, rgba(var(--red-rgb), 0.22), rgba(var(--red-rgb), 0.09));
+  border-color: rgba(var(--red-rgb), 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 16px rgba(var(--red-rgb), 0.1);
+}
+
+body.dark-mode .header-action {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .year-control select {
+  border-color: rgba(var(--red-rgb), 0.9);
+  background: var(--red);
+}
+
+/* Light mode gets a subtler version of the same hierarchy. */
+body:not(.dark-mode) .header {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(var(--red-rgb), 0.06), transparent 34%),
+    linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
+  border-color: rgba(0, 0, 0, 0.16);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.15),
+    inset 0 -1px 0 rgba(var(--red-rgb), 0.38);
+}
+
+body:not(.dark-mode) .header::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(var(--red-rgb), 0.55), transparent);
+  pointer-events: none;
+}
+
+body:not(.dark-mode) .spotlight-wall {
+  background:
+    radial-gradient(circle at 12% 16%, rgba(var(--red-rgb), 0.16), transparent 24rem),
+    linear-gradient(135deg, #fff5f5 0%, #ffffff 45%, #f7f7f7 100%);
+  border-color: rgba(var(--red-rgb), 0.34);
+}
+
+body:not(.dark-mode) .browse-panel,
+body:not(.dark-mode) .gallery-panel,
+body:not(.dark-mode) .stats-panel {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f6f6 100%);
+}
+
+body:not(.dark-mode) .footer {
+  background: linear-gradient(180deg, #f7f7f7 0%, #ececec 100%);
+}
+
+/* Add a little more breathing room between sections on roomy screens without changing the target layout. */
+@media (min-width: 1200px) and (min-height: 740px) {
+  .app {
+    gap: 7px;
+  }
+}
