@@ -2043,3 +2043,168 @@ body:not(.dark-mode) .room-button:focus-visible {
     linear-gradient(180deg, rgba(var(--red-rgb), 0.12), rgba(var(--red-rgb), 0.035)),
     #ffffff;
 }
+
+/* Update 7: optical vertical alignment and title subtitle repositioning */
+.app {
+  grid-template-rows: 84px minmax(0, 1fr) 112px 34px;
+}
+
+body.mode-gallery .app {
+  grid-template-rows: 84px 76px minmax(0, 1fr) 34px;
+}
+
+body.mode-stats .app {
+  grid-template-rows: 84px minmax(0, 1fr) 34px;
+}
+
+.header {
+  grid-template-columns: 318px 1fr 318px;
+  padding: 9px 18px 10px;
+  align-items: center;
+}
+
+.brand,
+.showcase-title,
+.header-controls {
+  transform: translateY(-1px);
+}
+
+.brand-text {
+  display: grid;
+  align-content: center;
+  gap: 1px;
+}
+
+.brand-text .subtitle {
+  display: none !important;
+}
+
+.school {
+  line-height: 1;
+}
+
+h1 {
+  margin: 0;
+  line-height: 0.88;
+}
+
+.showcase-title {
+  align-self: center;
+  display: grid;
+  place-items: center;
+  gap: 3px;
+}
+
+.showcase-title p {
+  line-height: 0.9;
+}
+
+.showcase-title span,
+.showcase-title span#showcaseSubtitle {
+  display: block;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(0.78rem, 1vw, 0.96rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.015em;
+  text-shadow: none;
+}
+
+.header-controls {
+  align-items: end;
+}
+
+.header-action {
+  min-height: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.year-control {
+  grid-template-rows: 13px 38px;
+  align-items: end;
+}
+
+.year-control label {
+  line-height: 1;
+}
+
+.year-control select {
+  height: 38px;
+}
+
+/* Keep section content optically centered rather than box-centered. */
+.browse-heading,
+.room-buttons,
+.find-controls,
+.spotlight-title-block,
+.spotlight-stage,
+.spotlight-rail,
+.gallery-heading,
+.stats-heading,
+.footer > * {
+  transform: translateY(-1px);
+}
+
+.footer {
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+body.dark-mode .header {
+  background:
+    radial-gradient(circle at 50% -18%, rgba(255, 255, 255, 0.11), transparent 30%),
+    radial-gradient(circle at 50% 118%, rgba(var(--red-rgb), 0.22), transparent 46%),
+    linear-gradient(180deg, #1d1d20 0%, #121216 56%, #080809 100%);
+}
+
+body.dark-mode .header::after,
+body:not(.dark-mode) .header::after {
+  left: 18px;
+  right: 18px;
+  bottom: 4px;
+}
+
+body.dark-mode .spotlight-wall {
+  background:
+    radial-gradient(circle at 4% 42%, rgba(var(--red-rgb), 0.38), transparent 25rem),
+    radial-gradient(circle at 44% -10%, rgba(var(--red-rgb), 0.26), transparent 18rem),
+    radial-gradient(circle at 74% 20%, rgba(255, 255, 255, 0.045), transparent 20rem),
+    linear-gradient(135deg, #231014 0%, #171417 40%, #0f0f11 100%);
+  border-color: rgba(var(--red-rgb), 0.56);
+}
+
+body:not(.dark-mode) .spotlight-wall {
+  background:
+    radial-gradient(circle at 6% 42%, rgba(var(--red-rgb), 0.23), transparent 24rem),
+    radial-gradient(circle at 42% -8%, rgba(var(--red-rgb), 0.15), transparent 18rem),
+    linear-gradient(135deg, #fff0f0 0%, #ffffff 46%, #f8f8f8 100%);
+}
+
+@media (max-width: 1100px) {
+  .app,
+  body.mode-gallery .app,
+  body.mode-stats .app {
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .brand,
+  .showcase-title,
+  .header-controls,
+  .browse-heading,
+  .room-buttons,
+  .find-controls,
+  .spotlight-title-block,
+  .spotlight-stage,
+  .spotlight-rail,
+  .gallery-heading,
+  .stats-heading,
+  .footer > * {
+    transform: none;
+  }
+}
