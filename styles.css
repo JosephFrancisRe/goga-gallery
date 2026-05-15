@@ -2851,3 +2851,170 @@ body:not(.dark-mode).mode-stats .did-you-know {
     display: none;
   }
 }
+
+
+
+/* Update 10: Pathway Info fine tune */
+/* Remove the red-outline feeling from the outer Pathway Info content container. */
+body.mode-stats .stats-panel {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+/* Keep the Did You Know panel special, but reduce the red intensity enough to improve readability. */
+body.mode-stats .did-you-know {
+  padding: 12px 34px;
+  align-items: center;
+  background:
+    radial-gradient(circle at 91% 50%, rgba(255, 120, 128, 0.34), transparent 12rem),
+    radial-gradient(circle at 4% 18%, rgba(var(--red-rgb), 0.22), transparent 18rem),
+    linear-gradient(100deg, rgba(115, 37, 42, 0.88) 0%, rgba(48, 38, 41, 0.96) 54%, rgba(30, 30, 32, 0.98) 100%);
+  border-color: rgba(var(--red-rgb), 0.50);
+  border-left-width: 0;
+}
+
+body.mode-stats .did-you-know::before {
+  opacity: 0.58;
+  transform: translateY(-2px);
+}
+
+body.mode-stats .did-you-copy {
+  align-self: center;
+  transform: translateY(-1px);
+}
+
+body.mode-stats .did-you-know p {
+  margin-bottom: 6px;
+}
+
+body.mode-stats .did-you-know h3 {
+  max-width: 980px;
+}
+
+body.mode-stats .did-you-know span {
+  margin-top: 6px;
+}
+
+body.mode-stats .ai-orb {
+  align-self: center;
+  transform: translateY(-3px);
+}
+
+/* Make the AI course name read like the point of the announcement. */
+.ai-headline-emphasis {
+  color: #ffffff;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.18),
+    0 0 22px rgba(var(--red-rgb), 0.34),
+    0 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+/* Give the paired average values more breathing room. */
+body.mode-stats .dual-stat-stack {
+  gap: 31px;
+}
+
+/* Make the course bars more substantial and reduce the "thin line in empty space" feeling. */
+body.mode-stats .stats-bars {
+  justify-content: center;
+  gap: clamp(14px, 2.05vh, 22px);
+}
+
+body.mode-stats .stats-bar-row {
+  min-height: 40px;
+}
+
+body.mode-stats .stats-bar-track {
+  height: 20px;
+  border-radius: 999px;
+}
+
+body.mode-stats .stats-bar-track b {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 0 12px rgba(var(--red-rgb),0.12);
+}
+
+/* Enlarge the pie chart and place percent labels directly over each slice. */
+body.mode-stats .stats-pie-wrap {
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+body.mode-stats .stats-pie-box {
+  position: relative;
+  width: min(218px, 82%);
+  aspect-ratio: 1;
+  justify-self: center;
+  align-self: center;
+}
+
+body.mode-stats .stats-pie {
+  width: 100%;
+  height: 100%;
+  box-shadow:
+    inset 0 0 0 10px var(--card-bg),
+    0 14px 28px rgba(0,0,0,.30);
+}
+
+body.mode-stats .pie-percent-label {
+  position: absolute;
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  text-shadow:
+    0 1px 2px rgba(0,0,0,0.85),
+    0 0 8px rgba(0,0,0,0.55);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+body.mode-stats .pie-label-sophomore {
+  left: 63%;
+  top: 21%;
+}
+
+body.mode-stats .pie-label-junior {
+  left: 67%;
+  top: 66%;
+}
+
+body.mode-stats .pie-label-senior {
+  left: 25%;
+  top: 55%;
+}
+
+body.mode-stats .stats-pie-legend {
+  gap: 6px;
+}
+
+/* Light mode companion tuning. */
+body:not(.dark-mode).mode-stats .stats-panel {
+  border-color: rgba(0, 0, 0, 0.14) !important;
+}
+
+body:not(.dark-mode).mode-stats .did-you-know {
+  background:
+    radial-gradient(circle at 91% 50%, rgba(var(--red-rgb), 0.28), transparent 12rem),
+    linear-gradient(100deg, rgba(var(--red-rgb), 0.20) 0%, #ffffff 58%, #f4f4f4 100%);
+}
+
+body:not(.dark-mode).mode-stats .ai-headline-emphasis {
+  color: #161616;
+  text-shadow:
+    0 0 12px rgba(var(--red-rgb), 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 1100px) {
+  body.mode-stats .stats-pie-box {
+    width: min(220px, 72vw);
+  }
+
+  body.mode-stats .dual-stat-stack {
+    gap: 20px;
+  }
+}

@@ -755,6 +755,15 @@ function hashProject(project) {
   return Math.abs(hash);
 }
 
+
+function didYouKnowHeadlineMarkup() {
+  if (state.lang === "es") {
+    return 'Gateway Tech está agregando <span class="ai-headline-emphasis">Foundations of Artificial Intelligence</span>.';
+  }
+
+  return 'Gateway Tech is adding <span class="ai-headline-emphasis">Foundations of Artificial Intelligence</span>.';
+}
+
 function renderPathwayInfo() {
   const stats = window.GOGA_PATHWAY_STATS;
 
@@ -768,17 +777,18 @@ function renderPathwayInfo() {
   const maxHours = Math.max(...courses.map(course => Number(course.totalHours) || 0), 1);
   const totalHours = totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600);
   const uniqueStudents = totals.uniqueStudents || 0;
-  const totalLines = Number(totals.totalLinesOfCode || totals.totalLines || totals.linesOfCode || 63724);
+  const totalLines = Number(totals.totalLinesOfCode || totals.totalLines || totals.linesOfCode || 159322);
   const avgHours = uniqueStudents ? (totalHours / uniqueStudents).toFixed(1) : "0.0";
   const avgLines = uniqueStudents ? Math.round(totalLines / uniqueStudents) : 0;
   const gradeStats = buildGradeStats(courses);
+  const totalGradeSeconds = gradeStats.reduce((sum, item) => sum + item.seconds, 0) || 1;
   const pieStyle = buildPieStyle(gradeStats);
 
   els.statsContent.innerHTML = `
     <section class="did-you-know">
       <div class="did-you-copy">
         <p>${escapeHtml(t("didYouKnow"))}</p>
-        <h3>${escapeHtml(t("aiHeadline"))}</h3>
+        <h3>${didYouKnowHeadlineMarkup()}</h3>
         <span>${escapeHtml(t("aiBody"))}</span>
       </div>
       <div class="ai-orb" aria-hidden="true">
@@ -822,7 +832,14 @@ function renderPathwayInfo() {
           <article class="stats-card stats-grade-card">
             <div class="stats-section-heading"><p>${escapeHtml(t("hoursByGrade"))}</p></div>
             <div class="stats-pie-wrap">
-              <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
+              <div class="stats-pie-box">
+                <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
+                ${gradeStats.map(item => {
+                  const pct = Math.round((item.seconds / totalGradeSeconds) * 100);
+                  const positionClass = `pie-label-${normalize(item.label)}`;
+                  return `<span class="pie-percent-label ${positionClass}">${pct}%</span>`;
+                }).join("")}
+              </div>
               <div class="stats-pie-legend">
                 ${gradeStats.map(item => `
                   <div><span style="--key-color:${escapeHtml(item.color)}"></span><strong>${escapeHtml(localizeGrade(item.label))}</strong><em>${formatNumber(Math.round(item.hours))} ${escapeHtml(t("hrs"))}</em></div>
