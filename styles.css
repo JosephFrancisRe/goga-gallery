@@ -48,7 +48,7 @@ body {
     radial-gradient(circle at top center, rgba(var(--red-rgb), 0.16), transparent 34rem),
     linear-gradient(180deg, #050505 0%, #111111 100%);
   color: var(--text-main);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", "Noto Sans", "Segoe UI", "Helvetica Neue", Arial, Helvetica, sans-serif;
   overflow: hidden;
 }
 
@@ -60,8 +60,10 @@ body:not(.dark-mode) {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
+  font-family: inherit;
 }
 
 button {
@@ -101,10 +103,10 @@ body.mode-stats .app {
 .header {
   overflow: hidden;
   display: grid;
-  grid-template-columns: 318px 1fr 310px;
+  grid-template-columns: 318px 1fr 320px;
   gap: 14px;
   align-items: center;
-  padding: 8px 16px;
+  padding: 6px 18px 7px;
 }
 
 .brand {
@@ -113,6 +115,7 @@ body.mode-stats .app {
   gap: 10px;
   min-width: 0;
   height: 100%;
+  align-self: center;
 }
 
 .brand-logo-wrap {
@@ -184,13 +187,15 @@ h1 {
   text-align: center;
   align-self: center;
   min-width: 0;
+  display: grid;
+  place-items: center;
 }
 
 .showcase-title p {
   margin: 0;
   color: var(--text-main);
-  font-size: clamp(1.65rem, 2.55vw, 2.55rem);
-  line-height: 0.9;
+  font-size: clamp(1.72rem, 2.7vw, 2.72rem);
+  line-height: 0.86;
   font-weight: 950;
   letter-spacing: -0.06em;
   text-shadow:
@@ -199,19 +204,15 @@ h1 {
 }
 
 .showcase-title span {
-  display: block;
-  margin-top: 4px;
-  color: var(--text-muted);
-  font-size: 0.86rem;
-  font-weight: 800;
-  line-height: 1;
+  display: none;
 }
 
 .header-controls {
   display: flex;
   justify-content: flex-end;
-  align-items: end;
+  align-items: center;
   gap: 10px;
+  align-self: center;
 }
 
 .header-action,
@@ -219,13 +220,22 @@ h1 {
 .reset,
 .back-home,
 .pager button {
-  min-height: 38px;
+  min-height: 40px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--card-bg-strong);
   color: var(--text-main);
   padding: 0 15px;
   font-weight: 950;
+}
+
+.header-action {
+  height: 40px;
+  min-width: 148px;
+  white-space: nowrap;
+  line-height: 1;
+  align-self: end;
+  margin-top: 16px;
 }
 
 .header-action.active,
@@ -239,8 +249,10 @@ h1 {
 
 .year-control {
   display: grid;
+  grid-template-rows: 13px 40px;
   gap: 3px;
   justify-items: center;
+  align-items: end;
 }
 
 .year-control label {
@@ -253,6 +265,7 @@ h1 {
 
 .year-control select {
   min-width: 94px;
+  height: 40px;
   background: var(--red);
   border-color: var(--red);
   color: #ffffff;
@@ -514,22 +527,56 @@ h1 {
 .room-buttons {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
 .room-button {
+  position: relative;
   min-width: 0;
   min-height: 68px;
   border: 1px solid var(--line);
   border-radius: var(--small-radius);
-  background: var(--card-bg);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0)),
+    var(--card-bg);
   color: var(--text-main);
-  padding: 9px 10px;
+  padding: 20px 12px 9px 14px;
   display: grid;
   align-content: center;
   gap: 3px;
   text-align: left;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
 }
+
+.room-button::before {
+  position: absolute;
+  top: 7px;
+  left: 13px;
+  color: var(--red);
+  font-size: 0.56rem;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.room-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  border-radius: 999px;
+  background: rgba(var(--red-rgb), 0.7);
+  opacity: 0.55;
+}
+
+.room-button[data-filter="all"]::before { content: "EXHIBIT"; }
+.room-button[data-filter="website"]::before { content: "WEB"; }
+.room-button[data-filter="game"]::before { content: "ARCADE"; }
+.room-button[data-filter="other"]::before { content: "LAB"; }
 
 .room-button span {
   font-size: 0.94rem;
@@ -547,8 +594,14 @@ h1 {
 .room-button:hover,
 .room-button:focus-visible {
   border-color: var(--red);
-  background: rgba(var(--red-rgb), 0.13);
+  background:
+    linear-gradient(180deg, rgba(var(--red-rgb), 0.20), rgba(var(--red-rgb), 0.08)),
+    var(--card-bg);
   outline: none;
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .find-controls {
@@ -581,6 +634,7 @@ h1 {
   background: var(--card-bg);
   color: var(--text-main);
   padding: 0 12px;
+  text-overflow: ellipsis;
 }
 
 .field input:focus,
@@ -614,7 +668,7 @@ body.mode-gallery .browse-heading p {
 
 body.mode-gallery .room-button {
   min-height: 54px;
-  padding: 7px 9px;
+  padding: 18px 10px 7px 12px;
 }
 
 body.mode-gallery .room-button span {
@@ -1594,7 +1648,7 @@ body:not(.dark-mode) .theme-toggle-track {
     grid-template-columns: 1fr;
   }
 
-  .header {
+ .header {
     text-align: center;
   }
 
@@ -1778,13 +1832,15 @@ body.dark-mode .brand-logo-wrap {
 /* Featured wall stays the most dramatic content area, but now reads as a distinct lit gallery wall. */
 body.dark-mode .spotlight-wall {
   background:
-    radial-gradient(circle at 12% 16%, rgba(var(--red-rgb), 0.24), transparent 24rem),
-    radial-gradient(circle at 68% 18%, rgba(255, 255, 255, 0.035), transparent 18rem),
-    linear-gradient(135deg, #1b1113 0%, #141416 42%, #101011 100%);
-  border-color: rgba(var(--red-rgb), 0.42);
+    radial-gradient(circle at 10% 20%, rgba(var(--red-rgb), 0.42), transparent 28rem),
+    radial-gradient(circle at 34% 0%, rgba(var(--red-rgb), 0.20), transparent 24rem),
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.045), transparent 18rem),
+    linear-gradient(135deg, #2a1115 0%, #171216 44%, #101011 100%);
+  border-color: rgba(var(--red-rgb), 0.62);
   box-shadow:
     0 16px 38px rgba(0, 0, 0, 0.58),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+    0 0 36px rgba(var(--red-rgb), 0.10),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045);
 }
 
 /* Functional panels are quieter than the exhibit wall but visibly separated from the page. */
@@ -1924,277 +1980,66 @@ body:not(.dark-mode) .footer {
 }
 
 
-
-/* Update 5: stronger exhibit hierarchy and cleaner header */
-
-/*
-  Design intent:
-  - Header reads as the permanent marquee/identity sign.
-  - Featured Projects reads as the warm dramatic exhibit wall.
-  - Browse/Gallery/Stats read as useful but quieter panels.
-  - Footer recedes into a utility strip.
-*/
-
-/* The header no longer carries a subtitle, so give it a cleaner, less cramped footprint. */
-@media (min-width: 1110px) {
-  .app {
-    grid-template-rows: 86px minmax(0, 1fr) 104px 28px;
-    gap: 7px;
-  }
-
-  body.mode-gallery .app {
-    grid-template-rows: 86px 72px minmax(0, 1fr) 28px;
-  }
-
-  body.mode-stats .app {
-    grid-template-rows: 86px minmax(0, 1fr) 28px;
-  }
+/* Update 6: bilingual typography, header control alignment, and gallery-room plaques */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Inter", "Noto Sans", "Segoe UI", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.header {
-  overflow: hidden;
-  padding: 10px 18px;
-  grid-template-columns: 320px minmax(360px, 1fr) 310px;
+body.mode-stats #statsBackButton {
+  display: none;
 }
 
-.showcase-title {
-  align-self: center;
-  transform: translateY(-1px);
+.search-field input::placeholder {
+  opacity: 0.72;
 }
 
-.showcase-title p {
-  font-size: clamp(1.9rem, 2.85vw, 2.95rem);
-  line-height: 0.86;
-}
-
-.showcase-title span {
-  display: none !important;
-}
-
-.brand-logo-wrap,
-.brand-logo {
-  width: 62px;
-  height: 62px;
-}
-
-.school {
-  font-size: 0.78rem;
-  line-height: 1;
-}
-
-h1 {
-  font-size: clamp(2.45rem, 3.65vw, 3.45rem);
-  line-height: 0.82;
-  margin: 0;
-}
-
-.subtitle {
-  font-size: 0.82rem;
-  line-height: 0.95;
-  margin-top: 1px;
-}
-
-.header-controls {
-  align-items: center;
-}
-
-/* Make the main header clearly more important than a utility strip. */
 body.dark-mode .header {
   background:
-    radial-gradient(circle at 50% -18%, rgba(255,255,255,0.12), transparent 34%),
-    linear-gradient(180deg, #202024 0%, #121215 56%, #070708 100%);
-  border-color: rgba(255, 255, 255, 0.24);
-  box-shadow:
-    0 18px 42px rgba(0,0,0,0.68),
-    inset 0 0 0 1px rgba(255,255,255,0.035),
-    inset 0 -2px 0 rgba(var(--red-rgb),0.82);
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.085), transparent 32%),
+    radial-gradient(circle at 50% 130%, rgba(var(--red-rgb), 0.16), transparent 46%),
+    linear-gradient(180deg, #1b1b1e 0%, #111114 58%, #09090a 100%);
 }
 
-body.dark-mode .header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse at 50% 45%, rgba(var(--red-rgb), 0.12), transparent 36%),
-    radial-gradient(ellipse at 15% 10%, rgba(var(--red-rgb), 0.10), transparent 30%);
-  pointer-events: none;
-}
-
-body.dark-mode .header::after {
-  left: 18px;
-  right: 18px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent 0%, rgba(var(--red-rgb), 0.92) 22%, rgba(255,255,255,0.34) 50%, rgba(var(--red-rgb), 0.92) 78%, transparent 100%);
-}
-
-body.dark-mode .showcase-title p {
-  text-shadow:
-    0 3px 0 rgba(var(--red-rgb), 0.42),
-    0 0 24px rgba(255, 255, 255, 0.12),
-    0 10px 28px rgba(0,0,0,0.78);
-}
-
-body.dark-mode .brand {
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.32));
-}
-
-/* The Featured Projects panel should read as the strongest content zone. */
-body.dark-mode .spotlight-wall {
-  background:
-    radial-gradient(circle at 7% 12%, rgba(var(--red-rgb), 0.46), transparent 24rem),
-    radial-gradient(circle at 28% 2%, rgba(var(--red-rgb), 0.28), transparent 20rem),
-    radial-gradient(circle at 70% 16%, rgba(255,255,255,0.06), transparent 18rem),
-    linear-gradient(135deg, #281014 0%, #1b1113 28%, #111113 64%, #09090a 100%);
-  border-color: rgba(var(--red-rgb), 0.62);
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.64),
-    0 0 0 1px rgba(var(--red-rgb),0.16),
-    inset 0 1px 0 rgba(255,255,255,0.055),
-    inset 0 0 70px rgba(var(--red-rgb), 0.07);
-}
-
-body.dark-mode .spotlight-title-block p {
-  color: #ff7077;
-  text-shadow: 0 0 16px rgba(var(--red-rgb),0.22);
-}
-
-body.dark-mode .spotlight-title-block h2 {
-  text-shadow:
-    0 2px 0 rgba(var(--red-rgb),0.32),
-    0 10px 24px rgba(0,0,0,0.46);
-}
-
-body.dark-mode .spotlight-artwork {
-  border-left-color: var(--red);
-  box-shadow:
-    0 18px 38px rgba(0,0,0,0.62),
-    0 0 28px rgba(var(--red-rgb),0.14),
-    inset 0 1px 0 rgba(255,255,255,0.055);
-}
-
-body.dark-mode .wall-label {
-  box-shadow:
-    0 18px 38px rgba(0,0,0,0.58),
-    0 0 22px rgba(255,255,255,0.035),
-    inset 0 1px 0 rgba(255,255,255,0.055);
-}
-
-/* Secondary panels need clearer boundaries but less drama. */
 body.dark-mode .browse-panel,
 body.dark-mode .gallery-panel,
 body.dark-mode .stats-panel {
   background:
-    linear-gradient(180deg, rgba(20,20,22,0.985), rgba(10,10,11,0.985));
-  border-color: rgba(255,255,255,0.18);
-  box-shadow:
-    0 10px 26px rgba(0,0,0,0.48),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-}
-
-body.dark-mode .browse-panel {
-  border-top-color: rgba(255,255,255,0.22);
-}
-
-/* The footer is a utility rail. It should not visually compete with the title. */
-.footer {
-  min-height: 0;
-  border-radius: 12px;
-  font-size: 0.72rem;
-  padding: 4px 10px;
+    linear-gradient(180deg, rgba(26, 26, 29, 0.985), rgba(12, 12, 14, 0.985));
 }
 
 body.dark-mode .footer {
-  background: rgba(7,7,8,0.92);
-  border-color: rgba(255,255,255,0.10);
-  box-shadow:
-    0 4px 12px rgba(0,0,0,0.32),
-    inset 0 1px 0 rgba(255,255,255,0.025);
-  color: rgba(248,248,248,0.72);
+  opacity: 0.88;
 }
 
-body.dark-mode .footer-left,
-body.dark-mode .footer-right {
-  color: rgba(248,248,248,0.72);
-}
-
-.footer-controls {
-  opacity: 0.92;
-}
-
-.theme-toggle,
-.language-toggle button {
-  min-height: 21px;
-  font-size: 0.68rem;
-}
-
-.theme-toggle-track {
-  width: 27px;
-  height: 15px;
-}
-
-.theme-toggle-thumb {
-  width: 9px;
-  height: 9px;
-}
-
-/* Avoid duplicate navigation on the Pathway Info page.
-   The top-right header button already says Back to Exhibit. */
-body.mode-stats #statsBackButton {
-  display: none !important;
-}
-
-body.mode-stats .stats-heading {
-  grid-template-columns: 1fr auto;
-}
-
-body.mode-stats .stats-heading > div {
-  min-width: 0;
-}
-
-body.mode-stats #statsYearPill {
-  grid-column: 2;
-}
-
-/* Use the same return language in gallery/search rooms. */
-.back-home {
-  white-space: nowrap;
-}
-
-/* Light mode gets the same structural hierarchy, but less dramatic. */
-body:not(.dark-mode) .header {
+body.dark-mode .room-button {
   background:
-    radial-gradient(circle at 50% -18%, rgba(var(--red-rgb), 0.10), transparent 32%),
-    linear-gradient(180deg, #ffffff 0%, #f1f1f1 100%);
-  border-color: rgba(0,0,0,0.20);
-  box-shadow:
-    0 14px 30px rgba(0,0,0,0.16),
-    inset 0 -2px 0 rgba(var(--red-rgb),0.52);
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.005)),
+    #28282b;
 }
 
-body:not(.dark-mode) .spotlight-wall {
+body.dark-mode .room-button.active,
+body.dark-mode .room-button:hover,
+body.dark-mode .room-button:focus-visible {
   background:
-    radial-gradient(circle at 8% 12%, rgba(var(--red-rgb), 0.24), transparent 24rem),
-    radial-gradient(circle at 24% 4%, rgba(var(--red-rgb), 0.14), transparent 20rem),
-    linear-gradient(135deg, #fff0f1 0%, #ffffff 48%, #f7f7f7 100%);
-  border-color: rgba(var(--red-rgb), 0.46);
+    linear-gradient(180deg, rgba(var(--red-rgb), 0.26), rgba(var(--red-rgb), 0.09)),
+    #28282b;
+  border-color: rgba(var(--red-rgb), 0.82);
 }
 
-body:not(.dark-mode) .footer {
-  color: rgba(0,0,0,0.62);
-  background: rgba(245,245,245,0.92);
-  border-color: rgba(0,0,0,0.10);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+body:not(.dark-mode) .room-button {
+  background:
+    linear-gradient(180deg, rgba(var(--red-rgb), 0.045), rgba(255,255,255,0)),
+    #ffffff;
 }
 
-@media (max-width: 1100px) {
-  .showcase-title p {
-    font-size: clamp(1.8rem, 7vw, 2.65rem);
-    line-height: 0.9;
-  }
-
-  .header {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+body:not(.dark-mode) .room-button.active,
+body:not(.dark-mode) .room-button:hover,
+body:not(.dark-mode) .room-button:focus-visible {
+  background:
+    linear-gradient(180deg, rgba(var(--red-rgb), 0.12), rgba(var(--red-rgb), 0.035)),
+    #ffffff;
 }
