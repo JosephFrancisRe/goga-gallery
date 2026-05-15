@@ -64,8 +64,8 @@ const I18N = {
     aiHeadline: "Gateway Tech is adding Foundations of Artificial Intelligence.",
     aiBody: "This new junior-year Software Engineering course uses Python to explore data science, statistics, linear algebra, machine learning, and AI.",
     totalHours: "Total Coding Hours",
-    studentsRepresented: "Students Represented",
-    avgPerStudent: "Avg Hours / Student",
+    studentsRepresented: "Lines of Code",
+    avgPerStudent: "Avg Per Student",
     timeByCourse: "Time Spent Coding by Course",
     hoursByGrade: "Coding Hours by Grade",
     pathwaySequence: "Pathway Sequence",
@@ -140,7 +140,7 @@ const I18N = {
     aiHeadline: "Gateway Tech está agregando Foundations of Artificial Intelligence.",
     aiBody: "Este nuevo curso de junior usa Python para explorar ciencia de datos, estadística, álgebra lineal, machine learning e inteligencia artificial.",
     totalHours: "Horas Totales de Programación",
-    studentsRepresented: "Estudiantes Representados",
+    studentsRepresented: "Líneas de Código",
     avgPerStudent: "Promedio por Estudiante",
     timeByCourse: "Tiempo Programando por Curso",
     hoursByGrade: "Horas por Grado",
@@ -763,23 +763,35 @@ function renderPathwayInfo() {
   const maxHours = Math.max(...courses.map(course => Number(course.totalHours) || 0), 1);
   const totalHours = totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600);
   const uniqueStudents = totals.uniqueStudents || 0;
+  const totalLines = Number(totals.totalLinesOfCode || totals.totalLines || totals.linesOfCode || 63724);
   const avgHours = uniqueStudents ? (totalHours / uniqueStudents).toFixed(1) : "0.0";
+  const avgLines = uniqueStudents ? Math.round(totalLines / uniqueStudents) : 0;
   const gradeStats = buildGradeStats(courses);
   const pieStyle = buildPieStyle(gradeStats);
 
   els.statsContent.innerHTML = `
     <section class="did-you-know">
-      <div>
+      <div class="did-you-copy">
         <p>${escapeHtml(t("didYouKnow"))}</p>
         <h3>${escapeHtml(t("aiHeadline"))}</h3>
         <span>${escapeHtml(t("aiBody"))}</span>
+      </div>
+      <div class="ai-orb" aria-hidden="true">
+        <strong>AI</strong>
+        <i></i><i></i><i></i>
       </div>
     </section>
 
     <section class="stats-kpi-grid" aria-label="Pathway summary numbers">
       <article><strong>${formatNumber(totalHours)}</strong><span>${escapeHtml(t("totalHours"))}</span></article>
-      <article><strong>${formatNumber(uniqueStudents)}</strong><span>${escapeHtml(t("studentsRepresented"))}</span></article>
-      <article><strong>${escapeHtml(avgHours)}</strong><span>${escapeHtml(t("avgPerStudent"))}</span></article>
+      <article><strong>${formatNumber(totalLines)}</strong><span>${escapeHtml(t("studentsRepresented"))}</span></article>
+      <article class="dual-kpi">
+        <div class="dual-stat-stack">
+          <strong>${escapeHtml(avgHours)}<small>${escapeHtml(t("hrs"))}</small></strong>
+          <strong>${formatNumber(avgLines)}<small>lines</small></strong>
+        </div>
+        <span>${escapeHtml(t("avgPerStudent"))}</span>
+      </article>
     </section>
 
     <section class="stats-detail-grid">
@@ -821,12 +833,12 @@ function renderPathwayInfo() {
           <div><strong>SE12</strong><span>AP CSA</span><p>${escapeHtml(t("se12Text"))}</p></div>
         </div>
       </article>
-
-      <article class="stats-card behind-card">
-        <div class="stats-section-heading"><p>${escapeHtml(t("behindNumbers"))}</p></div>
-        <p>${escapeHtml(t("behindText"))}</p>
-      </article>
     </section>
+
+    <article class="stats-card behind-card">
+      <div class="stats-section-heading"><p>${escapeHtml(t("behindNumbers"))}</p></div>
+      <p>${escapeHtml(t("behindText"))}</p>
+    </article>
   `;
 }
 
