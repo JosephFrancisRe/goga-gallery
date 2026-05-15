@@ -174,3 +174,15 @@ Changes:
 - Kept the Featured Projects wall as the most dramatic section.
 - Kept Browse and Footer quieter so they read as navigation/utility surfaces.
 - Added a comparable but subtler hierarchy for light mode.
+
+
+## Exhibit Wall update 5: hierarchy and header cleanup
+
+- Removed the header subtitle so the masthead no longer feels cramped.
+- Strengthened the header as a branded marquee/sign without making it compete with the Featured Projects wall.
+- Made the Featured Projects section more dramatic with a stronger red gallery-light gradient.
+- Increased separation between header, featured content, browse/gallery panels, and footer.
+- Made the footer quieter so it reads as a utility rail rather than a major content section.
+- Standardized gallery/search return language to "Back to Exhibit."
+- Hid the duplicate body-level return button on Pathway Info because the header already provides Back to Exhibit.
+- Removed root-level screenshot runner files from this package because they are not required for the kiosk to run.

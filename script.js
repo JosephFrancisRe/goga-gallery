@@ -12,9 +12,9 @@ const I18N = {
     htmlLang: "en",
     pathwayInfo: "Pathway Info",
     backToExhibit: "Back to Exhibit",
-    backToSpotlight: "← Spotlight Wall",
+    backToSpotlight: "← Back to Exhibit",
     year: "Year",
-    showcaseSubtitle: "Student websites, games, and creative coding projects",
+    showcaseSubtitle: "",
     featuredProjects: "Featured Projects",
     museumSpotlight: "Museum Spotlight Wall",
     browseExhibit: "Browse the Exhibit",
@@ -88,9 +88,9 @@ const I18N = {
     htmlLang: "es",
     pathwayInfo: "Info del Programa",
     backToExhibit: "Volver a la Exhibición",
-    backToSpotlight: "← Muro Destacado",
+    backToSpotlight: "← Volver a la Exhibición",
     year: "Año",
-    showcaseSubtitle: "Sitios web, juegos y proyectos creativos de programación",
+    showcaseSubtitle: "",
     featuredProjects: "Proyectos Destacados",
     museumSpotlight: "Muro Destacado del Museo",
     browseExhibit: "Explorar la Exhibición",
@@ -392,7 +392,7 @@ function setupStaticText() {
 
   els.yearLabel.textContent = t("year");
   els.statsButton.textContent = state.mode === "stats" ? t("backToExhibit") : t("pathwayInfo");
-  els.showcaseSubtitle.textContent = t("showcaseSubtitle");
+  if (els.showcaseSubtitle) els.showcaseSubtitle.textContent = t("showcaseSubtitle");
   els.spotlightKicker.textContent = t("featuredProjects");
   els.spotlightHeading.textContent = t("museumSpotlight");
   els.browseKicker.textContent = t("browseExhibit");
