@@ -152,3 +152,12 @@ Changes:
 - Added an English / Español language selector in the footer.
 - Changed the footer credit to "Designed by Mr. Re."
 - Preserved the dark/light toggle.
+
+
+## Exhibit Wall update 3
+
+- Fixed hidden viewer-note overlays that were blocking CodeHS launch buttons and appearing on top of embedded student websites.
+- Tightened the Pathway Info layout so it fits better in the 1440 x 778 kiosk viewport.
+- Shortened Spanish labels and footer text to reduce wrapping and overlap.
+- Widened wall-label metadata columns so Spanish labels do not collide with their values.
+- Preserved dark/light mode and English/Español switching.
