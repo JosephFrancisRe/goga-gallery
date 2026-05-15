@@ -787,9 +787,9 @@ function renderPathwayInfo() {
   els.statsContent.innerHTML = `
     <section class="did-you-know">
       <div class="did-you-copy">
-        <p>${escapeHtml(t("didYouKnow"))}</p>
+        <p class="did-you-kicker">${escapeHtml(t("didYouKnow"))}</p>
         <h3>${didYouKnowHeadlineMarkup()}</h3>
-        <span>${escapeHtml(t("aiBody"))}</span>
+        <p class="ai-body-text">${escapeHtml(t("aiBody"))}</p>
       </div>
       <div class="ai-orb" aria-hidden="true">
         <strong>AI</strong>
@@ -820,7 +820,11 @@ function renderPathwayInfo() {
                 const width = Math.max(8, Math.round((hours / maxHours) * 100));
                 return `
                   <div class="stats-bar-row">
-                    <div><strong>${escapeHtml(course.displayName || course.className)}</strong><span>${escapeHtml(localizeGrade(course.gradeLabel || ""))} · ${formatNumber(course.studentCount || 0)} ${escapeHtml(t("students"))}</span></div>
+                    <div class="course-label">
+                      <strong>${escapeHtml(course.displayName || course.className)}</strong>
+                      <span class="course-grade">${escapeHtml(localizeGrade(course.gradeLabel || ""))}</span>
+                      <span class="course-students">${formatNumber(course.studentCount || 0)} ${escapeHtml(t("students"))}</span>
+                    </div>
                     <div class="stats-bar-track"><b style="--bar-width:${width}%"></b></div>
                     <em>${formatNumber(Math.round(hours))} ${escapeHtml(t("hrs"))}</em>
                   </div>

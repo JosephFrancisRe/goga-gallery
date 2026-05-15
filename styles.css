@@ -3018,3 +3018,173 @@ body:not(.dark-mode).mode-stats .ai-headline-emphasis {
     gap: 20px;
   }
 }
+
+
+
+/* Update 12: Pathway Info cleanup after KPI/AI updates */
+
+/* Restore the red exhibit-outline around the Pathway Info content area. */
+body.mode-stats .stats-panel {
+  border-color: rgba(var(--red-rgb), 0.42) !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(var(--red-rgb), 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+/* Make Did You Know readable again while keeping it visually special. */
+body.mode-stats .did-you-know {
+  padding: 10px 34px 10px;
+  align-items: center;
+  background:
+    radial-gradient(circle at 91% 50%, rgba(255, 110, 118, 0.24), transparent 12rem),
+    radial-gradient(circle at 5% 16%, rgba(var(--red-rgb), 0.18), transparent 18rem),
+    linear-gradient(100deg, rgba(86, 33, 38, 0.94) 0%, rgba(42, 36, 39, 0.97) 55%, rgba(25, 25, 27, 0.99) 100%);
+  border-color: rgba(var(--red-rgb), 0.48);
+  border-left: 10px solid var(--red);
+}
+
+body.mode-stats .did-you-know::before {
+  opacity: 0.42;
+  transform: none;
+}
+
+body.mode-stats .did-you-copy {
+  align-self: center;
+  transform: none;
+}
+
+body.mode-stats .did-you-kicker {
+  color: #ff6f76;
+  font-size: 0.76rem;
+  line-height: 1;
+  margin: 0 0 6px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+body.mode-stats .did-you-know h3 {
+  margin: 0;
+  max-width: 1080px;
+  font-size: clamp(1.42rem, 2.16vw, 2.06rem);
+  line-height: 1.02;
+}
+
+body.mode-stats .did-you-know h3 .ai-headline-emphasis {
+  display: inline !important;
+  margin: 0 !important;
+  max-width: none !important;
+  color: #ffffff;
+  font-size: inherit !important;
+  font-weight: inherit;
+  line-height: inherit !important;
+  text-shadow:
+    0 0 14px rgba(255, 255, 255, 0.18),
+    0 0 26px rgba(var(--red-rgb), 0.34),
+    0 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+body.mode-stats .did-you-know .ai-body-text {
+  display: block;
+  margin: 7px 0 0;
+  max-width: 1080px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.9rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+body.mode-stats .did-you-know span:not(.ai-headline-emphasis) {
+  display: inline;
+}
+
+body.mode-stats .ai-orb {
+  align-self: center;
+  justify-self: center;
+  transform: none;
+}
+
+/* Course bars: fuller rows, larger text, thicker bars, and hours visually attached to the bar. */
+body.mode-stats .stats-bars {
+  justify-content: center;
+  gap: clamp(16px, 2.3vh, 24px);
+}
+
+body.mode-stats .stats-bar-row {
+  position: relative;
+  min-height: 51px;
+  grid-template-columns: minmax(205px, 0.76fr) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+body.mode-stats .stats-bar-row .course-label {
+  min-width: 0;
+}
+
+body.mode-stats .stats-bar-row strong {
+  display: block;
+  font-size: 1.02rem;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+body.mode-stats .stats-bar-row .course-grade,
+body.mode-stats .stats-bar-row .course-students {
+  display: block;
+  color: var(--text-muted);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+body.mode-stats .stats-bar-row .course-grade {
+  margin-top: 3px;
+  font-size: 0.73rem;
+}
+
+body.mode-stats .stats-bar-row .course-students {
+  font-size: 0.70rem;
+}
+
+body.mode-stats .stats-bar-track {
+  grid-column: 2;
+  height: 22px;
+  margin-right: 62px;
+  border-radius: 999px;
+}
+
+body.mode-stats .stats-bar-row em {
+  grid-column: 2;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  text-align: right;
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 950;
+}
+
+/* Light mode compatibility. */
+body:not(.dark-mode).mode-stats .stats-panel {
+  border-color: rgba(var(--red-rgb), 0.34) !important;
+}
+
+body:not(.dark-mode).mode-stats .did-you-know {
+  background:
+    radial-gradient(circle at 91% 50%, rgba(var(--red-rgb), 0.18), transparent 12rem),
+    linear-gradient(100deg, rgba(var(--red-rgb), 0.15) 0%, #ffffff 58%, #f4f4f4 100%);
+}
+
+body:not(.dark-mode).mode-stats .did-you-know .ai-body-text {
+  color: rgba(0, 0, 0, 0.72);
+}
+
+body:not(.dark-mode).mode-stats .did-you-know h3 .ai-headline-emphasis {
+  color: #151515;
+  text-shadow:
+    0 0 14px rgba(var(--red-rgb), 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.7);
+}
