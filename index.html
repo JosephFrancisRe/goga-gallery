@@ -7,7 +7,7 @@
   <meta name="description" content="GOGA Software Engineering Showcase: Gallery of Gateway Art at Gateway Tech." />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="dark-mode">
+<body class="dark-mode mode-home">
   <main class="app">
     <header class="header">
       <div class="brand" aria-label="Gateway Tech GOGA">
@@ -24,70 +24,86 @@
 
       <div class="showcase-title" aria-label="Kiosk title">
         <p>Software Engineering Showcase</p>
-        <span>Student websites, games, and creative coding projects</span>
+        <span id="showcaseSubtitle">Student websites, games, and creative coding projects</span>
       </div>
 
       <div class="header-controls">
-        <button type="button" class="header-action" id="statsButton" aria-pressed="false">Pathway Stats</button>
+        <button type="button" class="header-action" id="statsButton" aria-pressed="false">Pathway Info</button>
 
         <div class="year-control">
-          <label for="yearSelect">Year</label>
+          <label for="yearSelect" id="yearLabel">Year</label>
           <select id="yearSelect"></select>
         </div>
       </div>
     </header>
 
-    <section class="featured-showcase" id="featuredShowcase" aria-label="Featured showcase carousel">
-      <div class="featured-showcase-top">
-        <h2>Featured Projects</h2>
+    <section class="spotlight-wall" id="spotlightWall" aria-label="Museum spotlight wall">
+      <div class="spotlight-title-block">
+        <p id="spotlightKicker">Featured Projects</p>
+        <h2 id="spotlightHeading">Museum Spotlight Wall</h2>
       </div>
 
-      <div class="featured-carousel-frame">
-        <button type="button" class="carousel-arrow carousel-arrow-left" id="featuredPrev" aria-label="Previous featured project">‹</button>
-        <div class="featured-track" id="featuredTrack" aria-live="polite"></div>
-        <button type="button" class="carousel-arrow carousel-arrow-right" id="featuredNext" aria-label="Next featured project">›</button>
+      <div class="spotlight-stage">
+        <button type="button" class="spotlight-arrow spotlight-arrow-left" id="featuredPrev" aria-label="Previous featured project">‹</button>
+
+        <article class="spotlight-artwork" id="spotlightArtwork" aria-live="polite"></article>
+
+        <aside class="wall-label" id="wallLabel" aria-live="polite"></aside>
+
+        <button type="button" class="spotlight-arrow spotlight-arrow-right" id="featuredNext" aria-label="Next featured project">›</button>
       </div>
+
+      <div class="spotlight-rail" id="featuredTrack" aria-label="Featured project thumbnails"></div>
+      <span id="featuredPosition" class="visually-hidden">1 of 1</span>
     </section>
 
-    <section class="search-panel" id="searchPanel" aria-label="Find a student project">
-      <div class="search-title">
-        <p>Find Your Student</p>
-        <h2>Type a name, select a student, or browse the gallery.</h2>
+    <section class="browse-panel" id="browsePanel" aria-label="Browse the exhibit">
+      <div class="browse-heading">
+        <p id="browseKicker">Browse the Exhibit</p>
+        <h2 id="browseTitle">Choose a gallery room or find a student.</h2>
       </div>
 
-      <div class="search-controls">
+      <div class="room-buttons" aria-label="Gallery rooms">
+        <button type="button" class="room-button filter active" data-filter="all">
+          <span id="allProjectsLabel">All Projects</span>
+          <small id="allProjectsSmall">The full exhibition</small>
+        </button>
+        <button type="button" class="room-button filter" data-filter="website">
+          <span id="websiteGalleryLabel">Website Gallery</span>
+          <small id="websiteGallerySmall">Student sites</small>
+        </button>
+        <button type="button" class="room-button filter" data-filter="game">
+          <span id="gameArcadeLabel">Game Arcade</span>
+          <small id="gameArcadeSmall">CodeHS games</small>
+        </button>
+        <button type="button" class="room-button filter" data-filter="other">
+          <span id="creativeLabLabel">Creative Coding Lab</span>
+          <small id="creativeLabSmall">Graphics and experiments</small>
+        </button>
+      </div>
+
+      <div class="find-controls">
         <label class="field search-field">
-          <span>Search</span>
+          <span id="searchLabel">Search</span>
           <input id="searchInput" type="search" placeholder="Type student name or project title..." autocomplete="off" />
         </label>
 
-        <label class="field">
-          <span>Student</span>
+        <label class="field student-field">
+          <span id="studentLabel">Student</span>
           <select id="studentSelect">
             <option value="">All students</option>
           </select>
         </label>
 
-        <div class="filter-field">
-          <span>Filter</span>
-          <div class="filter-row">
-            <div class="filters" aria-label="Project filters">
-              <button type="button" class="filter active" data-filter="all">All</button>
-              <button type="button" class="filter" data-filter="game">Games</button>
-              <button type="button" class="filter" data-filter="website">Websites</button>
-              <button type="button" class="filter" data-filter="other">Other</button>
-            </div>
-
-            <button type="button" class="reset" id="resetButton">Reset</button>
-          </div>
-        </div>
+        <button type="button" class="reset" id="resetButton">Reset</button>
       </div>
     </section>
 
-    <section class="gallery-panel" aria-label="Project gallery">
+    <section class="gallery-panel" id="galleryPanel" aria-label="Project gallery" hidden>
       <div class="gallery-heading">
+        <button type="button" class="back-home" id="backHomeButton">← Spotlight Wall</button>
         <div>
-          <p id="modeLabel">All Projects</p>
+          <p id="modeLabel">Gallery Room</p>
           <h2 id="galleryTitle">Student Project Gallery</h2>
         </div>
         <strong id="projectCount">0 projects</strong>
@@ -102,17 +118,37 @@
       </div>
     </section>
 
+    <section class="stats-panel" id="statsPanel" aria-label="Pathway information" hidden>
+      <div class="stats-heading">
+        <button type="button" class="back-home" id="statsBackButton">← Spotlight Wall</button>
+        <div>
+          <p id="statsKicker">Pathway Impact</p>
+          <h2 id="statsTitle">Inside the Software Engineering Pathway</h2>
+        </div>
+        <strong id="statsYearPill">CodeHS data</strong>
+      </div>
+
+      <div class="stats-content" id="statsContent" aria-live="polite"></div>
+    </section>
+
     <footer class="footer">
-      <span class="footer-left">Mr. Re · Gateway Tech Software Engineering</span>
+      <span class="footer-left" id="footerLeft">Designed by Mr. Re</span>
 
-      <button type="button" class="theme-toggle footer-theme-toggle" id="themeToggle" aria-label="Switch to light mode" aria-pressed="true">
-        <span class="theme-toggle-track" aria-hidden="true">
-          <span class="theme-toggle-thumb"></span>
-        </span>
-        <span class="theme-toggle-label" id="themeToggleLabel">Dark</span>
-      </button>
+      <div class="footer-controls">
+        <button type="button" class="theme-toggle footer-theme-toggle" id="themeToggle" aria-label="Switch to light mode" aria-pressed="true">
+          <span class="theme-toggle-track" aria-hidden="true">
+            <span class="theme-toggle-thumb"></span>
+          </span>
+          <span class="theme-toggle-label" id="themeToggleLabel">Dark</span>
+        </button>
 
-      <span class="footer-right">Click any project to view it here. Use X to return to the gallery.</span>
+        <div class="language-toggle" id="languageToggle" aria-label="Language selector">
+          <button type="button" data-lang="en" class="active">EN</button>
+          <button type="button" data-lang="es">ES</button>
+        </div>
+      </div>
+
+      <span class="footer-right" id="footerRight">Tap a project to view it. CodeHS projects open in a new tab.</span>
     </footer>
   </main>
 
@@ -129,8 +165,8 @@
       <div class="viewer-body">
         <iframe id="projectFrame" title="Student project viewer" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
         <div class="viewer-note" id="viewerNote" hidden>
-          <h3>This project could not be displayed inside the gallery.</h3>
-          <p>Some external sites block embedded viewing. CodeHS share or embed links are usually the best fit for this page.</p>
+          <h3 id="viewerNoteTitle">This project could not be displayed inside the gallery.</h3>
+          <p id="viewerNoteBody">Some external sites block embedded viewing. CodeHS projects open best in their own browser tab.</p>
         </div>
       </div>
     </div>
