@@ -3294,3 +3294,170 @@ body.mode-stats .pie-label-senior {
     height: 29px;
   }
 }
+
+
+
+/* Update 14: final pathway/showcase polish */
+
+/* Dark mode should also show the red marquee outline around the header/title region. */
+body.dark-mode .header {
+  border-color: rgba(var(--red-rgb), 0.48) !important;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(var(--red-rgb), 0.10),
+    inset 0 -1px 0 rgba(var(--red-rgb), 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Let the brand return-home click target extend only slightly beyond the visible logo block. */
+.brand-home {
+  padding-right: 10px;
+}
+
+/* Browse and footer should read as bounded exhibit surfaces. */
+.browse-panel,
+.footer {
+  border-color: rgba(var(--red-rgb), 0.38) !important;
+}
+
+body.dark-mode .browse-panel,
+body.dark-mode .footer {
+  border-color: rgba(var(--red-rgb), 0.36) !important;
+}
+
+/* Optical centering for browse controls: slightly reduce the top-heavy look. */
+.browse-panel {
+  padding-top: 8px;
+  padding-bottom: 10px;
+  align-items: center;
+}
+
+/* Footer credit update lives in text, but this keeps the footer quiet and readable. */
+.footer {
+  min-height: 0;
+}
+
+/* Make EN/ES legible on active red and inactive gray backgrounds. */
+.lang-button,
+.language-toggle button {
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.7),
+    1px -1px 0 rgba(0, 0, 0, 0.7),
+    -1px 1px 0 rgba(0, 0, 0, 0.7),
+    1px 1px 0 rgba(0, 0, 0, 0.7),
+    0 1px 4px rgba(0, 0, 0, 0.85);
+}
+
+/* Did You Know: purple course title, natural body sentence, and less aggressive light-mode shadow. */
+body.mode-stats .did-you-know h3 .ai-headline-emphasis {
+  color: #9f7aea !important;
+  text-shadow:
+    0 0 12px rgba(159, 122, 234, 0.38),
+    0 0 24px rgba(159, 122, 234, 0.22),
+    0 2px 0 rgba(0, 0, 0, 0.28);
+}
+
+body.mode-stats .did-you-know .ai-body-text {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: 0.91rem;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+body:not(.dark-mode).mode-stats .did-you-know {
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+body:not(.dark-mode).mode-stats .did-you-know h3 .ai-headline-emphasis {
+  color: #7c3aed !important;
+  text-shadow:
+    0 0 10px rgba(159, 122, 234, 0.24),
+    0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Course names use the same purple accent as the AI course title. */
+body.mode-stats .stats-bar-row strong {
+  color: #9f7aea;
+}
+
+/* Progress bars: 20% shorter vertically, and shifted left slightly. */
+body.mode-stats .stats-bar-row {
+  grid-template-columns: minmax(245px, 0.96fr) minmax(205px, 1.04fr);
+  gap: 10px;
+}
+
+body.mode-stats .stats-bar-track {
+  height: 26px;
+  margin-right: 62px;
+}
+
+/* Fine-tune pie labels. */
+body.mode-stats .pie-label-senior {
+  left: 28%;
+  top: 49%;
+}
+
+/* Pathway Sequence: code labels in top-left; course names directly above descriptions. */
+.pathway-sequence div {
+  position: relative;
+  padding-top: 33px !important;
+}
+
+.pathway-sequence strong {
+  position: absolute;
+  top: 10px;
+  left: 13px;
+  display: block;
+  max-width: calc(100% - 26px);
+  color: var(--red);
+  font-size: 0.68rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pathway-sequence span {
+  position: static !important;
+  display: block;
+  max-width: none;
+  color: #ffffff;
+  font-size: 1.05rem;
+  line-height: 1.02;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+body:not(.dark-mode) .pathway-sequence span {
+  color: #111111;
+}
+
+.pathway-sequence p {
+  margin-top: 5px;
+}
+
+/* Keep long AI sequence code readable but not dominant. */
+.pathway-sequence .ai-step strong {
+  font-size: 0.58rem;
+  letter-spacing: 0.10em;
+}
+
+@media (max-width: 1180px) {
+  body.mode-stats .stats-bar-row {
+    grid-template-columns: minmax(230px, 0.95fr) minmax(175px, 1fr);
+  }
+
+  body.mode-stats .stats-bar-track {
+    height: 24px;
+  }
+}
