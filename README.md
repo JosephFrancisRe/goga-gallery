@@ -135,3 +135,20 @@ Major changes:
 - The gallery grid is hidden on the landing page and appears only after choosing a gallery room, searching, or selecting a student.
 - CodeHS projects use a launch screen instead of trying to iframe the regular CodeHS assignment share page.
 - Wall-label language is deliberately neutral so student-level work is not oversold.
+
+## Museum Exhibit Wall next build
+
+This build refines the image-first museum redesign for the 1440 x 778 kiosk viewport.
+
+Changes:
+- Fixed the compressed/clipped header by reducing the header height and scaling the logo/title block.
+- Added a compact gallery/search toolbar behavior for gallery and search modes.
+- Student/search results with 12 or fewer matches now show together instead of being unnecessarily paginated.
+- Rebranded "Pathway Stats" to "Pathway Info."
+- Removed redundant 2026 labels from the Pathway Info page; the year selector remains the single year control.
+- Added a "Did You Know?" panel about the upcoming junior-year Foundations of Artificial Intelligence course.
+- Added a "Behind the Numbers" note explaining class-time context without using adjusted-hours metrics.
+- Reworked Pathway Info to emphasize total coding hours, students represented, average hours per student, course bars, grade share, and a visual pathway sequence.
+- Added an English / Español language selector in the footer.
+- Changed the footer credit to "Designed by Mr. Re."
+- Preserved the dark/light toggle.

@@ -5,7 +5,162 @@ const DEFAULT_FILTER = (window.GOGA_CONFIG && window.GOGA_CONFIG.defaultFilter) 
 const INACTIVITY_LIMIT_MS = (window.GOGA_CONFIG && window.GOGA_CONFIG.inactivityLimitMs) || 300000;
 const FEATURED_INTERVAL_MS = 9500;
 const CARD_GRID_GAP = 12;
-const ESTIMATED_CARD_HEIGHT = 210;
+const ESTIMATED_CARD_HEIGHT = 178;
+
+const I18N = {
+  en: {
+    htmlLang: "en",
+    pathwayInfo: "Pathway Info",
+    backToExhibit: "Back to Exhibit",
+    backToSpotlight: "← Spotlight Wall",
+    year: "Year",
+    showcaseSubtitle: "Student websites, games, and creative coding projects",
+    featuredProjects: "Featured Projects",
+    museumSpotlight: "Museum Spotlight Wall",
+    browseExhibit: "Browse the Exhibit",
+    browseTitle: "Choose a gallery room or find a student.",
+    allProjects: "All Projects",
+    allProjectsSmall: "The full exhibition",
+    websiteGallery: "Website Gallery",
+    websiteGallerySmall: "Student sites",
+    gameArcade: "Game Arcade",
+    gameArcadeSmall: "CodeHS games",
+    creativeLab: "Creative Coding Lab",
+    creativeLabSmall: "Graphics and experiments",
+    search: "Search",
+    searchPlaceholder: "Type student name or project title...",
+    student: "Student",
+    allStudents: "All students",
+    reset: "Reset",
+    designedBy: "Designed by Mr. Re",
+    footerHint: "Tap a project to view it. CodeHS projects open in a new tab.",
+    dark: "Dark",
+    light: "Light",
+    wallLabel: "Wall Label",
+    gallery: "Gallery",
+    course: "Course",
+    openProject: "Open Project →",
+    galleryRoom: "Gallery Room",
+    searchResults: "Search Results",
+    matchingProjects: "Matching Student Projects",
+    selectedStudent: "Selected Student",
+    studentProjects: "{student}'s Projects",
+    noProjectsTitle: "No projects match this view.",
+    noProjectsBody: "Try another gallery room, clear the search, or select a different student.",
+    project: "project",
+    projects: "projects",
+    pageOf: "Page {page} of {total}",
+    previous: "Previous",
+    next: "Next",
+    viewerTitle: "This project could not be displayed inside the gallery.",
+    viewerBody: "Some external sites block embedded viewing. CodeHS projects open best in their own browser tab.",
+    codeHsKicker: "CodeHS Project",
+    codeHsNote: "This CodeHS project opens best in its own browser tab. Click below to launch the student project directly in CodeHS.",
+    openCodeHs: "Open CodeHS Project →",
+    statsKicker: "Pathway Impact",
+    statsTitle: "Inside the Software Engineering Pathway",
+    codeHsData: "CodeHS data",
+    didYouKnow: "Did You Know?",
+    aiHeadline: "Gateway Tech is adding Foundations of Artificial Intelligence.",
+    aiBody: "This new junior-year Software Engineering course uses Python to explore data science, statistics, linear algebra, machine learning, and AI.",
+    totalHours: "Total Coding Hours",
+    studentsRepresented: "Students Represented",
+    avgPerStudent: "Avg Hours / Student",
+    timeByCourse: "Time Spent Coding by Course",
+    hoursByGrade: "Coding Hours by Grade",
+    pathwaySequence: "Pathway Sequence",
+    behindNumbers: "Behind the Numbers",
+    behindText: "SE10 meets once per day, while SE11 and SE12 meet twice per day. Class sizes also differ, so total coding hours reflect both student work and available class time.",
+    sophomore: "Sophomore",
+    junior: "Junior",
+    senior: "Senior",
+    hrs: "hrs",
+    students: "students",
+    websiteNote: "A student-created website submitted during the Web Design portion of the Software Engineering pathway. It is presented here as a snapshot of student work from this course.",
+    gameNote: "A student-created {assignment}game submitted during the Game Development portion of the Software Engineering pathway. CodeHS games open best in a separate tab.",
+    otherNote: "A student-created creative coding project submitted during the Software Engineering pathway. This project uses graphics, animation, or drawing commands.",
+    se10Text: "AP Computer Science Principles introduces foundational computing and programming.",
+    se11Text: "Web Design and Game Development emphasizes websites, games, and interactive projects.",
+    aiText: "Foundations of Artificial Intelligence adds Python-based data science, statistics, linear algebra, machine learning, and AI.",
+    se12Text: "AP Computer Science A focuses on Java and object-oriented programming."
+  },
+  es: {
+    htmlLang: "es",
+    pathwayInfo: "Información del Programa",
+    backToExhibit: "Volver a la Exhibición",
+    backToSpotlight: "← Muro Destacado",
+    year: "Año",
+    showcaseSubtitle: "Sitios web, juegos y proyectos creativos de programación",
+    featuredProjects: "Proyectos Destacados",
+    museumSpotlight: "Muro Destacado del Museo",
+    browseExhibit: "Explorar la Exhibición",
+    browseTitle: "Elige una sala o busca a un estudiante.",
+    allProjects: "Todos",
+    allProjectsSmall: "Toda la exhibición",
+    websiteGallery: "Galería Web",
+    websiteGallerySmall: "Sitios de estudiantes",
+    gameArcade: "Sala de Juegos",
+    gameArcadeSmall: "Juegos de CodeHS",
+    creativeLab: "Laboratorio Creativo",
+    creativeLabSmall: "Gráficos y experimentos",
+    search: "Buscar",
+    searchPlaceholder: "Escribe un nombre o título del proyecto...",
+    student: "Estudiante",
+    allStudents: "Todos los estudiantes",
+    reset: "Reiniciar",
+    designedBy: "Diseñado por Mr. Re",
+    footerHint: "Toca un proyecto para verlo. Los proyectos de CodeHS se abren en una pestaña nueva.",
+    dark: "Oscuro",
+    light: "Claro",
+    wallLabel: "Etiqueta",
+    gallery: "Galería",
+    course: "Curso",
+    openProject: "Abrir Proyecto →",
+    galleryRoom: "Sala de Galería",
+    searchResults: "Resultados",
+    matchingProjects: "Proyectos Encontrados",
+    selectedStudent: "Estudiante Seleccionado",
+    studentProjects: "Proyectos de {student}",
+    noProjectsTitle: "No hay proyectos que coincidan.",
+    noProjectsBody: "Prueba otra sala, borra la búsqueda o selecciona otro estudiante.",
+    project: "proyecto",
+    projects: "proyectos",
+    pageOf: "Página {page} de {total}",
+    previous: "Anterior",
+    next: "Siguiente",
+    viewerTitle: "Este proyecto no se pudo mostrar dentro de la galería.",
+    viewerBody: "Algunos sitios externos bloquean la vista integrada. Los proyectos de CodeHS funcionan mejor en una pestaña nueva.",
+    codeHsKicker: "Proyecto de CodeHS",
+    codeHsNote: "Este proyecto de CodeHS funciona mejor en su propia pestaña. Haz clic abajo para abrirlo directamente en CodeHS.",
+    openCodeHs: "Abrir Proyecto de CodeHS →",
+    statsKicker: "Impacto del Programa",
+    statsTitle: "Dentro del Programa de Software Engineering",
+    codeHsData: "Datos de CodeHS",
+    didYouKnow: "¿Sabías que?",
+    aiHeadline: "Gateway Tech está agregando Foundations of Artificial Intelligence.",
+    aiBody: "Este nuevo curso de junior usa Python para explorar ciencia de datos, estadística, álgebra lineal, machine learning e inteligencia artificial.",
+    totalHours: "Horas Totales de Programación",
+    studentsRepresented: "Estudiantes Representados",
+    avgPerStudent: "Promedio por Estudiante",
+    timeByCourse: "Tiempo Programando por Curso",
+    hoursByGrade: "Horas por Grado",
+    pathwaySequence: "Secuencia del Programa",
+    behindNumbers: "Detrás de los Números",
+    behindText: "SE10 se reúne una vez al día, mientras que SE11 y SE12 se reúnen dos veces al día. Los tamaños de clase también varían, así que las horas totales reflejan tanto el trabajo estudiantil como el tiempo disponible en clase.",
+    sophomore: "10.º grado",
+    junior: "11.º grado",
+    senior: "12.º grado",
+    hrs: "hrs",
+    students: "estudiantes",
+    websiteNote: "Un sitio web creado por un estudiante durante la parte de Web Design del programa de Software Engineering. Se presenta como una muestra del trabajo estudiantil de este curso.",
+    gameNote: "Un juego de {assignment}creado por un estudiante durante la parte de Game Development del programa. Los juegos de CodeHS funcionan mejor en una pestaña nueva.",
+    otherNote: "Un proyecto creativo de programación creado por un estudiante durante el programa de Software Engineering. Este proyecto usa gráficos, animación o comandos de dibujo.",
+    se10Text: "AP Computer Science Principles introduce computación y programación fundamentales.",
+    se11Text: "Web Design and Game Development enfatiza sitios web, juegos y proyectos interactivos.",
+    aiText: "Foundations of Artificial Intelligence agrega ciencia de datos, estadística, álgebra lineal, machine learning e inteligencia artificial con Python.",
+    se12Text: "AP Computer Science A se enfoca en Java y programación orientada a objetos."
+  }
+};
 
 const state = {
   year: DEFAULT_YEAR,
@@ -17,17 +172,21 @@ const state = {
   featuredIndex: 0,
   featuredTimer: null,
   inactivityTimer: null,
-  activeProject: null
+  activeProject: null,
+  lang: localStorage.getItem("gogaLang") || "en"
 };
 
 const els = {
   yearSelect: document.getElementById("yearSelect"),
+  yearLabel: document.getElementById("yearLabel"),
   searchInput: document.getElementById("searchInput"),
   studentSelect: document.getElementById("studentSelect"),
   filterButtons: document.querySelectorAll(".filter"),
   resetButton: document.getElementById("resetButton"),
   statsButton: document.getElementById("statsButton"),
   spotlightWall: document.getElementById("spotlightWall"),
+  spotlightKicker: document.getElementById("spotlightKicker"),
+  spotlightHeading: document.getElementById("spotlightHeading"),
   spotlightArtwork: document.getElementById("spotlightArtwork"),
   wallLabel: document.getElementById("wallLabel"),
   featuredTrack: document.getElementById("featuredTrack"),
@@ -35,10 +194,26 @@ const els = {
   featuredNext: document.getElementById("featuredNext"),
   featuredPosition: document.getElementById("featuredPosition"),
   browsePanel: document.getElementById("browsePanel"),
+  browseKicker: document.getElementById("browseKicker"),
+  browseTitle: document.getElementById("browseTitle"),
+  searchLabel: document.getElementById("searchLabel"),
+  studentLabel: document.getElementById("studentLabel"),
+  allProjectsLabel: document.getElementById("allProjectsLabel"),
+  allProjectsSmall: document.getElementById("allProjectsSmall"),
+  websiteGalleryLabel: document.getElementById("websiteGalleryLabel"),
+  websiteGallerySmall: document.getElementById("websiteGallerySmall"),
+  gameArcadeLabel: document.getElementById("gameArcadeLabel"),
+  gameArcadeSmall: document.getElementById("gameArcadeSmall"),
+  creativeLabLabel: document.getElementById("creativeLabLabel"),
+  creativeLabSmall: document.getElementById("creativeLabSmall"),
+  footerLeft: document.getElementById("footerLeft"),
+  footerRight: document.getElementById("footerRight"),
   galleryPanel: document.getElementById("galleryPanel"),
   statsPanel: document.getElementById("statsPanel"),
   statsContent: document.getElementById("statsContent"),
   statsYearPill: document.getElementById("statsYearPill"),
+  statsKicker: document.getElementById("statsKicker"),
+  statsTitle: document.getElementById("statsTitle"),
   projectGrid: document.getElementById("projectGrid"),
   projectCount: document.getElementById("projectCount"),
   pageLabel: document.getElementById("pageLabel"),
@@ -54,9 +229,21 @@ const els = {
   viewerStudent: document.getElementById("viewerStudent"),
   projectFrame: document.getElementById("projectFrame"),
   viewerNote: document.getElementById("viewerNote"),
+  viewerNoteTitle: document.getElementById("viewerNoteTitle"),
+  viewerNoteBody: document.getElementById("viewerNoteBody"),
   themeToggle: document.getElementById("themeToggle"),
-  themeToggleLabel: document.getElementById("themeToggleLabel")
+  themeToggleLabel: document.getElementById("themeToggleLabel"),
+  languageToggle: document.getElementById("languageToggle"),
+  showcaseSubtitle: document.getElementById("showcaseSubtitle")
 };
+
+function t(key, values = {}) {
+  let text = (I18N[state.lang] && I18N[state.lang][key]) || I18N.en[key] || key;
+  Object.entries(values).forEach(([name, value]) => {
+    text = text.replaceAll(`{${name}}`, value);
+  });
+  return text;
+}
 
 function projects() {
   return Array.isArray(window.GOGA_PROJECTS) ? window.GOGA_PROJECTS : [];
@@ -103,11 +290,10 @@ function projectKind(project) {
 
 function galleryName(projectOrFilter) {
   const value = typeof projectOrFilter === "string" ? projectOrFilter : projectKind(projectOrFilter);
-
-  if (value === "website") return "Website Gallery";
-  if (value === "game") return "Game Arcade";
-  if (value === "other") return "Creative Coding Lab";
-  return "All Projects";
+  if (value === "website") return t("websiteGallery");
+  if (value === "game") return t("gameArcade");
+  if (value === "other") return t("creativeLab");
+  return t("allProjects");
 }
 
 function courseLabel(project) {
@@ -116,18 +302,12 @@ function courseLabel(project) {
 
 function neutralProjectNote(project) {
   const kind = projectKind(project);
-  const assignment = String(project.codehsAssignment || project.projectTitle || "").trim();
+  const assignment = String(project.codehsAssignment || "").trim();
+  const assignmentText = assignment ? `${assignment} ` : "";
 
-  if (kind === "website") {
-    return "A student-created website submitted during the Web Design portion of the Software Engineering pathway. It is presented here as a snapshot of student work from this course.";
-  }
-
-  if (kind === "game") {
-    const gameName = assignment ? `${assignment} ` : "";
-    return `A student-created ${gameName}game submitted during the Game Development portion of the Software Engineering pathway. CodeHS games open best in a separate tab.`;
-  }
-
-  return "A student-created creative coding project submitted during the Software Engineering pathway. This project uses graphics, animation, or drawing commands.";
+  if (kind === "website") return t("websiteNote");
+  if (kind === "game") return t("gameNote", { assignment: assignmentText });
+  return t("otherNote");
 }
 
 function featuredProjects() {
@@ -137,10 +317,7 @@ function featuredProjects() {
     .sort((a, b) => getTitle(a).localeCompare(getTitle(b)));
 
   if (list.length > 0) return list;
-
-  return projects()
-    .filter(project => getYear(project) === state.year)
-    .slice(0, 12);
+  return projects().filter(project => getYear(project) === state.year).slice(0, 12);
 }
 
 function matches(project) {
@@ -192,7 +369,7 @@ function setupStudents() {
     .filter(project => getYear(project) === state.year)
     .map(project => project.studentDisplayName));
 
-  els.studentSelect.innerHTML = `<option value="">All students</option>` + students
+  els.studentSelect.innerHTML = `<option value="">${escapeHtml(t("allStudents"))}</option>` + students
     .map(student => `<option value="${escapeHtml(student)}">${escapeHtml(student)}</option>`)
     .join("");
 
@@ -210,6 +387,45 @@ function setupFilterButtons() {
   });
 }
 
+function setupStaticText() {
+  document.documentElement.lang = t("htmlLang");
+
+  els.yearLabel.textContent = t("year");
+  els.statsButton.textContent = state.mode === "stats" ? t("backToExhibit") : t("pathwayInfo");
+  els.showcaseSubtitle.textContent = t("showcaseSubtitle");
+  els.spotlightKicker.textContent = t("featuredProjects");
+  els.spotlightHeading.textContent = t("museumSpotlight");
+  els.browseKicker.textContent = t("browseExhibit");
+  els.browseTitle.textContent = t("browseTitle");
+  els.searchLabel.textContent = t("search");
+  els.searchInput.placeholder = t("searchPlaceholder");
+  els.studentLabel.textContent = t("student");
+  els.resetButton.textContent = t("reset");
+  els.allProjectsLabel.textContent = t("allProjects");
+  els.allProjectsSmall.textContent = t("allProjectsSmall");
+  els.websiteGalleryLabel.textContent = t("websiteGallery");
+  els.websiteGallerySmall.textContent = t("websiteGallerySmall");
+  els.gameArcadeLabel.textContent = t("gameArcade");
+  els.gameArcadeSmall.textContent = t("gameArcadeSmall");
+  els.creativeLabLabel.textContent = t("creativeLab");
+  els.creativeLabSmall.textContent = t("creativeLabSmall");
+  els.backHomeButton.textContent = t("backToSpotlight");
+  els.statsBackButton.textContent = t("backToSpotlight");
+  els.prevButton.textContent = t("previous");
+  els.nextButton.textContent = t("next");
+  els.footerLeft.textContent = t("designedBy");
+  els.footerRight.textContent = t("footerHint");
+  els.viewerNoteTitle.textContent = t("viewerTitle");
+  els.viewerNoteBody.textContent = t("viewerBody");
+  els.statsKicker.textContent = t("statsKicker");
+  els.statsTitle.textContent = t("statsTitle");
+  els.statsYearPill.textContent = t("codeHsData");
+
+  els.languageToggle.querySelectorAll("[data-lang]").forEach(button => {
+    button.classList.toggle("active", button.dataset.lang === state.lang);
+  });
+}
+
 function render() {
   document.body.classList.toggle("mode-home", state.mode === "home");
   document.body.classList.toggle("mode-gallery", state.mode === "gallery");
@@ -218,6 +434,7 @@ function render() {
   setupYears();
   setupStudents();
   setupFilterButtons();
+  setupStaticText();
   setupStatsButton();
 
   els.spotlightWall.hidden = state.mode !== "home";
@@ -234,14 +451,14 @@ function render() {
   }
 
   if (state.mode === "gallery") renderGallery();
-  if (state.mode === "stats") renderPathwayStats();
+  if (state.mode === "stats") renderPathwayInfo();
 }
 
 function setupStatsButton() {
   const active = state.mode === "stats";
   els.statsButton.classList.toggle("active", active);
   els.statsButton.setAttribute("aria-pressed", String(active));
-  els.statsButton.textContent = active ? "Back to Exhibit" : "Pathway Stats";
+  els.statsButton.textContent = active ? t("backToExhibit") : t("pathwayInfo");
 }
 
 function renderSpotlight() {
@@ -267,7 +484,7 @@ function renderSpotlight() {
         <h3>${escapeHtml(getTitle(project))}</h3>
         <span>${escapeHtml(project.studentDisplayName || "Student")} · ${escapeHtml(project.projectType || "Project")}</span>
       </div>
-      <button type="button" class="spotlight-open">Open Project →</button>
+      <button type="button" class="spotlight-open">${escapeHtml(t("openProject"))}</button>
     </div>
   `;
 
@@ -282,13 +499,12 @@ function renderSpotlight() {
   };
 
   els.wallLabel.innerHTML = `
-    <p class="wall-label-kicker">Wall Label</p>
+    <p class="wall-label-kicker">${escapeHtml(t("wallLabel"))}</p>
     <h3>${escapeHtml(getTitle(project))}</h3>
     <dl>
-      <div><dt>Student</dt><dd>${escapeHtml(project.studentDisplayName || "Student")}</dd></div>
-      <div><dt>Gallery</dt><dd>${escapeHtml(galleryName(projectKind(project)))}</dd></div>
-      <div><dt>Course</dt><dd>${escapeHtml(courseLabel(project))}</dd></div>
-      <div><dt>Year</dt><dd>${escapeHtml(getYear(project))}</dd></div>
+      <div><dt>${escapeHtml(t("student"))}</dt><dd>${escapeHtml(project.studentDisplayName || "Student")}</dd></div>
+      <div><dt>${escapeHtml(t("gallery"))}</dt><dd>${escapeHtml(galleryName(projectKind(project)))}</dd></div>
+      <div><dt>${escapeHtml(t("course"))}</dt><dd>${escapeHtml(courseLabel(project))}</dd></div>
     </dl>
     <p class="wall-label-note">${escapeHtml(neutralProjectNote(project))}</p>
   `;
@@ -338,49 +554,55 @@ function stopFeaturedTimer() {
   state.featuredTimer = null;
 }
 
-function getProjectsPerPage() {
+function getGalleryLayout(listLength) {
   const width = window.innerWidth;
-  const gridHeight = els.projectGrid ? els.projectGrid.getBoundingClientRect().height : 0;
+  const focused = (state.search || state.student) && listLength <= 12;
 
   let columns = 2;
-  if (width >= 1380) columns = 5;
-  else if (width >= 1050) columns = 4;
-  else if (width >= 760) columns = 3;
 
-  if (width < 760) {
-    els.projectGrid.style.removeProperty("--gallery-columns");
-    els.projectGrid.style.removeProperty("--gallery-rows");
-    return 8;
+  if (focused) {
+    if (listLength <= 2) columns = listLength || 1;
+    else if (listLength <= 9) columns = 3;
+    else columns = 4;
+  } else if (width >= 1380) {
+    columns = 5;
+  } else if (width >= 1050) {
+    columns = 4;
+  } else if (width >= 760) {
+    columns = 3;
+  } else {
+    columns = 1;
   }
 
-  const rowsFromHeight = gridHeight > 0
-    ? Math.floor((gridHeight + CARD_GRID_GAP) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP))
-    : 2;
+  const rows = focused
+    ? Math.max(1, Math.ceil(listLength / columns))
+    : Math.max(1, Math.min(2, Math.floor(((els.projectGrid && els.projectGrid.getBoundingClientRect().height) || 400) / (ESTIMATED_CARD_HEIGHT + CARD_GRID_GAP)) || 2));
 
-  const rows = Math.max(1, Math.min(2, rowsFromHeight || 2));
-  els.projectGrid.style.setProperty("--gallery-columns", String(columns));
-  els.projectGrid.style.setProperty("--gallery-rows", String(rows));
+  const perPage = focused ? Math.max(1, listLength) : columns * rows;
 
-  return columns * rows;
+  return { columns, rows, perPage };
 }
 
 function renderGallery() {
   const list = filteredProjects();
-  const perPage = getProjectsPerPage();
-  const totalPages = Math.max(1, Math.ceil(list.length / perPage));
+  const layout = getGalleryLayout(list.length);
+  const totalPages = Math.max(1, Math.ceil(list.length / layout.perPage));
 
   state.page = Math.max(1, Math.min(state.page, totalPages));
 
-  const start = (state.page - 1) * perPage;
-  const visible = list.slice(start, start + perPage);
+  els.projectGrid.style.setProperty("--gallery-columns", String(layout.columns));
+  els.projectGrid.style.setProperty("--gallery-rows", String(layout.rows));
+
+  const start = (state.page - 1) * layout.perPage;
+  const visible = list.slice(start, start + layout.perPage);
 
   updateGalleryHeading(list.length, totalPages);
 
   if (!visible.length) {
     els.projectGrid.innerHTML = `
       <div class="empty gallery-empty">
-        <h3>No projects match this view.</h3>
-        <p>Try another gallery room, clear the search, or select a different student.</p>
+        <h3>${escapeHtml(t("noProjectsTitle"))}</h3>
+        <p>${escapeHtml(t("noProjectsBody"))}</p>
       </div>
     `;
     return;
@@ -402,22 +624,25 @@ function renderGallery() {
 
 function updateGalleryHeading(count, totalPages) {
   let title = galleryName(state.filter);
-  let label = "Gallery Room";
+  let label = t("galleryRoom");
 
   if (state.student) {
-    title = `${state.student}'s Projects`;
-    label = "Selected Student";
+    title = t("studentProjects", { student: state.student });
+    label = t("selectedStudent");
   } else if (state.search) {
-    title = "Matching Student Projects";
-    label = "Search Results";
+    title = t("matchingProjects");
+    label = t("searchResults");
   }
 
   els.modeLabel.textContent = label;
   els.galleryTitle.textContent = title;
-  els.projectCount.textContent = `${count} ${count === 1 ? "project" : "projects"}`;
-  els.pageLabel.textContent = `Page ${state.page} of ${totalPages}`;
+  els.projectCount.textContent = `${count} ${count === 1 ? t("project") : t("projects")}`;
+  els.pageLabel.textContent = t("pageOf", { page: state.page, total: totalPages });
   els.prevButton.disabled = state.page <= 1;
   els.nextButton.disabled = state.page >= totalPages;
+
+  const focused = (state.search || state.student) && count <= 12;
+  document.body.classList.toggle("focused-results", Boolean(focused));
 }
 
 function projectCard(project) {
@@ -475,7 +700,6 @@ function previewMarkup(project, size) {
   if (assignment.includes("snake") || assignment.includes("finishing touches")) {
     return `
       <div class="preview preview-game preview-snake preview-${size}" style="${cssVars}">
-        <div class="snake-grid"></div>
         <b class="snake s1"></b><b class="snake s2"></b><b class="snake s3"></b><b class="food"></b>
       </div>
     `;
@@ -526,7 +750,7 @@ function hashProject(project) {
   return Math.abs(hash);
 }
 
-function renderPathwayStats() {
+function renderPathwayInfo() {
   const stats = window.GOGA_PATHWAY_STATS;
 
   if (!stats || !stats.totals) {
@@ -538,41 +762,38 @@ function renderPathwayStats() {
   const totals = stats.totals;
   const maxHours = Math.max(...courses.map(course => Number(course.totalHours) || 0), 1);
   const totalHours = totals.totalHoursRounded || Math.round((totals.totalSeconds || 0) / 3600);
-  const se11Hours = totals.se11HoursRounded || Math.round((totals.se11Seconds || 0) / 3600);
+  const uniqueStudents = totals.uniqueStudents || 0;
+  const avgHours = uniqueStudents ? (totalHours / uniqueStudents).toFixed(1) : "0.0";
   const gradeStats = buildGradeStats(courses);
   const pieStyle = buildPieStyle(gradeStats);
 
-  els.statsYearPill.textContent = `${escapeHtml(stats.year || state.year)} stats`;
-
   els.statsContent.innerHTML = `
-    <div class="stats-hero">
+    <section class="did-you-know">
       <div>
-        <p>Gateway Tech Software Engineering</p>
-        <h3>${formatNumber(totalHours)} hours of time spent coding</h3>
-        <span>Based on CodeHS activity across AP CSP, Web Design, Game Development, and AP CSA.</span>
+        <p>${escapeHtml(t("didYouKnow"))}</p>
+        <h3>${escapeHtml(t("aiHeadline"))}</h3>
+        <span>${escapeHtml(t("aiBody"))}</span>
       </div>
-      <strong>${escapeHtml(stats.year || state.year)}</strong>
-    </div>
+    </section>
 
-    <div class="stats-kpi-grid">
-      <article><strong>${formatNumber(totalHours)}</strong><span>Total Hours</span></article>
-      <article><strong>${formatNumber(totals.uniqueStudents || 0)}</strong><span>Students</span></article>
-      <article><strong>${formatNumber(se11Hours)}</strong><span>SE11 Hours</span></article>
-      <article><strong>${formatNumber(totals.courseSections || courses.length)}</strong><span>Course Sections</span></article>
-    </div>
+    <section class="stats-kpi-grid" aria-label="Pathway summary numbers">
+      <article><strong>${formatNumber(totalHours)}</strong><span>${escapeHtml(t("totalHours"))}</span></article>
+      <article><strong>${formatNumber(uniqueStudents)}</strong><span>${escapeHtml(t("studentsRepresented"))}</span></article>
+      <article><strong>${escapeHtml(avgHours)}</strong><span>${escapeHtml(t("avgPerStudent"))}</span></article>
+    </section>
 
-    <div class="stats-detail-grid">
+    <section class="stats-detail-grid">
       <article class="stats-card stats-bars-card">
-        <div class="stats-section-heading"><p>Course Breakdown</p><h3>Time Spent Coding</h3></div>
+        <div class="stats-section-heading"><p>${escapeHtml(t("timeByCourse"))}</p></div>
         <div class="stats-bars">
           ${courses.map(course => {
             const hours = Number(course.totalHours) || 0;
             const width = Math.max(8, Math.round((hours / maxHours) * 100));
             return `
               <div class="stats-bar-row">
-                <div><strong>${escapeHtml(course.displayName || course.className)}</strong><span>${escapeHtml(course.gradeLabel || "")} · ${formatNumber(course.studentCount || 0)} students</span></div>
+                <div><strong>${escapeHtml(course.displayName || course.className)}</strong><span>${escapeHtml(localizeGrade(course.gradeLabel || ""))} · ${formatNumber(course.studentCount || 0)} ${escapeHtml(t("students"))}</span></div>
                 <div class="stats-bar-track"><b style="--bar-width:${width}%"></b></div>
-                <em>${formatNumber(Math.round(hours))} hrs</em>
+                <em>${formatNumber(Math.round(hours))} ${escapeHtml(t("hrs"))}</em>
               </div>
             `;
           }).join("")}
@@ -580,27 +801,40 @@ function renderPathwayStats() {
       </article>
 
       <article class="stats-card stats-grade-card">
-        <div class="stats-section-heading"><p>Grade-Level Share</p><h3>Hours by Grade</h3></div>
+        <div class="stats-section-heading"><p>${escapeHtml(t("hoursByGrade"))}</p></div>
         <div class="stats-pie-wrap">
           <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
           <div class="stats-pie-legend">
             ${gradeStats.map(item => `
-              <div><span style="--key-color:${escapeHtml(item.color)}"></span><strong>${escapeHtml(item.label)}</strong><em>${formatNumber(Math.round(item.hours))} hrs</em></div>
+              <div><span style="--key-color:${escapeHtml(item.color)}"></span><strong>${escapeHtml(localizeGrade(item.label))}</strong><em>${formatNumber(Math.round(item.hours))} ${escapeHtml(t("hrs"))}</em></div>
             `).join("")}
           </div>
         </div>
       </article>
 
-      <article class="stats-card stats-note-card">
-        <div class="stats-section-heading"><p>Pathway Context</p><h3>Three-Year Sequence</h3></div>
-        <ul>
-          <li><strong>SE10:</strong> AP Computer Science Principles introduces foundational computing and programming for sophomores.</li>
-          <li><strong>SE11:</strong> Web Design and Game Development combines first-semester websites with second-semester games.</li>
-          <li><strong>SE12:</strong> AP Computer Science A focuses on Java and object-oriented programming.</li>
-        </ul>
+      <article class="stats-card pathway-card">
+        <div class="stats-section-heading"><p>${escapeHtml(t("pathwaySequence"))}</p></div>
+        <div class="pathway-sequence">
+          <div><strong>SE10</strong><span>AP CSP</span><p>${escapeHtml(t("se10Text"))}</p></div>
+          <div><strong>SE11</strong><span>Web + Game</span><p>${escapeHtml(t("se11Text"))}</p></div>
+          <div class="ai-step"><strong>SE11+</strong><span>Foundations of AI</span><p>${escapeHtml(t("aiText"))}</p></div>
+          <div><strong>SE12</strong><span>AP CSA</span><p>${escapeHtml(t("se12Text"))}</p></div>
+        </div>
       </article>
-    </div>
+
+      <article class="stats-card behind-card">
+        <div class="stats-section-heading"><p>${escapeHtml(t("behindNumbers"))}</p></div>
+        <p>${escapeHtml(t("behindText"))}</p>
+      </article>
+    </section>
   `;
+}
+
+function localizeGrade(label) {
+  if (label === "Sophomore") return t("sophomore");
+  if (label === "Junior") return t("junior");
+  if (label === "Senior") return t("senior");
+  return label;
 }
 
 function buildGradeStats(courses) {
@@ -642,7 +876,7 @@ function buildPieStyle(items) {
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat("en-US").format(Number(value) || 0);
+  return new Intl.NumberFormat(state.lang === "es" ? "es-US" : "en-US").format(Number(value) || 0);
 }
 
 function enterGallery(filter = state.filter) {
@@ -727,7 +961,7 @@ function codeHsLaunchScreen(project, link) {
 
   return `
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="${escapeHtml(t("htmlLang"))}">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -745,11 +979,11 @@ function codeHsLaunchScreen(project, link) {
     </head>
     <body>
       <main class="launch-card">
-        <p class="kicker">CodeHS Project</p>
+        <p class="kicker">${escapeHtml(t("codeHsKicker"))}</p>
         <h1>${title}</h1>
         <p class="student">${student} · ${type}</p>
-        <p class="note">This CodeHS project opens best in its own browser tab. Click below to launch the student project directly in CodeHS.</p>
-        <a href="${safeLink}" target="_blank" rel="noopener noreferrer">Open CodeHS Project →</a>
+        <p class="note">${escapeHtml(t("codeHsNote"))}</p>
+        <a href="${safeLink}" target="_blank" rel="noopener noreferrer">${escapeHtml(t("openCodeHs"))}</a>
       </main>
     </body>
     </html>
@@ -783,13 +1017,20 @@ function applyTheme(theme) {
   }
 
   if (els.themeToggleLabel) {
-    els.themeToggleLabel.textContent = isDark ? "Dark" : "Light";
+    els.themeToggleLabel.textContent = isDark ? t("dark") : t("light");
   }
 
   localStorage.setItem("gogaTheme", isDark ? "dark" : "light");
 }
 
 function setupTheme() {
+  applyTheme(localStorage.getItem("gogaTheme") || "dark");
+}
+
+function setLanguage(lang) {
+  state.lang = lang === "es" ? "es" : "en";
+  localStorage.setItem("gogaLang", state.lang);
+  render();
   applyTheme(localStorage.getItem("gogaTheme") || "dark");
 }
 
@@ -800,6 +1041,10 @@ function bindEvents() {
       applyTheme(isDark ? "light" : "dark");
     });
   }
+
+  els.languageToggle.querySelectorAll("[data-lang]").forEach(button => {
+    button.addEventListener("click", () => setLanguage(button.dataset.lang));
+  });
 
   els.statsButton.addEventListener("click", () => {
     if (state.mode === "stats") {
