@@ -3188,3 +3188,109 @@ body:not(.dark-mode).mode-stats .did-you-know h3 .ai-headline-emphasis {
     0 0 14px rgba(var(--red-rgb), 0.16),
     0 1px 0 rgba(255, 255, 255, 0.7);
 }
+
+
+
+/* Update 13: pathway/chart/card label polish */
+
+/* Limit brand-home click target to the actual visible brand block, not the empty header grid space. */
+.brand-home {
+  width: max-content;
+  max-width: max-content;
+  justify-self: start;
+  display: inline-flex;
+}
+
+.brand {
+  width: max-content;
+}
+
+/* Course bars: give the course-title column more room and shorten the bars. */
+body.mode-stats .stats-bar-row {
+  grid-template-columns: minmax(270px, 1.04fr) minmax(190px, 0.96fr);
+  gap: 14px;
+}
+
+body.mode-stats .stats-bar-row strong {
+  white-space: nowrap;
+  font-size: 1rem;
+}
+
+body.mode-stats .stats-bar-track {
+  height: 33px;
+  margin-right: 62px;
+}
+
+body.mode-stats .stats-bar-track b {
+  border-radius: 999px;
+}
+
+/* Make pie labels larger and more legible against all slice colors. */
+body.mode-stats .pie-percent-label {
+  font-size: 1.03rem;
+  font-weight: 1000;
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.92),
+    1px -1px 0 rgba(0, 0, 0, 0.92),
+    -1px 1px 0 rgba(0, 0, 0, 0.92),
+    1px 1px 0 rgba(0, 0, 0, 0.92),
+    0 2px 5px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(0, 0, 0, 0.65);
+}
+
+/* Move the senior/gray-slice label closer to the center of that slice. */
+body.mode-stats .pie-label-senior {
+  left: 33%;
+  top: 54%;
+}
+
+/* Put pathway sequence course-code labels in the top-left corner of each subsection. */
+.pathway-sequence div {
+  position: relative;
+  padding-top: 28px !important;
+}
+
+.pathway-sequence span {
+  position: absolute;
+  top: 9px;
+  left: 12px;
+  display: block;
+  max-width: calc(100% - 24px);
+  color: var(--red);
+  font-size: 0.68rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pathway-sequence strong {
+  display: block;
+  line-height: 1.02;
+}
+
+.pathway-sequence p {
+  margin-top: 5px;
+}
+
+/* Slightly tighten the long Spanish Project Info label in spotlight metadata if needed. */
+.wall-label p {
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  body.mode-stats .stats-bar-row {
+    grid-template-columns: minmax(235px, 1fr) minmax(165px, 0.9fr);
+  }
+
+  body.mode-stats .stats-bar-row strong {
+    font-size: 0.94rem;
+  }
+
+  body.mode-stats .stats-bar-track {
+    height: 29px;
+  }
+}
