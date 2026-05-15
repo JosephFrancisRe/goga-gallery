@@ -17,7 +17,7 @@ const I18N = {
     showcaseSubtitle: "Gallery of Gateway Art",
     featuredProjects: "Featured Projects",
     museumSpotlight: "Museum Spotlight Wall",
-    browseExhibit: "Browse the Exhibit",
+    browseExhibit: "Browse the Showcase",
     browseTitle: "Choose a gallery room or find a student.",
     allProjects: "All Projects",
     allProjectsSmall: "The full exhibition",
@@ -34,6 +34,7 @@ const I18N = {
     reset: "Reset",
     designedBy: "Designed and developed by Mr. Re",
     footerHint: "Tap a project to view it. CodeHS projects open in a new tab.",
+    footerBuiltWith: "The Software Engineering Showcase was built with 31,644 lines of code.",
     dark: "Dark",
     light: "Light",
     wallLabel: "Project Info",
@@ -95,7 +96,7 @@ const I18N = {
     showcaseSubtitle: "Gallery of Gateway Art",
     featuredProjects: "Proyectos Destacados",
     museumSpotlight: "Muro Destacado del Museo",
-    browseExhibit: "Explorar la Exhibición",
+    browseExhibit: "Explorar el Showcase",
     browseTitle: "Elige una sala o busca a un estudiante.",
     allProjects: "Todos",
     allProjectsSmall: "Toda la exhibición",
@@ -112,6 +113,7 @@ const I18N = {
     reset: "Reiniciar",
     designedBy: "Diseñado y desarrollado por Mr. Re",
     footerHint: "Toca un proyecto para verlo. CodeHS abre en una pestaña nueva.",
+    footerBuiltWith: "The Software Engineering Showcase was built with 31,644 lines of code.",
     dark: "Oscuro",
     light: "Claro",
     wallLabel: "Información del Proyecto",
@@ -165,6 +167,8 @@ const I18N = {
     se12Text: "AP Computer Science A se enfoca en Java y programación orientada a objetos."
   }
 };
+
+let footerHoverResetTimer = null;
 
 const state = {
   year: DEFAULT_YEAR,
@@ -362,6 +366,19 @@ function filteredProjects() {
 
       return getTitle(a).localeCompare(getTitle(b));
     });
+}
+
+
+function showFooterBuiltWith() {
+  window.clearTimeout(footerHoverResetTimer);
+  if (els.footerLeft) els.footerLeft.textContent = t("footerBuiltWith");
+}
+
+function scheduleFooterCreditRestore() {
+  window.clearTimeout(footerHoverResetTimer);
+  footerHoverResetTimer = window.setTimeout(() => {
+    if (els.footerLeft) els.footerLeft.textContent = t("designedBy");
+  }, 2000);
 }
 
 function setupYears() {
@@ -1074,6 +1091,14 @@ function setLanguage(lang) {
 }
 
 function bindEvents() {
+  if (els.footerLeft) {
+    els.footerLeft.addEventListener("mouseenter", showFooterBuiltWith);
+    els.footerLeft.addEventListener("mouseleave", scheduleFooterCreditRestore);
+    els.footerLeft.addEventListener("focus", showFooterBuiltWith);
+    els.footerLeft.addEventListener("blur", scheduleFooterCreditRestore);
+  }
+
+
   if (els.themeToggle) {
     els.themeToggle.addEventListener("click", () => {
       const isDark = document.body.classList.contains("dark-mode");

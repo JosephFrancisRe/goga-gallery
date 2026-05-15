@@ -3512,3 +3512,198 @@ body:not(.dark-mode) .gallery-panel {
   white-space: nowrap;
   text-shadow: none;
 }
+
+
+
+/* Update 16: navigation/label polish and final requested UI adjustments */
+
+/* Make the brand-home hit area end near the visible right edge of GOGA rather than extending through empty grid space.
+   The small right padding gives roughly the requested extra 10px while avoiding clicks far into whitespace. */
+.brand-home {
+  display: inline-flex !important;
+  width: fit-content !important;
+  max-width: fit-content !important;
+  justify-self: start !important;
+  padding-right: 10px !important;
+}
+
+/* Footer hover line is longer; keep it contained and readable. */
+.footer-left {
+  min-width: 0;
+  max-width: 430px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Course titles should be white, not purple; grade/student metadata remains muted gray. */
+body.mode-stats .stats-bar-row strong {
+  color: #ffffff !important;
+}
+
+body:not(.dark-mode).mode-stats .stats-bar-row strong {
+  color: #111111 !important;
+}
+
+body.mode-stats .stats-bar-row .course-grade,
+body.mode-stats .stats-bar-row .course-students {
+  color: var(--text-muted) !important;
+}
+
+/* Move the 35% senior label up a bit more. */
+body.mode-stats .pie-label-senior {
+  left: 28% !important;
+  top: 45% !important;
+}
+
+/* Make the year dropdown text visible on red. */
+.year-control select {
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.72),
+    1px -1px 0 rgba(0, 0, 0, 0.72),
+    -1px 1px 0 rgba(0, 0, 0, 0.72),
+    1px 1px 0 rgba(0, 0, 0, 0.72),
+    0 1px 4px rgba(0, 0, 0, 0.85);
+}
+
+/* Match YEAR/dropdown spacing more closely to Search label/input spacing. */
+.year-control {
+  gap: 5px !important;
+  align-self: end;
+}
+
+/* Give the Pathway Info button its own small label, matching YEAR. */
+.header-controls .header-action {
+  position: relative;
+  margin-top: 18px;
+}
+
+.header-controls .header-action::before {
+  content: "INFO";
+  position: absolute;
+  left: 50%;
+  top: -18px;
+  transform: translateX(-50%);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* The top-right control cluster should align as a deliberate pair. */
+.header-controls {
+  align-items: end !important;
+}
+
+/* Red border around Gallery Room / gallery content panel. */
+.gallery-panel {
+  border-color: rgba(var(--red-rgb), 0.38) !important;
+}
+
+body.dark-mode .gallery-panel {
+  border-color: rgba(var(--red-rgb), 0.36) !important;
+}
+
+/* Red outlines around browse/footer surfaces, retained from prior intent. */
+.browse-panel,
+.footer {
+  border-color: rgba(var(--red-rgb), 0.38) !important;
+}
+
+body.dark-mode .browse-panel,
+body.dark-mode .footer {
+  border-color: rgba(var(--red-rgb), 0.36) !important;
+}
+
+/* Keep EN/ES readable against the active red segment. */
+.language-toggle button {
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.68),
+    1px -1px 0 rgba(0, 0, 0, 0.68),
+    -1px 1px 0 rgba(0, 0, 0, 0.68),
+    1px 1px 0 rgba(0, 0, 0, 0.68),
+    0 1px 4px rgba(0, 0, 0, 0.82);
+}
+
+/* Dark mode gets the same red marquee-outline feeling as light mode. */
+body.dark-mode .header {
+  border-color: rgba(var(--red-rgb), 0.48) !important;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(var(--red-rgb), 0.10),
+    inset 0 -1px 0 rgba(var(--red-rgb), 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Keep Foundations of Artificial Intelligence purple only in Did You Know. */
+body.mode-stats .did-you-know h3 .ai-headline-emphasis {
+  color: #9f7aea !important;
+}
+
+/* The Did You Know body sentence should read normally, not like a spaced-out label. */
+body.mode-stats .did-you-know .ai-body-text {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Reduce the heavy light-mode Did You Know shadow. */
+body:not(.dark-mode).mode-stats .did-you-know {
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Pathway Sequence: SE10/SE11/SE12 labels at top-left; course names above descriptions. */
+.pathway-sequence div {
+  position: relative;
+  padding-top: 33px !important;
+}
+
+.pathway-sequence strong {
+  position: absolute;
+  top: 10px;
+  left: 13px;
+  display: block;
+  max-width: calc(100% - 26px);
+  color: var(--red);
+  font-size: 0.68rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pathway-sequence span {
+  position: static !important;
+  display: block;
+  max-width: none;
+  color: #ffffff;
+  font-size: 1.05rem;
+  line-height: 1.02;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+body:not(.dark-mode) .pathway-sequence span {
+  color: #111111;
+}
+
+.pathway-sequence .ai-step strong {
+  font-size: 0.58rem;
+  letter-spacing: 0.10em;
+}
+
+/* Browse vertical centering correction retained. */
+.browse-panel {
+  padding-top: 8px !important;
+  padding-bottom: 10px !important;
+}
