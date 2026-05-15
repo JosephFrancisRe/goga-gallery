@@ -178,6 +178,8 @@ const state = {
   mode: "home",
   page: 1,
   featuredIndex: 0,
+  featuredWindowStart: 0,
+  featuredRailMotion: "",
   featuredTimer: null,
   inactivityTimer: null,
   activeProject: null,
@@ -493,6 +495,37 @@ function setupStatsButton() {
   els.statsButton.textContent = active ? t("backToExhibit") : t("pathwayInfo");
 }
 
+
+function featuredVisibleCount(listLength) {
+  return Math.min(7, listLength);
+}
+
+function isFeaturedVisible(index, start, count, length) {
+  if (!length) return false;
+  for (let offset = 0; offset < count; offset += 1) {
+    if (circularIndex(start + offset, length) === index) return true;
+  }
+  return false;
+}
+
+function ensureFeaturedWindow(listLength, visibleCount) {
+  if (!listLength) {
+    state.featuredWindowStart = 0;
+    return;
+  }
+
+  state.featuredWindowStart = circularIndex(state.featuredWindowStart || 0, listLength);
+
+  if (visibleCount >= listLength) {
+    state.featuredWindowStart = 0;
+    return;
+  }
+
+  if (!isFeaturedVisible(state.featuredIndex, state.featuredWindowStart, visibleCount, listLength)) {
+    state.featuredWindowStart = state.featuredIndex;
+  }
+}
+
 function renderSpotlight() {
   const list = featuredProjects();
 
@@ -541,12 +574,16 @@ function renderSpotlight() {
     <p class="wall-label-note">${escapeHtml(neutralProjectNote(project))}</p>
   `;
 
-  const maxThumbs = Math.min(7, list.length);
+  const maxThumbs = featuredVisibleCount(list.length);
+  ensureFeaturedWindow(list.length, maxThumbs);
+
   const thumbs = Array.from({ length: maxThumbs }, (_, offset) => {
-    const originalIndex = circularIndex(state.featuredIndex + offset, list.length);
+    const originalIndex = circularIndex(state.featuredWindowStart + offset, list.length);
     return { project: list[originalIndex], originalIndex };
   });
 
+  const motionClass = state.featuredRailMotion ? ` ${state.featuredRailMotion}` : "";
+  els.featuredTrack.classList.remove("rail-slide-left", "rail-slide-right");
   els.featuredTrack.innerHTML = thumbs.map(item => {
     const active = item.originalIndex === state.featuredIndex ? " active" : "";
     return `
@@ -556,6 +593,16 @@ function renderSpotlight() {
       </button>
     `;
   }).join("");
+
+  if (state.featuredRailMotion) {
+    window.requestAnimationFrame(() => {
+      els.featuredTrack.classList.add(state.featuredRailMotion);
+      window.setTimeout(() => {
+        els.featuredTrack.classList.remove("rail-slide-left", "rail-slide-right");
+      }, 320);
+      state.featuredRailMotion = "";
+    });
+  }
 
   els.featuredTrack.querySelectorAll("[data-featured-index]").forEach(button => {
     button.addEventListener("click", () => {
@@ -570,7 +617,20 @@ function renderSpotlight() {
 function advanceFeatured(step) {
   const list = featuredProjects();
   if (!list.length) return;
-  state.featuredIndex = circularIndex(state.featuredIndex + step, list.length);
+
+  const visibleCount = featuredVisibleCount(list.length);
+  ensureFeaturedWindow(list.length, visibleCount);
+
+  const nextIndex = circularIndex(state.featuredIndex + step, list.length);
+
+  if (visibleCount < list.length && !isFeaturedVisible(nextIndex, state.featuredWindowStart, visibleCount, list.length)) {
+    state.featuredWindowStart = circularIndex(state.featuredWindowStart + (step > 0 ? 1 : -1), list.length);
+    state.featuredRailMotion = step > 0 ? "rail-slide-left" : "rail-slide-right";
+  } else {
+    state.featuredRailMotion = "";
+  }
+
+  state.featuredIndex = nextIndex;
   renderSpotlight();
 }
 
@@ -963,6 +1023,8 @@ function returnHome() {
   state.mode = "home";
   state.page = 1;
   state.featuredIndex = 0;
+  state.featuredWindowStart = 0;
+  state.featuredRailMotion = "";
 
   els.searchInput.value = "";
   els.studentSelect.value = "";

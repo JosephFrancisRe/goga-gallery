@@ -3735,3 +3735,86 @@ body.stage-scaled .app {
 .footer-left:focus {
   color: var(--text-muted) !important;
 }
+
+
+
+/* Update 18: featured rail carousel, scaled viewer, and footer hover cleanup */
+
+/* Featured Projects rail now has a true selected item inside a sliding visible window. */
+.spotlight-rail {
+  overflow: hidden;
+}
+
+.rail-card {
+  will-change: transform;
+}
+
+.rail-card.active {
+  border-color: var(--red);
+  box-shadow:
+    0 0 0 1px rgba(var(--red-rgb), 0.46),
+    0 0 18px rgba(var(--red-rgb), 0.20);
+}
+
+.rail-slide-left {
+  animation: railSlideLeft 300ms ease;
+}
+
+.rail-slide-right {
+  animation: railSlideRight 300ms ease;
+}
+
+@keyframes railSlideLeft {
+  from {
+    transform: translateX(3.5%);
+    opacity: 0.92;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes railSlideRight {
+  from {
+    transform: translateX(-3.5%);
+    opacity: 0.92;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Keep the full overlay fixed to the viewport, but scale the modal window with the same stage ratio. */
+body.stage-scaled .viewer {
+  padding: 0;
+}
+
+body.stage-scaled .viewer-window {
+  width: 1280px;
+  height: 700px;
+  max-width: none;
+  max-height: none;
+  transform: scale(var(--stage-scale, 1));
+  transform-origin: center center;
+}
+
+/* Remove the older CSS-only hover tooltip so it cannot overlap the JS-driven footer text. */
+.footer-left::before,
+.footer-left::after,
+.footer-left:hover::before,
+.footer-left:hover::after,
+.footer-left:focus-visible::before,
+.footer-left:focus-visible::after {
+  content: none !important;
+  display: none !important;
+}
+
+.footer-left,
+.footer-left:hover,
+.footer-left:focus,
+.footer-left:focus-visible {
+  color: var(--text-muted) !important;
+  text-shadow: none !important;
+}
