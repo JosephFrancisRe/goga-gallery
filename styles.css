@@ -3579,7 +3579,7 @@ body.mode-stats .pie-label-senior {
 }
 
 .header-controls .header-action::before {
-  content: "INFO";
+  content: "PATHWAY INFO";
   position: absolute;
   left: 50%;
   top: -18px;
@@ -3706,4 +3706,32 @@ body:not(.dark-mode) .pathway-sequence span {
 .browse-panel {
   padding-top: 8px !important;
   padding-bottom: 10px !important;
+}
+
+
+
+/* Update 17: large-viewport proportional stage scaling */
+/* The kiosk design target is 1440px x 778px. Above that size, keep the same proportions
+   by scaling the whole app as a single stage instead of letting the layout stretch. */
+body.stage-scaled {
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+body.stage-scaled .app {
+  width: 1440px;
+  height: 778px;
+  max-width: none;
+  transform: scale(var(--stage-scale, 1));
+  transform-origin: center center;
+  padding: 6px;
+}
+
+/* Keep the footer hover from changing the credit color; only the text content changes. */
+.footer-left,
+.footer-left:hover,
+.footer-left:focus {
+  color: var(--text-muted) !important;
 }

@@ -10,7 +10,7 @@ const ESTIMATED_CARD_HEIGHT = 178;
 const I18N = {
   en: {
     htmlLang: "en",
-    pathwayInfo: "Pathway Info",
+    pathwayInfo: "Click Me",
     backToExhibit: "Back to Showcase",
     backToSpotlight: "← Back to Showcase",
     year: "Year",
@@ -34,7 +34,7 @@ const I18N = {
     reset: "Reset",
     designedBy: "Designed and developed by Mr. Re",
     footerHint: "Tap a project to view it. CodeHS projects open in a new tab.",
-    footerBuiltWith: "The Software Engineering Showcase was built with 31,644 lines of code.",
+    footerBuiltWith: "This showcase was built with 31,644 lines of code.",
     dark: "Dark",
     light: "Light",
     wallLabel: "Project Info",
@@ -89,7 +89,7 @@ const I18N = {
   },
   es: {
     htmlLang: "es",
-    pathwayInfo: "Info del Programa",
+    pathwayInfo: "Haz Clic",
     backToExhibit: "Volver al Showcase",
     backToSpotlight: "← Volver al Showcase",
     year: "Año",
@@ -113,7 +113,7 @@ const I18N = {
     reset: "Reiniciar",
     designedBy: "Diseñado y desarrollado por Mr. Re",
     footerHint: "Toca un proyecto para verlo. CodeHS abre en una pestaña nueva.",
-    footerBuiltWith: "The Software Engineering Showcase was built with 31,644 lines of code.",
+    footerBuiltWith: "This showcase was built with 31,644 lines of code.",
     dark: "Oscuro",
     light: "Claro",
     wallLabel: "Información del Proyecto",
@@ -368,6 +368,16 @@ function filteredProjects() {
     });
 }
 
+
+
+function updateStageScale() {
+  const designWidth = 1440;
+  const designHeight = 778;
+  const shouldScaleStage = window.innerWidth > designWidth && window.innerHeight > designHeight;
+  const scale = shouldScaleStage ? Math.min(window.innerWidth / designWidth, window.innerHeight / designHeight) : 1;
+  document.documentElement.style.setProperty("--stage-scale", scale.toFixed(5));
+  document.body.classList.toggle("stage-scaled", shouldScaleStage);
+}
 
 function showFooterBuiltWith() {
   window.clearTimeout(footerHoverResetTimer);
@@ -1190,6 +1200,7 @@ function bindEvents() {
 
   let resizeTimer = null;
   window.addEventListener("resize", () => {
+    updateStageScale();
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       if (state.mode === "gallery") renderGallery();
@@ -1216,6 +1227,7 @@ function escapeHtml(value) {
 }
 
 setupTheme();
+updateStageScale();
 bindEvents();
 render();
 resetInactivityTimer();
