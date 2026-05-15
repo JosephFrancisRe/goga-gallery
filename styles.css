@@ -2517,3 +2517,337 @@ body:not(.dark-mode) .did-you-know {
     gap: 14px;
   }
 }
+
+/* Update 9: Pathway Info spatial redesign and navigation polish */
+.brand {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+.brand:hover .brand-logo-wrap,
+.brand:focus-visible .brand-logo-wrap {
+  filter: drop-shadow(0 0 14px rgba(var(--red-rgb), 0.38));
+}
+
+.brand:focus-visible {
+  outline: 2px solid rgba(var(--red-rgb), 0.8);
+  outline-offset: 5px;
+  border-radius: 14px;
+}
+
+.showcase-title {
+  gap: 7px;
+}
+
+.showcase-title span,
+.showcase-title span#showcaseSubtitle {
+  margin-top: 3px;
+  line-height: 1.05;
+}
+
+/* The Pathway Info page no longer needs a duplicate page header; the main header already provides the exit. */
+body.mode-stats .stats-panel {
+  grid-template-rows: minmax(0, 1fr);
+  padding: 10px 14px 12px;
+}
+
+body.mode-stats .stats-heading {
+  display: none !important;
+}
+
+body.mode-stats .stats-content {
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 118px minmax(0, 1fr);
+  gap: 10px;
+}
+
+body.mode-stats .did-you-know {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 126px;
+  gap: 18px;
+  align-items: center;
+  border-left: 12px solid var(--red);
+  padding: 16px 18px 16px 22px;
+  background:
+    radial-gradient(circle at 91% 50%, rgba(255, 255, 255, 0.18), transparent 10rem),
+    radial-gradient(circle at 82% 54%, rgba(var(--red-rgb), 0.66), transparent 14rem),
+    radial-gradient(circle at 8% 18%, rgba(var(--red-rgb), 0.34), transparent 18rem),
+    linear-gradient(135deg, rgba(var(--red-rgb), 0.50) 0%, rgba(45, 27, 31, 0.98) 44%, rgba(14, 14, 16, 0.99) 100%);
+  border-color: rgba(var(--red-rgb), 0.56);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.54),
+    0 0 34px rgba(var(--red-rgb), 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+body.mode-stats .did-you-know::before {
+  width: 470px;
+  height: 470px;
+  right: -180px;
+  top: -210px;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: radial-gradient(circle, rgba(var(--red-rgb), 0.30), transparent 66%);
+}
+
+body.mode-stats .did-you-copy {
+  align-self: center;
+}
+
+body.mode-stats .did-you-know p {
+  color: #ff7077;
+  font-size: 0.76rem;
+  line-height: 1;
+  margin-bottom: 7px;
+}
+
+body.mode-stats .did-you-know h3 {
+  font-size: clamp(1.42rem, 2.25vw, 2.2rem);
+  line-height: 0.98;
+  max-width: none;
+}
+
+body.mode-stats .did-you-know span {
+  display: block;
+  margin-top: 7px;
+  max-width: 1060px;
+  font-size: 0.92rem;
+  line-height: 1.16;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+body.mode-stats .ai-orb {
+  width: 92px;
+  height: 92px;
+  justify-self: center;
+  align-self: center;
+}
+
+body.mode-stats .pathway-dashboard {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(355px, 0.38fr);
+  gap: 10px;
+}
+
+body.mode-stats .stats-left-stack {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 66px minmax(0, 1fr) 56px;
+  gap: 10px;
+}
+
+body.mode-stats .stats-kpi-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+body.mode-stats .stats-kpi-grid article {
+  min-height: 0;
+  display: grid;
+  align-content: center;
+  padding: 9px 14px;
+}
+
+body.mode-stats .stats-kpi-grid strong {
+  font-size: clamp(1.5rem, 2.35vw, 2.18rem);
+  line-height: 0.88;
+}
+
+body.mode-stats .stats-kpi-grid span {
+  margin-top: 4px;
+  line-height: 1;
+}
+
+body.mode-stats .dual-stat-stack {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  min-width: 0;
+}
+
+body.mode-stats .dual-stat-stack strong {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+body.mode-stats .dual-stat-stack small {
+  color: var(--text-muted);
+  font-size: 0.46em;
+  font-weight: 950;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+body.mode-stats .stats-detail-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(270px, 0.72fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 10px;
+}
+
+body.mode-stats .stats-card {
+  min-height: 0;
+  overflow: hidden;
+  padding: 12px 13px;
+  gap: 8px;
+}
+
+body.mode-stats .stats-section-heading p {
+  color: var(--red);
+  font-size: 0.73rem;
+  line-height: 1;
+}
+
+body.mode-stats .stats-bars {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 8px;
+}
+
+body.mode-stats .stats-bar-row {
+  grid-template-columns: minmax(165px, 0.64fr) 1fr 58px;
+  gap: 9px;
+}
+
+body.mode-stats .stats-bar-row strong {
+  font-size: 0.88rem;
+  line-height: 1.02;
+}
+
+body.mode-stats .stats-bar-row span {
+  font-size: 0.67rem;
+  line-height: 1.05;
+}
+
+body.mode-stats .stats-bar-track {
+  height: 11px;
+}
+
+body.mode-stats .stats-grade-card {
+  min-width: 0;
+}
+
+body.mode-stats .stats-pie-wrap {
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+body.mode-stats .stats-pie {
+  width: min(162px, 62%);
+  align-self: center;
+}
+
+body.mode-stats .stats-pie-legend {
+  gap: 7px;
+  font-size: 0.83rem;
+}
+
+body.mode-stats .pathway-card {
+  grid-column: auto;
+  grid-row: auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: 13px 14px;
+}
+
+body.mode-stats .pathway-sequence {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+body.mode-stats .pathway-sequence div {
+  min-height: 0;
+  padding: 9px 11px;
+  display: grid;
+  align-content: center;
+}
+
+body.mode-stats .pathway-sequence div::after {
+  bottom: -9px;
+  height: 9px;
+}
+
+body.mode-stats .pathway-sequence strong {
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+body.mode-stats .pathway-sequence span {
+  font-size: 1.02rem;
+  line-height: 1;
+}
+
+body.mode-stats .pathway-sequence p {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  line-height: 1.18;
+}
+
+body.mode-stats .behind-card {
+  grid-column: auto;
+  grid-row: auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  padding: 9px 14px;
+}
+
+body.mode-stats .behind-card .stats-section-heading p {
+  color: var(--red);
+}
+
+body.mode-stats .behind-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+body:not(.dark-mode).mode-stats .did-you-know {
+  background:
+    radial-gradient(circle at 88% 52%, rgba(var(--red-rgb), 0.34), transparent 13rem),
+    radial-gradient(circle at 8% 14%, rgba(var(--red-rgb), 0.16), transparent 18rem),
+    linear-gradient(135deg, rgba(var(--red-rgb), 0.18), #ffffff 44%, #f6f6f6 100%);
+}
+
+@media (max-width: 1100px) {
+  body.mode-stats .stats-content {
+    grid-template-rows: auto auto;
+  }
+
+  body.mode-stats .did-you-know,
+  body.mode-stats .pathway-dashboard,
+  body.mode-stats .stats-detail-grid,
+  body.mode-stats .stats-left-stack {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  body.mode-stats .ai-orb {
+    display: none;
+  }
+}

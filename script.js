@@ -66,6 +66,8 @@ const I18N = {
     totalHours: "Total Coding Hours",
     studentsRepresented: "Lines of Code",
     avgPerStudent: "Avg Per Student",
+    linesUnit: "lines",
+    aiSequenceCode: "SE11 (Beginning 2026-2027)",
     timeByCourse: "Time Spent Coding by Course",
     hoursByGrade: "Coding Hours by Grade",
     pathwaySequence: "Pathway Sequence",
@@ -142,6 +144,8 @@ const I18N = {
     totalHours: "Horas Totales de Programación",
     studentsRepresented: "Líneas de Código",
     avgPerStudent: "Promedio por Estudiante",
+    linesUnit: "líneas",
+    aiSequenceCode: "SE11 (desde 2026-2027)",
     timeByCourse: "Tiempo Programando por Curso",
     hoursByGrade: "Horas por Grado",
     pathwaySequence: "Secuencia del Programa",
@@ -234,6 +238,7 @@ const els = {
   themeToggle: document.getElementById("themeToggle"),
   themeToggleLabel: document.getElementById("themeToggleLabel"),
   languageToggle: document.getElementById("languageToggle"),
+  brandHomeButton: document.getElementById("brandHomeButton"),
   showcaseSubtitle: document.getElementById("showcaseSubtitle")
 };
 
@@ -782,63 +787,67 @@ function renderPathwayInfo() {
       </div>
     </section>
 
-    <section class="stats-kpi-grid" aria-label="Pathway summary numbers">
-      <article><strong>${formatNumber(totalHours)}</strong><span>${escapeHtml(t("totalHours"))}</span></article>
-      <article><strong>${formatNumber(totalLines)}</strong><span>${escapeHtml(t("studentsRepresented"))}</span></article>
-      <article class="dual-kpi">
-        <div class="dual-stat-stack">
-          <strong>${escapeHtml(avgHours)}<small>${escapeHtml(t("hrs"))}</small></strong>
-          <strong>${formatNumber(avgLines)}<small>lines</small></strong>
-        </div>
-        <span>${escapeHtml(t("avgPerStudent"))}</span>
-      </article>
-    </section>
+    <section class="pathway-dashboard">
+      <div class="stats-left-stack">
+        <section class="stats-kpi-grid" aria-label="Pathway summary numbers">
+          <article><strong>${formatNumber(totalHours)}</strong><span>${escapeHtml(t("totalHours"))}</span></article>
+          <article><strong>${formatNumber(totalLines)}</strong><span>${escapeHtml(t("studentsRepresented"))}</span></article>
+          <article class="dual-kpi">
+            <div class="dual-stat-stack">
+              <strong>${escapeHtml(avgHours)}<small>${escapeHtml(t("hrs"))}</small></strong>
+              <strong>${formatNumber(avgLines)}<small>${escapeHtml(t("linesUnit"))}</small></strong>
+            </div>
+            <span>${escapeHtml(t("avgPerStudent"))}</span>
+          </article>
+        </section>
 
-    <section class="stats-detail-grid">
-      <article class="stats-card stats-bars-card">
-        <div class="stats-section-heading"><p>${escapeHtml(t("timeByCourse"))}</p></div>
-        <div class="stats-bars">
-          ${courses.map(course => {
-            const hours = Number(course.totalHours) || 0;
-            const width = Math.max(8, Math.round((hours / maxHours) * 100));
-            return `
-              <div class="stats-bar-row">
-                <div><strong>${escapeHtml(course.displayName || course.className)}</strong><span>${escapeHtml(localizeGrade(course.gradeLabel || ""))} · ${formatNumber(course.studentCount || 0)} ${escapeHtml(t("students"))}</span></div>
-                <div class="stats-bar-track"><b style="--bar-width:${width}%"></b></div>
-                <em>${formatNumber(Math.round(hours))} ${escapeHtml(t("hrs"))}</em>
+        <section class="stats-detail-grid">
+          <article class="stats-card stats-bars-card">
+            <div class="stats-section-heading"><p>${escapeHtml(t("timeByCourse"))}</p></div>
+            <div class="stats-bars">
+              ${courses.map(course => {
+                const hours = Number(course.totalHours) || 0;
+                const width = Math.max(8, Math.round((hours / maxHours) * 100));
+                return `
+                  <div class="stats-bar-row">
+                    <div><strong>${escapeHtml(course.displayName || course.className)}</strong><span>${escapeHtml(localizeGrade(course.gradeLabel || ""))} · ${formatNumber(course.studentCount || 0)} ${escapeHtml(t("students"))}</span></div>
+                    <div class="stats-bar-track"><b style="--bar-width:${width}%"></b></div>
+                    <em>${formatNumber(Math.round(hours))} ${escapeHtml(t("hrs"))}</em>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </article>
+
+          <article class="stats-card stats-grade-card">
+            <div class="stats-section-heading"><p>${escapeHtml(t("hoursByGrade"))}</p></div>
+            <div class="stats-pie-wrap">
+              <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
+              <div class="stats-pie-legend">
+                ${gradeStats.map(item => `
+                  <div><span style="--key-color:${escapeHtml(item.color)}"></span><strong>${escapeHtml(localizeGrade(item.label))}</strong><em>${formatNumber(Math.round(item.hours))} ${escapeHtml(t("hrs"))}</em></div>
+                `).join("")}
               </div>
-            `;
-          }).join("")}
-        </div>
-      </article>
+            </div>
+          </article>
+        </section>
 
-      <article class="stats-card stats-grade-card">
-        <div class="stats-section-heading"><p>${escapeHtml(t("hoursByGrade"))}</p></div>
-        <div class="stats-pie-wrap">
-          <div class="stats-pie" style="${escapeHtml(pieStyle)}" aria-hidden="true"></div>
-          <div class="stats-pie-legend">
-            ${gradeStats.map(item => `
-              <div><span style="--key-color:${escapeHtml(item.color)}"></span><strong>${escapeHtml(localizeGrade(item.label))}</strong><em>${formatNumber(Math.round(item.hours))} ${escapeHtml(t("hrs"))}</em></div>
-            `).join("")}
-          </div>
-        </div>
-      </article>
+        <article class="stats-card behind-card">
+          <div class="stats-section-heading"><p>${escapeHtml(t("behindNumbers"))}</p></div>
+          <p>${escapeHtml(t("behindText"))}</p>
+        </article>
+      </div>
 
       <article class="stats-card pathway-card">
         <div class="stats-section-heading"><p>${escapeHtml(t("pathwaySequence"))}</p></div>
         <div class="pathway-sequence">
           <div><strong>SE10</strong><span>AP CSP</span><p>${escapeHtml(t("se10Text"))}</p></div>
           <div><strong>SE11</strong><span>Web + Game</span><p>${escapeHtml(t("se11Text"))}</p></div>
-          <div class="ai-step"><strong>SE11+</strong><span>Foundations of AI</span><p>${escapeHtml(t("aiText"))}</p></div>
+          <div class="ai-step"><strong>${escapeHtml(t("aiSequenceCode"))}</strong><span>Foundations of AI</span><p>${escapeHtml(t("aiText"))}</p></div>
           <div><strong>SE12</strong><span>AP CSA</span><p>${escapeHtml(t("se12Text"))}</p></div>
         </div>
       </article>
     </section>
-
-    <article class="stats-card behind-card">
-      <div class="stats-section-heading"><p>${escapeHtml(t("behindNumbers"))}</p></div>
-      <p>${escapeHtml(t("behindText"))}</p>
-    </article>
   `;
 }
 
@@ -1057,6 +1066,10 @@ function bindEvents() {
   els.languageToggle.querySelectorAll("[data-lang]").forEach(button => {
     button.addEventListener("click", () => setLanguage(button.dataset.lang));
   });
+
+  if (els.brandHomeButton) {
+    els.brandHomeButton.addEventListener("click", returnHome);
+  }
 
   els.statsButton.addEventListener("click", () => {
     if (state.mode === "stats") {
