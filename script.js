@@ -929,8 +929,18 @@ function enterGallery(filter = state.filter) {
 }
 
 function returnHome() {
+  state.year = DEFAULT_YEAR;
+  state.search = "";
+  state.student = "";
+  state.filter = DEFAULT_FILTER;
   state.mode = "home";
   state.page = 1;
+  state.featuredIndex = 0;
+
+  els.searchInput.value = "";
+  els.studentSelect.value = "";
+  els.yearSelect.value = DEFAULT_YEAR;
+
   closeProjectViewer();
   render();
 }
@@ -1033,20 +1043,7 @@ function codeHsLaunchScreen(project, link) {
 }
 
 function resetAll() {
-  state.year = DEFAULT_YEAR;
-  state.search = "";
-  state.student = "";
-  state.filter = DEFAULT_FILTER;
-  state.mode = "home";
-  state.page = 1;
-  state.featuredIndex = 0;
-
-  els.searchInput.value = "";
-  els.studentSelect.value = "";
-  els.yearSelect.value = DEFAULT_YEAR;
-
-  closeProjectViewer();
-  render();
+  returnHome();
 }
 
 function applyTheme(theme) {

@@ -3461,3 +3461,54 @@ body:not(.dark-mode) .pathway-sequence span {
     height: 24px;
   }
 }
+
+/* Update 15: Back to Showcase replaces Reset; Gallery Room gets exhibit border */
+/* Reset is redundant with Back to Showcase. Keep the function for safety, but remove the visible control. */
+.reset {
+  display: none !important;
+}
+
+.find-controls {
+  grid-template-columns: minmax(190px, 1fr) minmax(170px, 0.75fr);
+}
+
+body.mode-gallery .find-controls {
+  grid-template-columns: minmax(230px, 1fr) minmax(180px, 0.76fr);
+}
+
+/* Gallery Room panel should feel like part of the same exhibit frame system. */
+.gallery-panel {
+  border-color: rgba(var(--red-rgb), 0.42) !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(var(--red-rgb), 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+body:not(.dark-mode) .gallery-panel {
+  border-color: rgba(var(--red-rgb), 0.34) !important;
+}
+
+/* Footer hover credit with build-size note. */
+.footer-left {
+  position: relative;
+  min-width: min(440px, 42vw);
+}
+
+.footer-left:hover,
+.footer-left:focus-visible {
+  color: transparent;
+  text-shadow: none;
+}
+
+.footer-left:hover::after,
+.footer-left:focus-visible::after {
+  content: "The Software Engineering Showcase was built with 31,644 lines of code.";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-main);
+  white-space: nowrap;
+  text-shadow: none;
+}
