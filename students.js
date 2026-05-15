@@ -5238,3 +5238,88 @@ window.GOGA_PROJECTS = [
     "codehsAssignment": "Quilt Tracer"
   }
 ];
+
+// Featured project overrides for the GOGA showcase.
+// This block runs after window.GOGA_PROJECTS is created.
+
+(function applyFeaturedProjectOverrides() {
+  const featuredOverrides = [
+    {
+      studentDisplayNames: ["HENRY A."],
+      codehsAssignment: "Breakout"
+    },
+    {
+      studentDisplayNames: ["XAVIER G."],
+      codehsAssignment: "Helicopter"
+    },
+    {
+      studentDisplayNames: ["DANTE V."],
+      codehsAssignment: "Snake"
+    },
+    {
+      studentDisplayNames: ["DECLAN R.", "DECLAN O."],
+      codehsAssignment: "Tic Tac Toe"
+    },
+    {
+      studentDisplayNames: ["SELINA Z."],
+      codehsAssignment: "Blinking Rectangles"
+    },
+    {
+      studentDisplayNames: ["BENJAMIN S."],
+      codehsAssignment: "Increasing Number of Shapes"
+    },
+    {
+      studentDisplayNames: ["DECLAN F."],
+      codehsAssignment: "Parallax"
+    },
+    {
+      studentDisplayNames: ["NICK B.", "Nick B."],
+      codehsAssignment: "Quilt Tracer"
+    },
+    {
+      studentDisplayNames: ["ZAMIR K."],
+      projectTitle: "Zoomir",
+      projectType: "Website"
+    }
+  ];
+
+  const unfeaturedOverrides = [
+    {
+      studentDisplayNames: ["GREGORY K."],
+      projectTitle: "Greg Gets It!",
+      projectType: "Website"
+    }
+  ];
+
+  function matchesRule(project, rule) {
+    const studentMatches = rule.studentDisplayNames.includes(project.studentDisplayName);
+    const assignmentMatches = !rule.codehsAssignment || project.codehsAssignment === rule.codehsAssignment;
+    const titleMatches = !rule.projectTitle || project.projectTitle === rule.projectTitle;
+    const typeMatches = !rule.projectType || project.projectType === rule.projectType;
+
+    return studentMatches && assignmentMatches && titleMatches && typeMatches;
+  }
+
+  unfeaturedOverrides.forEach(rule => {
+    window.GOGA_PROJECTS.forEach(project => {
+      if (matchesRule(project, rule)) {
+        project.featured = false;
+      }
+    });
+  });
+
+  featuredOverrides.forEach(rule => {
+    let foundMatch = false;
+
+    window.GOGA_PROJECTS.forEach(project => {
+      if (matchesRule(project, rule)) {
+        project.featured = true;
+        foundMatch = true;
+      }
+    });
+
+    if (!foundMatch) {
+      console.warn("Featured override did not match a project:", rule);
+    }
+  });
+})();
